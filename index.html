@@ -349,6 +349,44 @@
   .bday-day{
     display:inline-block;min-width:34px;font-weight:700;color:var(--sky-dark);margin-right:6px;
   }
+
+  .quiz-box{
+    max-width:640px;margin:0 auto;background:var(--white);border:1px solid var(--line);
+    border-radius:22px;padding:28px;
+  }
+  .quiz-q{margin-bottom:22px;}
+  .quiz-q:last-child{margin-bottom:0;}
+  .quiz-q-num{
+    font-family:'M PLUS Rounded 1c';font-weight:800;font-size:12px;color:var(--coral-dark);
+    margin-bottom:8px;
+  }
+  .quiz-opt{
+    display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:8px;
+    border:1px solid var(--line);border-radius:12px;font-size:13.5px;cursor:pointer;
+    transition:border-color .15s,background .15s;
+  }
+  .quiz-opt:hover{border-color:var(--sky);background:var(--paper);}
+  .quiz-opt input{margin:0;flex:none;}
+  .quiz-actions{text-align:center;margin-top:8px;}
+  .quiz-error{
+    text-align:center;color:var(--coral-dark);font-size:12.5px;margin-bottom:12px;
+  }
+  .quiz-result{text-align:center;padding-top:10px;border-top:1px dashed var(--line);margin-top:10px;}
+  .quiz-result-type{
+    font-family:'M PLUS Rounded 1c';font-weight:800;font-size:30px;color:var(--sky-dark);
+  }
+  .quiz-result-desc{font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .quiz-apply{
+    margin-top:20px;padding-top:18px;border-top:1px dashed var(--line);
+  }
+  .quiz-apply label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin-bottom:8px;}
+  .quiz-apply-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .quiz-apply-row select{
+    font-family:'Zen Maru Gothic';font-size:13px;border:1px solid var(--line);
+    border-radius:10px;padding:8px 10px;background:var(--paper);
+  }
+  .quiz-apply-msg{font-size:12px;color:var(--mint-dark);margin-top:8px;}
+  #quiz-retry{margin-top:18px;}
   .mc-edit-actions{display:flex;gap:8px;margin-top:12px;}
   .hidden{display:none;}
   .loading-note{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;padding:20px;}
@@ -399,6 +437,7 @@
       <a href="#gallery">冒険の記録</a>
       <a href="#members">団員</a>
       <a href="#birthdays">誕生日</a>
+      <a href="#mbti-quiz">MBTI診断</a>
       <a href="#history">沿革</a>
       <a href="#join">参加案内</a>
     </div>
@@ -583,6 +622,95 @@
   <div class="bday-grid" id="birthday-calendar"></div>
 </section>
 
+<section id="mbti-quiz">
+  <div class="section-head">
+    <div class="section-tag">MBTI</div>
+    <h2>MBTI診断</h2>
+    <p>12個の質問に答えると、あなたのMBTIタイプが分かります。結果はそのままプロフィールに反映できます。</p>
+  </div>
+  <div class="quiz-box" id="quiz-box">
+    <div class="quiz-questions">
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q1</div>
+      <label class="quiz-opt"><input type="radio" name="q0" value="E">大人数の集まりに参加すると元気が出る</label>
+      <label class="quiz-opt"><input type="radio" name="q0" value="I">一人の時間でエネルギーを回復する</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q2</div>
+      <label class="quiz-opt"><input type="radio" name="q1" value="E">初対面の人ともすぐ話せるほうだ</label>
+      <label class="quiz-opt"><input type="radio" name="q1" value="I">知らない人には様子を見てから話す</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q3</div>
+      <label class="quiz-opt"><input type="radio" name="q2" value="E">賑やかな場所が好き</label>
+      <label class="quiz-opt"><input type="radio" name="q2" value="I">静かな場所でゆっくりしたい</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q4</div>
+      <label class="quiz-opt"><input type="radio" name="q3" value="S">具体的な事実や経験を重視する</label>
+      <label class="quiz-opt"><input type="radio" name="q3" value="N">可能性やアイデアを考えるのが好き</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q5</div>
+      <label class="quiz-opt"><input type="radio" name="q4" value="S">目の前のことに集中するタイプ</label>
+      <label class="quiz-opt"><input type="radio" name="q4" value="N">将来のことをあれこれ想像してしまう</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q6</div>
+      <label class="quiz-opt"><input type="radio" name="q5" value="S">実際に手を動かして学ぶのが得意</label>
+      <label class="quiz-opt"><input type="radio" name="q5" value="N">頭の中でイメージしながら理解する</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q7</div>
+      <label class="quiz-opt"><input type="radio" name="q6" value="T">物事を論理的に判断する</label>
+      <label class="quiz-opt"><input type="radio" name="q6" value="F">気持ちを大事にして判断する</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q8</div>
+      <label class="quiz-opt"><input type="radio" name="q7" value="T">正しいかどうかを重視する</label>
+      <label class="quiz-opt"><input type="radio" name="q7" value="F">相手がどう感じるかを重視する</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q9</div>
+      <label class="quiz-opt"><input type="radio" name="q8" value="T">冷静に指摘するタイプ</label>
+      <label class="quiz-opt"><input type="radio" name="q8" value="F">共感して寄り添うタイプ</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q10</div>
+      <label class="quiz-opt"><input type="radio" name="q9" value="J">計画を立ててから動く</label>
+      <label class="quiz-opt"><input type="radio" name="q9" value="P">状況に合わせて臨機応変に動く</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q11</div>
+      <label class="quiz-opt"><input type="radio" name="q10" value="J">予定通りに進めたい</label>
+      <label class="quiz-opt"><input type="radio" name="q10" value="P">予定はゆるく決めたい</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q12</div>
+      <label class="quiz-opt"><input type="radio" name="q11" value="J">きっちり片付けるのが好き</label>
+      <label class="quiz-opt"><input type="radio" name="q11" value="P">多少散らかっていても気にならない</label>
+    </div>
+    </div>
+    <div class="quiz-error hidden" id="quiz-error">まだ答えていない質問があります。すべての質問に答えてください。</div>
+    <div class="quiz-actions">
+      <button type="button" id="quiz-submit" class="mc-btn primary">結果を見る</button>
+    </div>
+    <div class="quiz-result hidden" id="quiz-result">
+      <div class="quiz-result-type" id="quiz-result-type"></div>
+      <div class="quiz-result-desc" id="quiz-result-desc"></div>
+      <div class="quiz-apply">
+        <label>この結果をプロフィールに反映する</label>
+        <div class="quiz-apply-row">
+          <select id="quiz-apply-select"></select>
+          <button type="button" id="quiz-apply-btn" class="mc-btn primary">反映する</button>
+        </div>
+        <div class="quiz-apply-msg" id="quiz-apply-msg"></div>
+      </div>
+      <button type="button" id="quiz-retry" class="mc-btn">もう一度診断する</button>
+    </div>
+  </div>
+</section>
+
 <section id="history">
   <div class="section-head">
     <div class="section-tag">History</div>
@@ -692,22 +820,22 @@
 
 <script>
   var MEMBERS = [
-    {id:'m01', name:'ぽんこつりっき', role:'団長', icon:'り', color:0, birthday:'', food:'', intro:'団長やってます。よろしくお願いします!', hobby:''},
-    {id:'m02', name:'ぽんこつちぇる', role:'団員', icon:'ちぇ', color:1, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m03', name:'ぽんこつのぽん', role:'団員', icon:'のぽ', color:2, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m04', name:'ぽんこつのりず', role:'団員', icon:'のり', color:3, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m05', name:'おポンなばとら', role:'団員', icon:'ばと', color:4, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m06', name:'イデア', role:'団員', icon:'イデ', color:0, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m07', name:'えぃ', role:'団員', icon:'えぃ', color:1, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m08', name:'うぁ', role:'団員', icon:'うぁ', color:2, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m09', name:'ポンコロレモン', role:'団員', icon:'レモ', color:3, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m10', name:'ぴっぽ', role:'団員', icon:'ぴっ', color:4, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m11', name:'ルシア', role:'団員', icon:'ルシ', color:0, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m12', name:'ぽむぽむおなぎ', role:'団員', icon:'おな', color:1, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m13', name:'ぽむぽむかりん', role:'団員', icon:'かり', color:2, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m14', name:'猫虫', role:'団員', icon:'猫', color:3, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m15', name:'ぽむぽむけある', role:'団員', icon:'ける', color:4, birthday:'', food:'', intro:'', hobby:''},
-    {id:'m16', name:'ぽむぽむはかせ', role:'団員', icon:'はか', color:0, birthday:'', food:'', intro:'', hobby:''}
+    {id:'m01', name:'ぽんこつりっき', role:'団長', icon:'り', color:0, birthday:'', food:'', intro:'団長やってます。よろしくお願いします!', hobby:'', mbti:''},
+    {id:'m02', name:'ぽんこつちぇる', role:'団員', icon:'ちぇ', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m03', name:'ぽんこつのぽん', role:'団員', icon:'のぽ', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m04', name:'ぽんこつのりず', role:'団員', icon:'のり', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m05', name:'おポンなばとら', role:'団員', icon:'ばと', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m06', name:'イデア', role:'団員', icon:'イデ', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m07', name:'えぃ', role:'団員', icon:'えぃ', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m08', name:'うぁ', role:'団員', icon:'うぁ', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m09', name:'ポンコロレモン', role:'団員', icon:'レモ', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m10', name:'ぴっぽ', role:'団員', icon:'ぴっ', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m11', name:'ルシア', role:'団員', icon:'ルシ', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m12', name:'ぽむぽむおなぎ', role:'団員', icon:'おな', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m13', name:'ぽむぽむかりん', role:'団員', icon:'かり', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m14', name:'猫虫', role:'団員', icon:'猫', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m15', name:'ぽむぽむけある', role:'団員', icon:'ける', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:''},
+    {id:'m16', name:'ぽむぽむはかせ', role:'団員', icon:'はか', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:''}
   ];
   var COLOR_PAIRS = [
     ['var(--coral)','var(--coral-dark)'],
@@ -731,7 +859,7 @@
   async function saveOverride(id, data){
     try{
       await authReadyPromise;
-      await db.collection('memberOverrides').doc(id).set(data);
+      await db.collection('memberOverrides').doc(id).set(data, { merge: true });
       return true;
     }catch(e){
       return false;
@@ -751,6 +879,7 @@
       birthday:o.birthday!==undefined ? o.birthday : m.birthday,
       food:o.food!==undefined ? o.food : m.food,
       hobby:o.hobby!==undefined ? o.hobby : (m.hobby || ''),
+      mbti:o.mbti!==undefined ? o.mbti : (m.mbti || ''),
       intro:o.intro!==undefined ? o.intro : m.intro
     };
   }
@@ -774,6 +903,14 @@
     }
     return html;
   }
+  var MBTI_TYPES = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+  function mbtiOptionsHTML(selected){
+    var html = '<option value="">-</option>';
+    MBTI_TYPES.forEach(function(t){
+      html += '<option value="' + t + '"' + (t === selected ? ' selected' : '') + '>' + t + '</option>';
+    });
+    return html;
+  }
   function cardHTML(m){
     var pair = COLOR_PAIRS[m.color % COLOR_PAIRS.length];
     var bg = 'linear-gradient(135deg,' + pair[0] + ',' + pair[1] + ')';
@@ -791,6 +928,7 @@
       + '          <span>🎂 誕生日: ' + (m.birthday ? esc(m.birthday) : '未設定') + '</span>'
       + '          <span>🍙 好きな食べ物: ' + (m.food ? esc(m.food) : '未設定') + '</span>'
       + '          <span>🎮 趣味: ' + (m.hobby ? esc(m.hobby) : '未設定') + '</span>'
+      + '          <span>🧠 MBTI: ' + (m.mbti ? esc(m.mbti) : '未設定') + '</span>'
       + '        </div>'
       + '      </div>'
       + '    </div>'
@@ -811,6 +949,8 @@
       + '    <input type="text" class="f-food" placeholder="例: 唐揚げ" value="' + esc(m.food) + '">'
       + '    <label>趣味</label>'
       + '    <input type="text" class="f-hobby" placeholder="例: フィギュア集め" value="' + esc(m.hobby) + '">'
+      + '    <label>MBTI</label>'
+      + '    <select class="f-mbti">' + mbtiOptionsHTML(m.mbti) + '</select>'
       + '    <label>自己紹介</label>'
       + '    <textarea class="f-intro">' + esc(m.intro) + '</textarea>'
       + '    <div class="mc-edit-actions">'
@@ -846,6 +986,92 @@
     container.innerHTML = html;
   }
 
+  var MBTI_DESC = {
+    INTJ:'戦略的で独立心が強い「建築家」タイプ',
+    INTP:'好奇心旺盛な理論家「論理学者」タイプ',
+    ENTJ:'リーダーシップのある「指揮官」タイプ',
+    ENTP:'発想力豊かな「討論者」タイプ',
+    INFJ:'理想を追いかける「提唱者」タイプ',
+    INFP:'優しく想像力豊かな「仲介者」タイプ',
+    ENFJ:'人を惹きつける「主人公」タイプ',
+    ENFP:'自由で情熱的な「広報運動家」タイプ',
+    ISTJ:'誠実で責任感の強い「管理者」タイプ',
+    ISFJ:'献身的な「擁護者」タイプ',
+    ESTJ:'実行力のある「幹部」タイプ',
+    ESFJ:'面倒見の良い「領事官」タイプ',
+    ISTP:'冷静な職人肌「巨匠」タイプ',
+    ISFP:'感性豊かな「冒険家」タイプ',
+    ESTP:'行動力のある「起業家」タイプ',
+    ESFP:'陽気なムードメーカー「エンターテイナー」タイプ'
+  };
+  function initQuiz(){
+    var box = document.getElementById('quiz-box');
+    if(!box) return;
+    var errorEl = document.getElementById('quiz-error');
+    var resultEl = document.getElementById('quiz-result');
+    var typeEl = document.getElementById('quiz-result-type');
+    var descEl = document.getElementById('quiz-result-desc');
+    var applySelect = document.getElementById('quiz-apply-select');
+    var applyBtn = document.getElementById('quiz-apply-btn');
+    var applyMsg = document.getElementById('quiz-apply-msg');
+
+    applySelect.innerHTML = MEMBERS.map(function(m){
+      return '<option value="' + m.id + '">' + esc(m.name) + '</option>';
+    }).join('');
+
+    document.getElementById('quiz-submit').addEventListener('click', function(){
+      var counts = {};
+      var answered = 0;
+      for(var i = 0; i < 12; i++){
+        var checked = box.querySelector('input[name="q' + i + '"]:checked');
+        if(checked){
+          answered++;
+          counts[checked.value] = (counts[checked.value] || 0) + 1;
+        }
+      }
+      if(answered < 12){
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      var type = ''
+        + ((counts.E || 0) >= (counts.I || 0) ? 'E' : 'I')
+        + ((counts.S || 0) >= (counts.N || 0) ? 'S' : 'N')
+        + ((counts.T || 0) >= (counts.F || 0) ? 'T' : 'F')
+        + ((counts.J || 0) >= (counts.P || 0) ? 'J' : 'P');
+      typeEl.textContent = type;
+      descEl.textContent = MBTI_DESC[type] || '';
+      applyMsg.textContent = '';
+      resultEl.classList.remove('hidden');
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      applyBtn.dataset.type = type;
+    });
+
+    applyBtn.addEventListener('click', async function(){
+      var id = applySelect.value;
+      var type = applyBtn.dataset.type;
+      if(!id || !type) return;
+      applyBtn.disabled = true;
+      applyMsg.textContent = '反映中…';
+      var ok = await saveOverride(id, { mbti: type });
+      if(ok){
+        applyMsg.textContent = '反映しました!団員紹介にも表示されます。';
+        render();
+      } else {
+        applyMsg.textContent = storageAvailable()
+          ? '反映に失敗しました。もう一度お試しください。'
+          : 'サイトの設定が完了していません(管理者にご確認ください)。';
+      }
+      applyBtn.disabled = false;
+    });
+
+    document.getElementById('quiz-retry').addEventListener('click', function(){
+      box.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+      resultEl.classList.add('hidden');
+      box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   async function render(){
     var grid = document.getElementById('member-grid');
     grid.innerHTML = '<div class="loading-note">読み込み中…</div>';
@@ -856,6 +1082,7 @@
   }
   document.addEventListener('DOMContentLoaded', function(){
     render();
+    initQuiz();
     document.getElementById('member-grid').addEventListener('change', function(e){
       if(e.target.classList.contains('f-birthday-month')){
         var card = e.target.closest('.member-card');
@@ -888,6 +1115,7 @@
           birthday: (monthVal && dayVal) ? (monthVal + '月' + dayVal + '日') : '',
           food: card.querySelector('.f-food').value.trim(),
           hobby: card.querySelector('.f-hobby').value.trim(),
+          mbti: card.querySelector('.f-mbti').value,
           intro: card.querySelector('.f-intro').value.trim()
         };
         var ok = await saveOverride(id, data);
