@@ -70,7 +70,7 @@
     box-shadow:0 2px 0 rgba(0,0,0,0.06);
   }
   .nav-links a:hover{background:var(--sky);border-color:var(--sky-dark);color:#fff;}
-  @media(max-width:640px){.nav-links{display:none;}}
+  @media(max-width:640px){.nav-links{display:flex;}}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -598,6 +598,203 @@
 
   footer{padding:40px 24px;text-align:center;color:var(--ink-soft);font-size:13px;}
   footer .fbrand{font-family:'M PLUS Rounded 1c';font-weight:800;color:var(--ink);margin-bottom:6px;}
+
+
+/* =========================================================
+   RESPONSIVE / SMARTPHONE OPTIMIZATION
+   PC・タブレット・スマートフォン共通で使える追加調整
+   ========================================================= */
+@media (max-width: 640px){
+  html{scroll-padding-top:64px;}
+  body{font-size:14px;line-height:1.75;overflow-x:hidden;}
+
+  /* ヘッダー / ナビ */
+  .nav-inner{padding:9px 12px;gap:10px;overflow:hidden;}
+  .brand{flex:0 0 auto;gap:7px;}
+  .brand-emblem{width:34px;height:34px;font-size:14px;}
+  .brand-name{font-size:14px;white-space:nowrap;}
+  .nav-links{
+    display:flex;
+    flex:1 1 auto;
+    min-width:0;
+    width:auto;
+    gap:6px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:2px 2px 5px;
+    margin:0;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links a{
+    flex:0 0 auto;
+    padding:7px 11px;
+    font-size:11px;
+    border-width:1.5px;
+  }
+
+  /* ヒーロー */
+  .hero{padding:54px 16px 42px;}
+  .hero-eyebrow{font-size:11px;padding:5px 12px;}
+  .hero h1{font-size:32px;line-height:1.35;margin:17px 0 12px;}
+  .hero p.lead{font-size:13.5px;line-height:1.85;max-width:100%;}
+  .hero-cta{flex-direction:column;gap:9px;margin-top:23px;}
+  .hero-cta .btn{width:100%;padding:12px 16px;font-size:13px;}
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:28px;}
+  .stat-slot{min-width:0;padding:10px 7px;border-radius:14px;}
+  .stat-slot:last-child{grid-column:1 / -1;}
+  .stat-slot .num{font-size:16px;overflow-wrap:anywhere;}
+  .stat-slot .lbl{font-size:10px;}
+
+  /* セクション共通 */
+  section{padding:54px 14px;}
+  .section-head{margin-bottom:28px;}
+  .section-tag{font-size:10px;}
+  .section-head h2{font-size:24px;line-height:1.45;}
+  .section-head p{font-size:12.5px;line-height:1.75;}
+
+  /* トップの画像・スポットライト */
+  .slideshow,.spotlight{padding-left:14px;padding-right:14px;}
+  .slideshow-frame{aspect-ratio:4/3;border-radius:18px;}
+  .slideshow-cap{padding:11px 12px;font-size:11px;}
+  .spotlight-card{flex-direction:column;align-items:stretch;gap:14px;padding:17px;border-radius:20px;}
+  .spotlight-illust{width:135px;margin:0 auto;}
+  .spotlight-info{min-width:0;}
+  .spotlight-name{font-size:20px;overflow-wrap:anywhere;}
+  .spotlight-meta{font-size:12px;}
+  .spotlight-quote{margin-bottom:24px;}
+  .quote-of-day{padding:19px 15px;border-radius:18px;}
+  .quote-text{font-size:16px;line-height:1.7;overflow-wrap:anywhere;}
+
+  /* 紹介 */
+  .about-grid{grid-template-columns:1fr;gap:20px;}
+  .badge-illust{max-width:270px;margin:0 auto;border-radius:22px;}
+  .about-card{padding:19px;border-radius:18px;}
+  .about-card h3{font-size:16px;line-height:1.5;}
+  .about-card p{font-size:13px;line-height:1.8;}
+  .tag-row{gap:6px;}
+  .tag{font-size:11px;padding:5px 10px;}
+
+  /* ギャラリー */
+  .gallery-category{margin-bottom:38px;}
+  .gallery-cat-head{flex-direction:column;align-items:stretch;gap:10px;}
+  .gallery-cat-head h3{font-size:16px;line-height:1.5;}
+  .gallery-cat-sub{font-size:11px;}
+  .add-photo-btn{width:100%;padding:9px 12px;}
+  .gallery-grid{grid-template-columns:1fr;gap:12px;}
+  .gallery-folder{padding:4px 12px 14px;border-radius:16px;}
+  .gallery-folder summary{font-size:13px;padding:12px 0;}
+  .item-card{border-radius:16px;padding:8px;}
+  .item-frame{border-radius:13px;}
+  .item-caption{padding:10px 6px 5px;}
+  .item-caption .t{font-size:13px;overflow-wrap:anywhere;}
+  .item-caption .d{font-size:11px;}
+  .item-actions{flex-wrap:wrap;}
+  .item-actions .mc-btn{padding:6px 10px;}
+  .add-photo-panel{padding:13px;border-radius:14px;}
+  .add-photo-panel input,.add-photo-panel textarea{font-size:13px;}
+
+  /* ライトボックス */
+  .lightbox{padding:12px;}
+  .lightbox-inner{max-width:96vw;max-height:90vh;}
+  .lightbox-inner img{max-height:72vh;border-radius:10px;}
+  .lightbox-close{top:10px;right:10px;width:40px;height:40px;}
+  .lightbox-caption{font-size:12px;margin-top:9px;}
+  .lightbox-caption .d{font-size:11px;}
+
+  /* 団員 */
+  .save-note{font-size:11.5px;padding:10px 13px;margin-bottom:22px;}
+  .member-grid{grid-template-columns:1fr;gap:11px;}
+  .member-card{padding:14px;border-radius:16px;}
+  .mc-head{gap:10px;}
+  .avatar{width:44px;height:44px;font-size:14px;}
+  .member-name{font-size:15px;overflow-wrap:anywhere;}
+  .member-meta{font-size:12px;}
+  .member-comment{font-size:12.5px;}
+  .mc-actions,.mc-edit-actions{flex-wrap:wrap;}
+  .mc-btn{font-size:11.5px;padding:7px 12px;min-height:36px;}
+  .mc-edit input,.mc-edit textarea,.birthday-selects select{font-size:13px;min-height:38px;}
+  .bday-grid{grid-template-columns:1fr 1fr;gap:8px;}
+  .bday-month{padding:10px 11px;border-radius:13px;}
+  .bday-month-label{font-size:13px;}
+  .bday-list li{font-size:11.5px;}
+
+  /* MBTI */
+  .quiz-box{padding:17px;border-radius:18px;}
+  .quiz-q{margin-bottom:18px;}
+  .quiz-opt{font-size:12.5px;line-height:1.55;padding:10px 11px;align-items:flex-start;}
+  .quiz-opt input{margin-top:3px;}
+  .quiz-result-type{font-size:28px;}
+  .quiz-result-desc{font-size:12.5px;}
+  .quiz-apply-row{flex-direction:column;align-items:stretch;}
+  .quiz-apply-row select{width:100%;font-size:13px;min-height:40px;}
+
+  /* みんなの声 / 名言 */
+  .voice-box{padding:14px;border-radius:16px;}
+  .voice-box textarea{min-height:100px;font-size:13px;}
+  .voice-actions{flex-direction:column;align-items:stretch;gap:8px;}
+  .voice-actions .mc-btn{width:100%;}
+  .voice-list{gap:10px;}
+  .voice-card{padding:14px;border-radius:14px;}
+  .voice-text{font-size:13px;overflow-wrap:anywhere;}
+  .voice-meta{margin-top:9px;}
+
+  /* チーム編成 */
+  .team-block{padding:14px;border-radius:15px;}
+  .team-check-grid{grid-template-columns:1fr 1fr;gap:6px;}
+  .team-check{font-size:11.5px;padding:8px;min-width:0;overflow-wrap:anywhere;}
+  .team-size-row{flex-direction:column;gap:7px;margin-bottom:15px;}
+  .team-size-row input{width:100%;max-width:120px;min-height:40px;}
+  .team-results{grid-template-columns:1fr;gap:10px;}
+  .team-card{padding:14px;}
+
+  /* ルール */
+  .rules-box textarea{min-height:280px;padding:14px;font-size:13px;line-height:1.75;}
+  .rules-actions{flex-direction:column;align-items:stretch;gap:8px;}
+  .rules-actions .mc-btn{width:100%;}
+
+  /* 沿革 */
+  .history-line{padding-left:19px;}
+  .history-dot{left:-30px;width:18px;height:18px;}
+  .history-item{padding-bottom:28px;}
+  .history-date{font-size:12px;line-height:1.5;}
+  .history-title{font-size:14px;line-height:1.55;}
+  .history-desc{font-size:12px;line-height:1.75;overflow-wrap:anywhere;}
+
+  /* 入団案内 */
+  .join{border-radius:22px;padding:38px 18px;}
+  .join h2{font-size:22px;line-height:1.45;}
+  .join p{font-size:13px;line-height:1.8;}
+  .join .btn-primary{width:100%;}
+
+  /* 合言葉画面 */
+  .site-gate{padding:16px;}
+  .site-gate-card{max-width:340px;padding:30px 20px;border-radius:20px;}
+  .site-gate-input{font-size:16px;min-height:46px;}
+  .site-gate-card .mc-btn{min-height:42px;}
+
+  footer{padding:30px 14px;font-size:12px;}
+}
+
+/* 小型スマホ（iPhone SE等） */
+@media (max-width: 380px){
+  .brand-name{font-size:13px;}
+  .nav-inner{gap:7px;}
+  .nav-links a{padding:6px 9px;font-size:10.5px;}
+  .hero{padding-top:48px;}
+  .hero h1{font-size:29px;}
+  .bday-grid{grid-template-columns:1fr;}
+  .team-check-grid{grid-template-columns:1fr;}
+}
+
+/* タッチ操作向け：ボタンを押しやすくする */
+@media (hover:none) and (pointer:coarse){
+  button,.btn,.nav-links a,.quiz-opt,.team-check,summary{touch-action:manipulation;}
+  .nav-links a,.btn,.mc-btn{min-height:40px;}
+}
+
 </style>
 </head>
 <body>
