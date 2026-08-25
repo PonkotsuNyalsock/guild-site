@@ -507,7 +507,63 @@
   }
   .team-card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
   .team-card li{font-size:13px;color:var(--ink);}
-  .mc-edit-actions{display:flex;gap:8px;margin-top:12px;}
+
+  .rules-box{max-width:720px;margin:0 auto;}
+  .rules-box textarea{
+    width:100%;min-height:360px;font-family:'Zen Maru Gothic';font-size:14px;color:var(--ink);
+    line-height:1.8;border:1px solid var(--line);border-radius:18px;padding:20px;
+    background:var(--white);resize:vertical;
+  }
+  .rules-actions{display:flex;align-items:center;gap:12px;margin-top:14px;}
+
+  .site-gate{
+    position:fixed;inset:0;z-index:300;
+    background:
+      radial-gradient(520px 260px at 15% 10%, rgba(79,180,232,0.16), transparent 70%),
+      radial-gradient(480px 260px at 88% 18%, rgba(255,201,77,0.20), transparent 70%),
+      var(--white);
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .site-gate.hidden{display:none;}
+  .site-gate-card{
+    max-width:340px;width:100%;text-align:center;background:#fff;
+    border:1px solid var(--line);border-radius:24px;padding:36px 28px;
+    box-shadow:0 10px 0 rgba(0,0,0,0.06);
+  }
+  .site-gate-emblem{
+    width:56px;height:56px;margin:0 auto 14px;border-radius:50%;
+    background:linear-gradient(145deg,var(--sky),var(--mint));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'M PLUS Rounded 1c';font-weight:800;font-size:22px;
+  }
+  .site-gate-title{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:18px;}
+  .site-gate-desc{font-size:13px;color:var(--ink-soft);margin:8px 0 18px;}
+  .site-gate-input{
+    width:100%;font-family:'Zen Maru Gothic';font-size:14px;text-align:center;
+    border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper);
+    margin-bottom:14px;
+  }
+  .site-gate-error{color:var(--coral-dark);font-size:12px;margin-top:12px;}
+  .merged-block{margin-top:64px;padding-top:56px;border-top:1px dashed var(--line);}
+  .mc-edit-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .delete-member-btn{color:var(--coral-dark);border-color:var(--coral);}
+  .add-member-card{
+    display:flex;align-items:center;justify-content:center;
+    border:2px dashed var(--line);background:var(--paper);min-height:150px;
+  }
+  .add-member-card .mc-view{width:100%;}
+  .add-member-open{
+    width:100%;background:none;border:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    color:var(--ink-soft);font-family:'Zen Maru Gothic';font-size:13px;font-weight:700;
+    padding:20px 0;
+  }
+  .add-member-plus{
+    width:44px;height:44px;border-radius:50%;background:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;color:var(--sky-dark);border:2px solid var(--sky);
+  }
+  .add-member-card .mc-edit{border-top:none;padding-top:0;margin-top:0;}
   .hidden{display:none;}
   .loading-note{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:13px;padding:20px;}
   .error-note{grid-column:1/-1;text-align:center;color:var(--coral-dark);font-size:12.5px;padding:8px;}
@@ -546,6 +602,17 @@
 </head>
 <body>
 
+<div class="site-gate" id="site-gate">
+  <div class="site-gate-card">
+    <div class="site-gate-emblem">脱</div>
+    <div class="site-gate-title">脱走レイダー</div>
+    <p class="site-gate-desc">合言葉を入力してください</p>
+    <input type="text" id="gate-input" class="site-gate-input" placeholder="合言葉" autocomplete="off">
+    <button type="button" id="gate-submit" class="mc-btn primary">入る</button>
+    <div class="site-gate-error hidden" id="gate-error">合言葉が違います。もう一度お試しください。</div>
+  </div>
+</div>
+
 <nav class="nav">
   <div class="nav-inner">
     <div class="brand">
@@ -556,13 +623,10 @@
       <a href="#about">紹介</a>
       <a href="#gallery">冒険の記録</a>
       <a href="#members">団員</a>
-      <a href="#birthdays">誕生日</a>
       <a href="#mbti-quiz">MBTI診断</a>
-      <a href="#history">沿革</a>
       <a href="#voices">みんなの声</a>
-      <a href="#quotes">名言集</a>
-      <a href="#teams">チーム分け</a>
-      <a href="#join">参加案内</a>
+      <a href="#rules">ルール</a>
+      
     </div>
   </div>
 </nav>
@@ -572,7 +636,7 @@
   <h1>のんびり冒険する、<br><span>脱走レイダー</span></h1>
   <p class="lead">ネバーランドの空の下、写真を撮ったりおしゃべりしたりしながらゆるく冒険する騎士団です。初心者さんも大歓迎!</p>
   <div class="hero-cta">
-    <a class="btn btn-primary" href="#join">団員募集を見る</a>
+    <a class="btn btn-primary" href="#about">団員募集を見る</a>
     <a class="btn btn-secondary" href="#gallery">冒険の記録を見る</a>
   </div>
   <div class="stat-row">
@@ -625,6 +689,52 @@
       </div>
     </div>
   </div>
+
+<div id="history" class="merged-block">
+  <div class="section-head">
+    <div class="section-tag">History</div>
+    <h2>騎士団の沿革</h2>
+    <p>結成からこれまでの歩みを、日付順にまとめています。</p>
+  </div>
+  <div class="history-line">
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div class="history-date">2026年6月8日・第1シーズン</div>
+      <div class="history-title">「ぽんこつの家」結成</div>
+      <div class="history-desc">初期メンバー9名でスタート。ぽんこつりっき・ぽんこつちぇる・ぽんこつのぽん・ぽんこつのりず・おポンなばとら・イデア・えぃ・うぁ・ポンコロレモン。</div>
+    </div>
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div class="history-date">2026年6月29日・第2シーズン</div>
+      <div class="history-title">「迷子センター」に改名</div>
+      <div class="history-desc">メンバー構成はそのまま、シーズンにあわせて騎士団名を変更。</div>
+    </div>
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div class="history-date">2026年7月27日・第3シーズン</div>
+      <div class="history-title">「脱走レイダー」に改名</div>
+      <div class="history-desc">ぴっぽ・ルシアが加入。</div>
+    </div>
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div class="history-date">2026年8月24日・第4シーズン</div>
+      <div class="history-title">新シーズン開始(騎士団名は検討中)</div>
+      <div class="history-desc">ぽむぽむおなぎ・ぽむぽむかりん・猫虫・ぽむぽむけある・ぽむぽむはかせが加入し、団員16名に。</div>
+    </div>
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div class="history-date">2026年8月25日</div>
+      <div class="history-title">新メンバー加入</div>
+      <div class="history-desc">えいり・はるヒナが加入。</div>
+    </div>
+  </div>
+</div>
+
+<div id="join" class="merged-block">
+  <h2>一緒に冒険しませんか?</h2>
+  <p>初心者さんもベテランさんも歓迎です。ゲーム内メールやDiscordからお気軽にどうぞ。</p>
+  <a class="btn btn-primary" href="#">Discordはこちら</a>
+</div>
 </section>
 
 <section id="gallery" class="tab-panel">
@@ -738,6 +848,23 @@
       </div>
     </div>
   </div>
+
+<div id="quotes" class="merged-block">
+  <div class="section-head">
+    <div class="section-tag">Quotes</div>
+    <h2>名言(迷言)集</h2>
+    <p>ゲーム内での面白い発言や誤字を、みんなでどんどん記録していきましょう。</p>
+  </div>
+  <div class="voice-box">
+    <textarea id="quote-input" placeholder="迷言の内容を入力(例: 「悪竜、討伐した!」→「悪童、討伐した」)"></textarea>
+    <input type="text" id="quote-speaker" placeholder="誰の発言か(任意)" class="quote-speaker-input">
+    <div class="voice-actions">
+      <button type="button" id="quote-submit" class="mc-btn primary">投稿する</button>
+      <span class="voice-msg" id="quote-msg"></span>
+    </div>
+  </div>
+  <div class="voice-list" id="quote-list"><div class="loading-note">読み込み中…</div></div>
+</div>
 </section>
 
 <section class="members tab-panel" id="members">
@@ -748,16 +875,49 @@
   </div>
   <div class="save-note">✏️ 編集内容はこのサイトを開いた全員に共有されます。誰かが書き換えると、他の団員が開いたときにもその内容が表示されます。</div>
   <div class="member-grid" id="member-grid"><div class="loading-note">読み込み中…</div></div>
-</section>
 
-<section id="birthdays" class="tab-panel">
+<div id="birthdays" class="merged-block">
   <div class="section-head">
     <div class="section-tag">Birthdays</div>
     <h2>誕生日カレンダー</h2>
     <p>団員のみんなの誕生月をひと目でチェック。お祝いを忘れずに!</p>
   </div>
   <div class="bday-grid" id="birthday-calendar"></div>
+</div>
+
+<div id="teams" class="merged-block">
+  <div class="section-head">
+    <div class="section-tag">Teams</div>
+    <h2>チーム分けツール</h2>
+    <p>今インしている団員にチェックを入れて、1チームの目安人数を決めればランダムでできるだけ均等な人数のチームに分かれます。団員以外の参加者も追加できます。</p>
+  </div>
+  <div class="team-tool">
+    <div class="team-block">
+      <div class="team-block-label">インしている団員</div>
+      <div class="team-check-grid" id="team-check-grid"><div class="loading-note">読み込み中…</div></div>
+    </div>
+    <div class="team-block">
+      <div class="team-block-label">団員以外の参加者(任意)</div>
+      <div class="team-extra-inputs" id="team-extra-inputs">
+        <input type="text" class="team-extra-input" placeholder="参加者の名前">
+        <input type="text" class="team-extra-input" placeholder="参加者の名前">
+        <input type="text" class="team-extra-input" placeholder="参加者の名前">
+        <input type="text" class="team-extra-input" placeholder="参加者の名前">
+      </div>
+      <button type="button" id="team-extra-add" class="mc-btn">+ 参加者欄を増やす</button>
+    </div>
+    <div class="team-size-row">
+      <label>1チームの目安人数</label>
+      <input type="number" id="team-size" min="2" max="16" value="4">
+      <button type="button" id="team-shuffle-btn" class="mc-btn primary">ランダムでチーム分け</button>
+    </div>
+    <div class="team-error hidden" id="team-error"></div>
+    <div class="team-results" id="team-results"></div>
+  </div>
+</div>
 </section>
+
+
 
 <section id="mbti-quiz" class="tab-panel">
   <div class="section-head">
@@ -848,39 +1008,7 @@
   </div>
 </section>
 
-<section id="history" class="tab-panel">
-  <div class="section-head">
-    <div class="section-tag">History</div>
-    <h2>騎士団の沿革</h2>
-    <p>結成からこれまでの歩みを、日付順にまとめています。</p>
-  </div>
-  <div class="history-line">
-    <div class="history-item">
-      <div class="history-dot"></div>
-      <div class="history-date">2026年6月8日・第1シーズン</div>
-      <div class="history-title">「ぽんこつの家」結成</div>
-      <div class="history-desc">初期メンバー9名でスタート。ぽんこつりっき・ぽんこつちぇる・ぽんこつのぽん・ぽんこつのりず・おポンなばとら・イデア・えぃ・うぁ・ポンコロレモン。</div>
-    </div>
-    <div class="history-item">
-      <div class="history-dot"></div>
-      <div class="history-date">2026年6月29日・第2シーズン</div>
-      <div class="history-title">「迷子センター」に改名</div>
-      <div class="history-desc">メンバー構成はそのまま、シーズンにあわせて騎士団名を変更。</div>
-    </div>
-    <div class="history-item">
-      <div class="history-dot"></div>
-      <div class="history-date">2026年7月27日・第3シーズン</div>
-      <div class="history-title">「脱走レイダー」に改名</div>
-      <div class="history-desc">ぴっぽ・ルシアが加入。</div>
-    </div>
-    <div class="history-item">
-      <div class="history-dot"></div>
-      <div class="history-date">2026年8月24日・第4シーズン</div>
-      <div class="history-title">新シーズン開始(騎士団名は検討中)</div>
-      <div class="history-desc">ぽむぽむおなぎ・ぽむぽむかりん・猫虫・ぽむぽむけある・ぽむぽむはかせが加入し、団員16名に。</div>
-    </div>
-  </div>
-</section>
+
 
 <section id="voices" class="tab-panel">
   <div class="section-head">
@@ -898,59 +1026,26 @@
   <div class="voice-list" id="voice-list"><div class="loading-note">読み込み中…</div></div>
 </section>
 
-<section id="quotes" class="tab-panel">
-  <div class="section-head">
-    <div class="section-tag">Quotes</div>
-    <h2>名言(迷言)集</h2>
-    <p>ゲーム内での面白い発言や誤字を、みんなでどんどん記録していきましょう。</p>
-  </div>
-  <div class="voice-box">
-    <textarea id="quote-input" placeholder="迷言の内容を入力(例: 「悪竜、討伐した!」→「悪童、討伐した」)"></textarea>
-    <input type="text" id="quote-speaker" placeholder="誰の発言か(任意)" class="quote-speaker-input">
-    <div class="voice-actions">
-      <button type="button" id="quote-submit" class="mc-btn primary">投稿する</button>
-      <span class="voice-msg" id="quote-msg"></span>
-    </div>
-  </div>
-  <div class="voice-list" id="quote-list"><div class="loading-note">読み込み中…</div></div>
-</section>
 
-<section id="teams" class="tab-panel">
+
+
+
+<section id="rules" class="tab-panel">
   <div class="section-head">
-    <div class="section-tag">Teams</div>
-    <h2>チーム分けツール</h2>
-    <p>今インしている団員にチェックを入れて、1チームの目安人数を決めればランダムでできるだけ均等な人数のチームに分かれます。団員以外の参加者も追加できます。</p>
+    <div class="section-tag">Rules</div>
+    <h2>騎士団のルール</h2>
+    <p>下の欄に直接書き込んで保存できます。誰でも編集できるので、みんなで最新の状態に保ちましょう。</p>
   </div>
-  <div class="team-tool">
-    <div class="team-block">
-      <div class="team-block-label">インしている団員</div>
-      <div class="team-check-grid" id="team-check-grid"><div class="loading-note">読み込み中…</div></div>
+  <div class="rules-box">
+    <textarea id="rules-textarea" placeholder="ここにルールを書いてください…"></textarea>
+    <div class="rules-actions">
+      <button type="button" id="rules-save" class="mc-btn primary">保存する</button>
+      <span class="voice-msg" id="rules-msg"></span>
     </div>
-    <div class="team-block">
-      <div class="team-block-label">団員以外の参加者(任意)</div>
-      <div class="team-extra-inputs" id="team-extra-inputs">
-        <input type="text" class="team-extra-input" placeholder="参加者の名前">
-        <input type="text" class="team-extra-input" placeholder="参加者の名前">
-        <input type="text" class="team-extra-input" placeholder="参加者の名前">
-        <input type="text" class="team-extra-input" placeholder="参加者の名前">
-      </div>
-      <button type="button" id="team-extra-add" class="mc-btn">+ 参加者欄を増やす</button>
-    </div>
-    <div class="team-size-row">
-      <label>1チームの目安人数</label>
-      <input type="number" id="team-size" min="2" max="16" value="4">
-      <button type="button" id="team-shuffle-btn" class="mc-btn primary">ランダムでチーム分け</button>
-    </div>
-    <div class="team-error hidden" id="team-error"></div>
-    <div class="team-results" id="team-results"></div>
   </div>
 </section>
 
-<section class="join tab-panel" id="join">
-  <h2>一緒に冒険しませんか?</h2>
-  <p>初心者さんもベテランさんも歓迎です。ゲーム内メールやDiscordからお気軽にどうぞ。</p>
-  <a class="btn btn-primary" href="#">Discordはこちら</a>
-</section>
+
 
 <footer>
   <div class="fbrand">脱走レイダー</div>
@@ -1066,6 +1161,15 @@
       return false;
     }
   }
+  async function saveExtraMember(id, data){
+    try{
+      await authReadyPromise;
+      await db.collection('extraMembers').doc(id).set(data, { merge: true });
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
   function esc(s){
     return String(s || '').replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -1117,8 +1221,10 @@
     var bg = 'linear-gradient(135deg,' + pair[0] + ',' + pair[1] + ')';
     var roleClass = m.role === '団長' ? 'member-role leader' : 'member-role';
     var bd = parseBirthday(m.birthday);
+    var extraAttr = m.isExtra ? ' data-extra="1"' : '';
+    var deleteBtn = m.isExtra ? '<button type="button" class="mc-btn delete-member-btn">削除</button>' : '';
     return ''
-      + '<div class="member-card" data-id="' + m.id + '">'
+      + '<div class="member-card" data-id="' + m.id + '"' + extraAttr + '>'
       + '  <div class="mc-view">'
       + '    <div class="mc-head">'
       + '      <div class="avatar" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
@@ -1157,9 +1263,71 @@
       + '    <div class="mc-edit-actions">'
       + '      <button type="button" class="mc-btn primary save-btn">保存する</button>'
       + '      <button type="button" class="mc-btn cancel-btn">キャンセル</button>'
+      + deleteBtn
       + '    </div>'
       + '  </div>'
       + '</div>';
+  }
+  function addMemberCardHTML(){
+    return ''
+      + '<div class="member-card add-member-card">'
+      + '  <div class="mc-view">'
+      + '    <button type="button" class="add-member-open">'
+      + '      <span class="add-member-plus">＋</span><span>新しい団員を追加</span>'
+      + '    </button>'
+      + '  </div>'
+      + '  <div class="mc-edit hidden">'
+      + '    <label>アイコン文字(1〜4文字)</label>'
+      + '    <input type="text" class="f-icon" maxlength="4" value="">'
+      + '    <label>ニックネーム</label>'
+      + '    <input type="text" class="f-name" value="">'
+      + '    <label>誕生日</label>'
+      + '    <div class="birthday-selects">'
+      + '      <select class="f-birthday-month">' + monthOptionsHTML('') + '</select>'
+      + '      <select class="f-birthday-day">' + dayOptionsHTML('', '') + '</select>'
+      + '    </div>'
+      + '    <label>好きな食べ物</label>'
+      + '    <input type="text" class="f-food" placeholder="例: 唐揚げ" value="">'
+      + '    <label>趣味</label>'
+      + '    <input type="text" class="f-hobby" placeholder="例: フィギュア集め" value="">'
+      + '    <label>MBTI</label>'
+      + '    <select class="f-mbti">' + mbtiOptionsHTML('') + '</select>'
+      + '    <label>自己紹介</label>'
+      + '    <textarea class="f-intro"></textarea>'
+      + '    <div class="mc-edit-actions">'
+      + '      <button type="button" class="mc-btn primary add-member-submit">追加する</button>'
+      + '      <button type="button" class="mc-btn add-member-cancel">キャンセル</button>'
+      + '    </div>'
+      + '  </div>'
+      + '</div>';
+  }
+  async function loadExtraMembers(){
+    try{
+      await authReadyPromise;
+      var snap = await db.collection('extraMembers').get();
+      var out = [];
+      snap.forEach(function(doc){
+        var d = doc.data();
+        out.push({
+          id: doc.id, isExtra: true,
+          role: d.role || '団員', color: d.color || 0,
+          name: d.name || '', icon: d.icon || '',
+          birthday: d.birthday || '', food: d.food || '',
+          hobby: d.hobby || '', mbti: d.mbti || '', intro: d.intro || ''
+        });
+      });
+      out.sort(function(a, b){ return (a.addedAt || 0) - (b.addedAt || 0); });
+      return out;
+    }catch(e){
+      return [];
+    }
+  }
+  async function getAllMembers(){
+    var overrides = {};
+    try{ overrides = await loadOverrides(); }catch(e){}
+    var seedList = MEMBERS.map(function(m){ return mergedMember(m, overrides); });
+    var extras = await loadExtraMembers();
+    return seedList.concat(extras);
   }
   function buildBirthdayCalendar(mergedList){
     var container = document.getElementById('birthday-calendar');
@@ -1205,7 +1373,7 @@
     ESTP:'行動力のある「起業家」タイプ',
     ESFP:'陽気なムードメーカー「エンターテイナー」タイプ'
   };
-  function initQuiz(){
+  async function initQuiz(){
     var box = document.getElementById('quiz-box');
     if(!box) return;
     var errorEl = document.getElementById('quiz-error');
@@ -1216,8 +1384,9 @@
     var applyBtn = document.getElementById('quiz-apply-btn');
     var applyMsg = document.getElementById('quiz-apply-msg');
 
-    applySelect.innerHTML = MEMBERS.map(function(m){
-      return '<option value="' + m.id + '">' + esc(m.name) + '</option>';
+    var allMembers = await getAllMembers();
+    applySelect.innerHTML = allMembers.map(function(m){
+      return '<option value="' + m.id + '" data-extra="' + (m.isExtra ? '1' : '0') + '">' + esc(m.name) + '</option>';
     }).join('');
 
     document.getElementById('quiz-submit').addEventListener('click', function(){
@@ -1250,11 +1419,12 @@
 
     applyBtn.addEventListener('click', async function(){
       var id = applySelect.value;
+      var isExtra = applySelect.options[applySelect.selectedIndex].dataset.extra === '1';
       var type = applyBtn.dataset.type;
       if(!id || !type) return;
       applyBtn.disabled = true;
       applyMsg.textContent = '反映中…';
-      var ok = await saveOverride(id, { mbti: type });
+      var ok = isExtra ? await saveExtraMember(id, { mbti: type }) : await saveOverride(id, { mbti: type });
       if(ok){
         applyMsg.textContent = '反映しました!団員紹介にも表示されます。';
         render();
@@ -1276,9 +1446,8 @@
   async function render(){
     var grid = document.getElementById('member-grid');
     grid.innerHTML = '<div class="loading-note">読み込み中…</div>';
-    var overrides = await loadOverrides();
-    var mergedList = MEMBERS.map(function(m){ return mergedMember(m, overrides); });
-    grid.innerHTML = mergedList.map(cardHTML).join('');
+    var mergedList = await getAllMembers();
+    grid.innerHTML = mergedList.map(cardHTML).join('') + addMemberCardHTML();
     buildBirthdayCalendar(mergedList);
   }
   document.addEventListener('DOMContentLoaded', function(){
@@ -1319,7 +1488,8 @@
           mbti: card.querySelector('.f-mbti').value,
           intro: card.querySelector('.f-intro').value.trim()
         };
-        var ok = await saveOverride(id, data);
+        var isExtra = card.getAttribute('data-extra') === '1';
+        var ok = isExtra ? await saveExtraMember(id, data) : await saveOverride(id, data);
         if(ok){
           render();
         } else {
@@ -1333,6 +1503,66 @@
               ? '保存に失敗しました。通信環境を確認してもう一度お試しください。'
               : 'サイトの設定が完了していません(管理者にご確認ください)。';
             edit.appendChild(err);
+          }
+        }
+      } else if(e.target.classList.contains('delete-member-btn')){
+        if(!confirm('この団員のプロフィールを削除しますか?この操作は取り消せません。')) return;
+        try{
+          await authReadyPromise;
+          await db.collection('extraMembers').doc(id).delete();
+          render();
+        }catch(e){
+          alert('削除に失敗しました。');
+        }
+      } else if(e.target.closest('.add-member-open')){
+        card.querySelector('.mc-view').classList.add('hidden');
+        card.querySelector('.mc-edit').classList.remove('hidden');
+      } else if(e.target.classList.contains('add-member-cancel')){
+        card.querySelector('.mc-edit').classList.add('hidden');
+        card.querySelector('.mc-view').classList.remove('hidden');
+        card.querySelectorAll('input[type="text"], textarea').forEach(function(el){ el.value = ''; });
+      } else if(e.target.classList.contains('add-member-submit')){
+        var addBtn = e.target;
+        var name = card.querySelector('.f-name').value.trim();
+        if(!name){
+          if(!card.querySelector('.error-note')){
+            var aerr = document.createElement('div');
+            aerr.className = 'error-note';
+            aerr.textContent = 'ニックネームを入力してください';
+            card.querySelector('.mc-edit').appendChild(aerr);
+          }
+          return;
+        }
+        addBtn.disabled = true;
+        addBtn.textContent = '追加中…';
+        var monthVal2 = card.querySelector('.f-birthday-month').value;
+        var dayVal2 = card.querySelector('.f-birthday-day').value;
+        var newData = {
+          icon: card.querySelector('.f-icon').value.trim() || name.slice(0, 2),
+          name: name,
+          birthday: (monthVal2 && dayVal2) ? (monthVal2 + '月' + dayVal2 + '日') : '',
+          food: card.querySelector('.f-food').value.trim(),
+          hobby: card.querySelector('.f-hobby').value.trim(),
+          mbti: card.querySelector('.f-mbti').value,
+          intro: card.querySelector('.f-intro').value.trim(),
+          role: '団員',
+          color: Math.floor(Math.random() * COLOR_PAIRS.length),
+          addedAt: Date.now()
+        };
+        try{
+          await authReadyPromise;
+          await db.collection('extraMembers').add(newData);
+          render();
+        }catch(err){
+          addBtn.disabled = false;
+          addBtn.textContent = '追加する';
+          if(!card.querySelector('.error-note')){
+            var aerr2 = document.createElement('div');
+            aerr2.className = 'error-note';
+            aerr2.textContent = storageAvailable()
+              ? '追加に失敗しました。もう一度お試しください。'
+              : 'サイトの設定が完了していません(管理者にご確認ください)。';
+            card.querySelector('.mc-edit').appendChild(aerr2);
           }
         }
       }
@@ -1646,7 +1876,7 @@
       a.classList.toggle('active-tab', a.getAttribute('href') === '#' + id);
     });
   }
-  document.querySelectorAll('.nav-links a').forEach(function(a){
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click', function(e){
       var id = a.getAttribute('href').slice(1);
       var target = document.getElementById(id);
@@ -1698,9 +1928,7 @@
   async function renderSpotlight(){
     var container = document.getElementById('spotlight-card');
     if(!container) return;
-    var overrides = {};
-    try{ overrides = await loadOverrides(); }catch(e){}
-    var mergedList = MEMBERS.map(function(m){ return mergedMember(m, overrides); });
+    var mergedList = await getAllMembers();
     var pick = mergedList[Math.floor(Math.random() * mergedList.length)];
     var cls = MBTI_CLASS[pick.mbti] || (pick.hobby ? pick.hobby : '');
     var metaLines = [];
@@ -1907,9 +2135,7 @@
   async function initTeamTool(){
     var grid = document.getElementById('team-check-grid');
     if(!grid) return;
-    var overrides = {};
-    try{ overrides = await loadOverrides(); }catch(e){}
-    var mergedList = MEMBERS.map(function(m){ return mergedMember(m, overrides); });
+    var mergedList = await getAllMembers();
     grid.innerHTML = mergedList.map(function(m){
       return '<label class="team-check"><input type="checkbox" value="' + esc(m.name) + '">' + esc(m.name) + '</label>';
     }).join('');
@@ -1955,7 +2181,7 @@
         var tmp = names[i]; names[i] = names[j]; names[j] = tmp;
       }
 
-      var teamCount = Math.max(1, Math.round(names.length / size));
+      var teamCount = Math.max(1, Math.ceil(names.length / size));
       var base = Math.floor(names.length / teamCount);
       var remainder = names.length % teamCount;
       var teams = [];
@@ -1975,6 +2201,62 @@
     });
   }
   document.addEventListener('DOMContentLoaded', initTeamTool);
+
+  /* ---------- SITE GATE (合言葉) ---------- */
+  var SITE_PASSPHRASE = '秘密のにゃるそっく';
+  (function(){
+    var gate = document.getElementById('site-gate');
+    if(!gate) return;
+    if(localStorage.getItem('site-gate-passed') === '1'){
+      gate.classList.add('hidden');
+      return;
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      var input = document.getElementById('gate-input');
+      var errorEl = document.getElementById('gate-error');
+      function tryEnter(){
+        if(input.value.trim() === SITE_PASSPHRASE){
+          try{ localStorage.setItem('site-gate-passed', '1'); }catch(e){}
+          gate.classList.add('hidden');
+        } else {
+          errorEl.classList.remove('hidden');
+        }
+      }
+      document.getElementById('gate-submit').addEventListener('click', tryEnter);
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Enter') tryEnter();
+      });
+    });
+  })();
+
+  /* ---------- RULES (直接編集) ---------- */
+  document.addEventListener('DOMContentLoaded', async function(){
+    var textarea = document.getElementById('rules-textarea');
+    if(!textarea) return;
+    var msg = document.getElementById('rules-msg');
+    var saveBtn = document.getElementById('rules-save');
+    try{
+      await authReadyPromise;
+      var doc = await db.collection('siteContent').doc('rules').get();
+      if(doc.exists) textarea.value = doc.data().text || '';
+    }catch(e){ /* leave blank */ }
+    saveBtn.addEventListener('click', async function(){
+      if(!storageAvailable()){ msg.textContent = 'サイトの設定が完了していません。'; return; }
+      saveBtn.disabled = true;
+      msg.textContent = '保存中…';
+      try{
+        await authReadyPromise;
+        await db.collection('siteContent').doc('rules').set({
+          text: textarea.value,
+          updatedAt: Date.now()
+        });
+        msg.textContent = '保存しました。';
+      }catch(e){
+        msg.textContent = '保存に失敗しました。もう一度お試しください。';
+      }
+      saveBtn.disabled = false;
+    });
+  });
 </script>
 </body>
 </html>
