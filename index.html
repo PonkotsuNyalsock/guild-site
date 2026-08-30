@@ -542,6 +542,8 @@
   .guide-item-title{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:14px;margin-bottom:6px;}
   .guide-item-desc{font-size:13px;color:var(--ink-soft);line-height:1.7;}
 
+  .quest-back-btn{display:none;margin:0 auto 14px;max-width:640px;width:100%;text-align:left;background:transparent;border:0;padding:6px 0;color:var(--ink-soft);font-family:'Zen Maru Gothic';font-size:13px;font-weight:700;cursor:pointer;}
+  .quest-back-btn:hover{color:var(--ink);}
   .quest-list{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:10px;}
   .quest-item{
     display:flex;align-items:center;gap:14px;background:var(--white);
@@ -914,6 +916,7 @@
 
   /* ---------- スマホ表示の微調整(ユーザーバー・クエスト・ログイン) ---------- */
   @media(max-width:640px){
+    .quest-back-btn{display:block;}
     .user-bar{padding:8px 14px;}
     .user-bar-inner{
       display:flex;flex-wrap:wrap;justify-content:space-between;row-gap:6px;
@@ -1602,6 +1605,7 @@
 </section>
 
 <section id="quests" class="tab-panel">
+  <button type="button" class="quest-back-btn" id="quest-back-btn">← 前の画面に戻る</button>
   <div class="section-head">
     <div class="section-tag">Quests</div>
     <h2>クエスト</h2>
@@ -1764,7 +1768,8 @@
     document.getElementById('user-bar-guest').classList.add('hidden');
     document.getElementById('user-bar-logged').classList.remove('hidden');
     document.getElementById('user-bar-name').textContent = name;
-    document.getElementById('user-bar-points').textContent = '⭐ ' + points + 'pt';
+    var safePoints = Number(points); if(!Number.isFinite(safePoints)) safePoints = 0;
+    document.getElementById('user-bar-points').textContent = '⭐ ' + safePoints + 'pt';
   }
   function showLoggedOutBar(){
     document.getElementById('user-bar-logged').classList.add('hidden');
@@ -1789,17 +1794,28 @@
     return (Date.now() - parseInt(ts, 10)) < LOGIN_EXPIRY_MS;
   }
   async function awardPostPoints(amount){
-    if(!isLoginValid()) return;
+    if(!isLoginValid() || !db) return false;
     var uid = localStorage.getItem('loggedInUserId');
     try{
       await authReadyPromise;
-      var doc = await db.collection('users').doc(uid).get();
-      var data = doc.exists ? doc.data() : {};
-      var points = (data.points || 0) + amount;
-      var totalPoints = (data.totalPoints !== undefined ? data.totalPoints : (data.points || 0)) + amount;
-      await db.collection('users').doc(uid).set({ points: points, totalPoints: totalPoints }, { merge: true });
-      updateUserBar(localStorage.getItem('loggedInUserName'), points);
-    }catch(e){ /* ignore */ }
+      var docRef = db.collection('users').doc(uid);
+      var result = await db.runTransaction(function(tx){
+        return tx.get(docRef).then(function(doc){
+          var data = doc.exists ? doc.data() : {};
+          var current = Number(data.points); if(!Number.isFinite(current)) current = 0;
+          var total = Number(data.totalPoints); if(!Number.isFinite(total)) total = current;
+          var next = current + Number(amount || 0);
+          var nextTotal = total + Number(amount || 0);
+          tx.set(docRef, { points: next, totalPoints: nextTotal }, { merge: true });
+          return { points: next, totalPoints: nextTotal };
+        });
+      });
+      updateUserBar(localStorage.getItem('loggedInUserName'), result.points);
+      return true;
+    }catch(e){
+      console.error('ポイント付与エラー:', e);
+      return false;
+    }
   }
 
   function renderNotifBadge(total){
@@ -1983,24 +1999,48 @@
           var today = todayStr();
           var points;
           if(doc.exists){
-            var data = doc.data();
-            if(data.pin !== pin){
-              errorEl.textContent = 'パスワードが違います';
-              errorEl.classList.remove('hidden');
-              submitBtn.disabled = false;
-              submitBtn.textContent = 'ログインする';
-              return;
-            }
-            points = data.points || 0;
-            var totalPoints = data.totalPoints !== undefined ? data.totalPoints : points;
-            if(data.lastLoginDate !== today){
-              points += 1;
-              totalPoints += 1;
-              await docRef.set({ points: points, totalPoints: totalPoints, lastLoginDate: today }, { merge: true });
+            var data = doc.data() || {};
+            var currentPoints = Number(data.points); if(!Number.isFinite(currentPoints)) currentPoints = 0;
+            var currentTotal = Number(data.totalPoints); if(!Number.isFinite(currentTotal)) currentTotal = currentPoints;
+
+            // PIN未登録のユーザー文書は「初回ログイン」とみなす。
+            // プロフィール保存などで users/m_xx が先に作られていても、20pt特典を逃さない。
+            if(!data.pin){
+              points = currentPoints + 20;
+              currentTotal += 20;
+              // 初回ログイン当日分の1ptも付与
+              if(data.lastLoginDate !== today){
+                points += 1;
+                currentTotal += 1;
+              }
+              await docRef.set({
+                displayName: displayName,
+                pin: pin,
+                points: points,
+                totalPoints: currentTotal,
+                lastLoginDate: today,
+                firstLoginAwarded: true,
+                lastSeen: Date.now()
+              }, { merge: true });
+            } else {
+              if(String(data.pin) !== pin){
+                errorEl.textContent = 'パスワードが違います';
+                errorEl.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'ログインする';
+                return;
+              }
+              points = currentPoints;
+              if(data.lastLoginDate !== today){
+                points += 1;
+                currentTotal += 1;
+                await docRef.set({ points: points, totalPoints: currentTotal, lastLoginDate: today }, { merge: true });
+              }
             }
           } else {
-            points = 20;
-            await docRef.set({ displayName: displayName, pin: pin, points: points, totalPoints: points, lastLoginDate: today, lastSeen: Date.now() });
+            // 完全に新規のユーザー
+            points = 21; // 初回20pt + 今日のログイン1pt
+            await docRef.set({ displayName: displayName, pin: pin, points: points, totalPoints: points, lastLoginDate: today, firstLoginAwarded: true, lastSeen: Date.now() });
           }
           localStorage.setItem('loggedInUserId', key);
           localStorage.setItem('loggedInUserName', displayName);
@@ -3020,6 +3060,11 @@
     if(homeExtras) homeExtras.style.display = (id === 'about') ? '' : 'none';
     if(id === 'members' && typeof recordDailyProfileView === 'function') recordDailyProfileView();
     if(id === 'rules' && typeof recordRulesViewed === 'function') recordRulesViewed();
+    if(id === 'shop' && typeof refreshShopUI === 'function') refreshShopUI();
+    if(id === 'quests'){
+      if(typeof renderQuests === 'function') renderQuests();
+      if(typeof renderDailyMission === 'function') renderDailyMission();
+    }
   }
   document.addEventListener('click', function(e){
     var a = e.target.closest('a[href^="#"]');
@@ -3036,6 +3081,9 @@
 
     if(target.classList.contains('tab-panel')){
       e.preventDefault();
+      if(window.location.hash !== '#' + id){
+        history.pushState({tab:id}, '', '#' + id);
+      }
       showTab(id);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -3051,7 +3099,28 @@
     }
   });
   document.addEventListener('DOMContentLoaded', function(){
-    showTab('about');
+    var initial = window.location.hash ? window.location.hash.slice(1) : 'about';
+    if(!document.getElementById(initial) || !document.getElementById(initial).classList.contains('tab-panel')) initial = 'about';
+    showTab(initial);
+    var questBack = document.getElementById('quest-back-btn');
+    if(questBack){
+      questBack.addEventListener('click', function(){
+        if(window.history.length > 1){ window.history.back(); }
+        else { history.replaceState({tab:'about'}, '', '#about'); showTab('about'); window.scrollTo({top:0,behavior:'smooth'}); }
+      });
+    }
+  });
+  window.addEventListener('popstate', function(){
+    var id = window.location.hash ? window.location.hash.slice(1) : 'about';
+    if(!document.getElementById(id) || !document.getElementById(id).classList.contains('tab-panel')) id = 'about';
+    showTab(id);
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  window.addEventListener('hashchange', function(){
+    var id = window.location.hash ? window.location.hash.slice(1) : 'about';
+    if(!document.getElementById(id) || !document.getElementById(id).classList.contains('tab-panel')) return;
+    showTab(id);
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 
   /* ---------- SPOTLIGHT ---------- */
@@ -3642,8 +3711,8 @@
     }
     var data = await loadShopUserDoc();
     if(!data) data = {};
-    var points = data.points || 0;
-    var total = data.totalPoints !== undefined ? data.totalPoints : points;
+    var points = Number(data.points); if(!Number.isFinite(points)) points = 0;
+    var total = Number(data.totalPoints); if(!Number.isFinite(total)) total = points;
     var inventory = data.inventory || [];
     balanceEl.innerHTML = '⭐ 所持: ' + points + 'pt ／ 累計: ' + total + 'pt';
 
@@ -4496,17 +4565,25 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var points = data.points || 0;
-          var inventory = data.inventory || [];
-          if(points >= item.shopCost && inventory.indexOf(key) === -1){
-            points -= item.shopCost;
-            inventory.push(key);
-            await docRef.set({ points: points, inventory: inventory }, { merge: true });
-            updateUserBar(localStorage.getItem('loggedInUserName'), points);
-          }
-        }catch(err){ /* ignore */ }
+          var result = await db.runTransaction(function(tx){
+            return tx.get(docRef).then(function(doc){
+              var data = doc.exists ? doc.data() : {};
+              var points = Number(data.points); if(!Number.isFinite(points)) points = 0;
+              var inventory = Array.isArray(data.inventory) ? data.inventory.slice() : [];
+              if(inventory.indexOf(key) !== -1) throw new Error('ALREADY_OWNED');
+              if(points < Number(item.shopCost)) throw new Error('NOT_ENOUGH_POINTS');
+              points -= Number(item.shopCost);
+              inventory.push(key);
+              tx.set(docRef, { points: points, inventory: inventory }, { merge: true });
+              return points;
+            });
+          });
+          updateUserBar(localStorage.getItem('loggedInUserName'), result);
+        }catch(err){
+          if(err.message === 'NOT_ENOUGH_POINTS') alert('ポイントが足りません。');
+          else if(err.message === 'ALREADY_OWNED') alert('このアイテムはすでに持っています。');
+          else { console.error(err); alert('購入に失敗しました。もう一度お試しください。'); }
+        }
         await refreshShopUI();
         renderRanking();
       });
@@ -4554,27 +4631,30 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var points = data.points || 0;
-          if(points < GACHA_COST){
-            alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
-            gachaBtn.disabled = false;
-            return;
-          }
-          points -= GACHA_COST;
           var picked = pickGachaItem();
           var item = ITEM_CATALOG[picked];
-          var inventory = data.inventory || [];
-          var duplicate = inventory.indexOf(picked) !== -1;
-          var refund = 0;
-          if(duplicate){
-            refund = RARITY_REFUND[item.rarity] || 0;
-            points += refund;
-          } else {
-            inventory.push(picked);
-          }
-          await docRef.set({ points: points, inventory: inventory }, { merge: true });
+          var gachaResult = await db.runTransaction(function(tx){
+            return tx.get(docRef).then(function(doc){
+              var data = doc.exists ? doc.data() : {};
+              var points = Number(data.points); if(!Number.isFinite(points)) points = 0;
+              if(points < Number(GACHA_COST)) throw new Error('NOT_ENOUGH_POINTS');
+              points -= Number(GACHA_COST);
+              var inventory = Array.isArray(data.inventory) ? data.inventory.slice() : [];
+              var duplicate = inventory.indexOf(picked) !== -1;
+              var refund = 0;
+              if(duplicate){
+                refund = Number(RARITY_REFUND[item.rarity] || 0);
+                points += refund;
+              } else {
+                inventory.push(picked);
+              }
+              tx.set(docRef, { points: points, inventory: inventory }, { merge: true });
+              return { points: points, duplicate: duplicate, refund: refund };
+            });
+          });
+          var points = gachaResult.points;
+          var duplicate = gachaResult.duplicate;
+          var refund = gachaResult.refund;
           updateUserBar(localStorage.getItem('loggedInUserName'), points);
 
           await playGachaSuspense(resultEl, item.rarity);
@@ -4593,7 +4673,8 @@
           await refreshShopUI();
           renderRanking();
         }catch(err){
-          alert('通信に失敗しました。もう一度お試しください。');
+          if(err.message === 'NOT_ENOUGH_POINTS') alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
+          else { console.error(err); alert('通信に失敗しました。もう一度お試しください。'); }
         }
         gachaBtn.disabled = false;
       });
