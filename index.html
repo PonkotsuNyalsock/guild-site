@@ -70,7 +70,7 @@
     box-shadow:0 2px 0 rgba(0,0,0,0.06);
   }
   .nav-links a:hover{background:var(--sky);border-color:var(--sky-dark);color:#fff;}
-  @media(max-width:640px){.nav-inner{padding:10px 12px;align-items:center;}.nav-links{display:flex;flex:1;min-width:0;overflow-x:auto;flex-wrap:nowrap;gap:7px;margin-left:10px;padding:2px 2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}.nav-links::-webkit-scrollbar{display:none;}.nav-links a{padding:7px 12px;font-size:11.5px;flex:0 0 auto;}.brand-name{font-size:13px;}.brand-emblem{width:32px;height:32px;font-size:14px;}.brand{gap:7px;flex:0 0 auto;}}
+  @media(max-width:640px){.nav-links{display:none;}}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -535,6 +535,25 @@
   .guide-item-title{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:14px;margin-bottom:6px;}
   .guide-item-desc{font-size:13px;color:var(--ink-soft);line-height:1.7;}
 
+  .quest-list{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:10px;}
+  .quest-item{
+    display:flex;align-items:center;gap:14px;background:var(--white);
+    border:1px solid var(--line);border-radius:14px;padding:14px 18px;
+  }
+  .quest-item-text{flex:1;}
+  .quest-item-label{font-weight:700;font-size:13.5px;}
+  .quest-item-reward{font-size:11.5px;color:var(--sun-dark);font-weight:700;margin-top:2px;}
+  .quest-done{font-size:12px;color:var(--mint-dark);font-weight:700;white-space:nowrap;}
+  .quest-pending{font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+  .quest-block{max-width:640px;margin:0 auto 24px;}
+  .quest-block-label{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:14px;margin-bottom:10px;}
+  .quest-section-label{max-width:640px;margin:0 auto 10px;}
+  .daily-mission-box{
+    background:var(--white);border:2px solid var(--sun);border-radius:16px;
+    padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  .daily-mission-label{font-weight:700;font-size:14px;}
+
   /* ---------- SHOP ---------- */
   .shop-balance{
     max-width:640px;margin:0 auto 32px;text-align:center;font-family:'M PLUS Rounded 1c';
@@ -551,6 +570,40 @@
     margin-bottom:4px;
   }
   #prank-btn{margin-top:14px;}
+  .prank-position-row{display:flex;gap:14px;margin-bottom:4px;}
+  .prank-position-opt{
+    display:flex;align-items:center;gap:6px;font-size:13px;font-weight:400;
+    color:var(--ink);cursor:pointer;
+  }
+  .prank-position-opt input{margin:0;}
+  .dice-pending-item{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;margin-top:8px;font-size:13px;
+  }
+  .dice-roll-modal-inner{max-width:400px;text-align:center;}
+  .dice-roll-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:18px 0 4px;}
+  .dice-face{
+    width:50px;height:50px;border-radius:14px;border:2px solid var(--line);
+    background:var(--paper);display:flex;align-items:center;justify-content:center;
+    font-size:26px;line-height:1;cursor:pointer;user-select:none;
+    transition:border-color .15s,transform .1s,background .15s;
+  }
+  .dice-face.selected{border-color:var(--sky-dark);background:var(--sky);transform:translateY(-3px);}
+  .dice-face.locked{cursor:default;}
+  .dice-face.rolling{
+    animation:diceSpin 0.28s linear infinite;
+    border-color:var(--sky-dark);
+  }
+  @keyframes diceSpin{
+    0%{transform:rotate(0deg) scale(1);}
+    50%{transform:rotate(180deg) scale(1.18);}
+    100%{transform:rotate(360deg) scale(1);}
+  }
+  .dice-roll-hint{font-size:11.5px;color:var(--ink-soft);margin:8px 0 4px;line-height:1.6;}
+  .dice-roll-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+  .dice-roll-actions .mc-btn{width:100%;}
+  .dice-roll-actions .mc-btn:disabled{opacity:.4;cursor:not-allowed;}
   .theme-swatch-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
   .theme-swatch{
     width:52px;height:52px;border-radius:50%;border:3px solid transparent;cursor:pointer;
@@ -641,55 +694,44 @@
 
   /* ---------- FRAMES & BADGES ---------- */
   .avatar-wrap{position:relative;flex:none;}
-  /* ガチャで獲得したフレームはプロフィールカード全体の外枠に適用 */
-  .member-card.frame-n-red{border:3px solid #E24B4A;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(226,75,74,0.22);}
-  .member-card.frame-n-orange{border:3px solid #F0997B;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(240,153,123,0.22);}
-  .member-card.frame-n-yellow{border:3px solid #FFC94D;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(255,201,77,0.22);}
-  .member-card.frame-n-green{border:3px solid #63C43B;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(99,196,59,0.22);}
-  .member-card.frame-n-teal{border:3px solid #1D9E75;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(29,158,117,0.22);}
-  .member-card.frame-n-sky{border:3px solid #4FB4E8;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(79,180,232,0.22);}
-  .member-card.frame-n-blue{border:3px solid #185FA5;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(24,95,165,0.22);}
-  .member-card.frame-n-purple{border:3px solid #7F77DD;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(127,119,221,0.22);}
-  .member-card.frame-n-pink{border:3px solid #D4537E;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(212,83,126,0.22);}
-  .member-card.frame-n-brown{border:3px solid #8B5E3C;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(139,94,60,0.22);}
-  .member-card.frame-gold{
-    border:3px solid #E8B800;
-    box-shadow:0 0 0 2px #fff,0 4px 16px rgba(232,184,0,0.35);
+  .avatar.frame-n-red{box-shadow:0 0 0 3px #E24B4A,0 0 0 5px #fff;}
+  .avatar.frame-n-orange{box-shadow:0 0 0 3px #F0997B,0 0 0 5px #fff;}
+  .avatar.frame-n-yellow{box-shadow:0 0 0 3px #FFC94D,0 0 0 5px #fff;}
+  .avatar.frame-n-green{box-shadow:0 0 0 3px #63C43B,0 0 0 5px #fff;}
+  .avatar.frame-n-teal{box-shadow:0 0 0 3px #1D9E75,0 0 0 5px #fff;}
+  .avatar.frame-n-sky{box-shadow:0 0 0 3px #4FB4E8,0 0 0 5px #fff;}
+  .avatar.frame-n-blue{box-shadow:0 0 0 3px #185FA5,0 0 0 5px #fff;}
+  .avatar.frame-n-purple{box-shadow:0 0 0 3px #7F77DD,0 0 0 5px #fff;}
+  .avatar.frame-n-pink{box-shadow:0 0 0 3px #D4537E,0 0 0 5px #fff;}
+  .avatar.frame-n-brown{box-shadow:0 0 0 3px #8B5E3C,0 0 0 5px #fff;}
+  .avatar.frame-gold{box-shadow:0 0 0 3px #E8B800,0 0 0 5px #fff;}
+  .avatar.frame-fire{
+    border:3px solid #fff;
+    box-shadow:0 0 0 3px #FF6B35,0 0 10px 3px rgba(232,64,42,0.6);
   }
-  .member-card.frame-fire{
-    border:3px solid #FF6B35;
-    box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(232,64,42,0.45);
-  }
-  .member-card.frame-water{
-    border:3px solid #4FB4E8;
-    box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(29,95,168,0.45);
+  .avatar.frame-water{
+    border:3px solid #fff;
+    box-shadow:0 0 0 3px #4FB4E8,0 0 10px 3px rgba(29,95,168,0.6);
   }
   @keyframes lightningFlicker{
-    0%,100%{box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(255,201,77,0.55);}
-    50%{box-shadow:0 0 0 2px #fff,0 0 18px 5px rgba(178,102,255,0.75);}
+    0%,100%{box-shadow:0 0 0 3px #FFC94D,0 0 10px 3px rgba(255,201,77,0.6);}
+    50%{box-shadow:0 0 0 3px #B266FF,0 0 14px 5px rgba(178,102,255,0.8);}
   }
-  .member-card.frame-lightning{
-    border:3px solid #FFC94D;
+  .avatar.frame-lightning{
+    border:3px solid #fff;
     animation:lightningFlicker 1.6s infinite;
   }
   @keyframes galaxyGlow{
-    0%{box-shadow:0 0 0 2px #fff,0 0 10px 2px rgba(160,80,255,0.55);}
-    100%{box-shadow:0 0 0 2px #fff,0 0 20px 7px rgba(80,180,255,0.75);}
+    0%{box-shadow:0 0 6px 2px rgba(160,80,255,0.6);} 100%{box-shadow:0 0 14px 6px rgba(80,180,255,0.8);}
   }
-  .member-card.frame-galaxy{
-    border:3px solid transparent;
-    background:
-      linear-gradient(#fff,#fff) padding-box,
-      linear-gradient(135deg,#a050ff,#50b4ff,#6fd9b5,#ffc94d,#ff8fa0) border-box;
-    animation:galaxyGlow 1.4s infinite alternate;
-  }
+  .avatar.frame-galaxy{animation:galaxyGlow 1.4s infinite alternate;border:2px solid #fff;}
   @keyframes phoenixGlow{
-    0%{box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(255,143,160,0.65);}
-    50%{box-shadow:0 0 0 2px #fff,0 0 18px 5px rgba(255,201,77,0.75);}
-    100%{box-shadow:0 0 0 2px #fff,0 0 24px 8px rgba(255,59,31,0.85);}
+    0%{box-shadow:0 0 0 3px #FF8FA0,0 0 10px 3px rgba(255,143,160,0.7);}
+    50%{box-shadow:0 0 0 3px #FFC94D,0 0 12px 4px rgba(255,201,77,0.8);}
+    100%{box-shadow:0 0 0 3px #FF3B1F,0 0 16px 6px rgba(255,59,31,0.9);}
   }
-  .member-card.frame-phoenix{
-    border:3px solid #FF8FA0;
+  .avatar.frame-phoenix{
+    border:3px solid #fff;
     animation:phoenixGlow 1.2s infinite alternate;
   }
   .avatar-badge{
@@ -737,6 +779,12 @@
     font-size:12px;font-weight:700;color:#4a3200;background:var(--sun);
     padding:3px 10px;border-radius:999px;
   }
+  .user-bar-quest-link{
+    font-size:12px;font-weight:700;color:var(--ink);background:var(--white);
+    border:1px solid var(--line);padding:3px 10px;border-radius:999px;
+    text-decoration:none;white-space:nowrap;
+  }
+  .user-bar-quest-link:hover{background:var(--paper);}
   #user-bar-logged{display:flex;align-items:center;gap:10px;}
 
   .login-modal-inner{max-width:360px;width:100%;background:#fff;border-radius:22px;padding:32px 26px;text-align:left;}
@@ -876,6 +924,7 @@
     <div id="user-bar-logged" class="hidden">
       <span class="user-bar-name" id="user-bar-name"></span>
       <span class="user-bar-points" id="user-bar-points"></span>
+      <a href="#quests" class="user-bar-quest-link">🎯 クエスト</a>
       <button type="button" id="notif-bell-btn" class="mc-btn notif-bell">
         🔔<span class="notif-badge hidden" id="notif-badge">0</span>
       </button>
@@ -910,6 +959,22 @@
   </div>
 </div>
 
+<div class="lightbox" id="dice-roll-modal">
+  <button type="button" class="lightbox-close" id="dice-roll-modal-close">&times;</button>
+  <div class="lightbox-inner login-modal-inner dice-roll-modal-inner">
+    <div class="login-modal-title" id="dice-roll-modal-title">🎲 サイコロ対決</div>
+    <p class="login-modal-sub" id="dice-roll-modal-sub"></p>
+    <div class="dice-roll-row" id="dice-roll-row"></div>
+    <p class="dice-roll-hint" id="dice-roll-hint"></p>
+    <div class="login-error hidden" id="dice-roll-error"></div>
+    <div class="dice-roll-actions">
+      <button type="button" class="mc-btn" id="dice-reroll-one-btn">選んだ1つを振り直す</button>
+      <button type="button" class="mc-btn" id="dice-reroll-all-btn">全部振り直す</button>
+      <button type="button" class="mc-btn primary" id="dice-roll-confirm-btn">この目で決定する</button>
+    </div>
+  </div>
+</div>
+
 <div id="home-extras">
 <header class="hero">
   <div class="hero-eyebrow"><span class="hero-dot"></span>Tree of Savior Neverland</div>
@@ -920,7 +985,7 @@
     <a class="btn btn-secondary" href="#gallery">冒険の記録を見る</a>
   </div>
   <div class="stat-row">
-    <div class="stat-slot"><div class="num">18名</div><div class="lbl">団員数</div></div>
+    <div class="stat-slot"><div class="num">16名</div><div class="lbl">団員数</div></div>
     <div class="stat-slot"><div class="num">2026.6.8</div><div class="lbl">結成日</div></div>
     <div class="stat-slot"><div class="num">カーニバルパーティー</div><div class="lbl">拠点サーバー</div></div>
   </div>
@@ -1046,7 +1111,7 @@
       <div class="history-dot"></div>
       <div class="history-date">2026年8月24日・第4シーズン</div>
       <div class="history-title">新シーズン開始(騎士団名は検討中)</div>
-      <div class="history-desc">ぽむぽむおなぎ・ぽむぽむかりん・猫虫・ぽむぽむけある・ぽむぽむはかせが加入し、団員18名に。</div>
+      <div class="history-desc">ぽむぽむおなぎ・ぽむぽむかりん・猫虫・ぽむぽむけある・ぽむぽむはかせが加入し、団員16名に。</div>
     </div>
     <div class="history-item">
       <div class="history-dot"></div>
@@ -1477,6 +1542,22 @@
   </div>
 </section>
 
+<section id="quests" class="tab-panel">
+  <div class="section-head">
+    <div class="section-tag">Quests</div>
+    <h2>クエスト</h2>
+    <p>プロフィールを埋めたり、サイトの機能を一通り試すとポイントがもらえます。ログインしたばかりの人におすすめです。</p>
+  </div>
+
+  <div class="quest-block">
+    <div class="quest-block-label">📅 今日のミッション</div>
+    <div class="daily-mission-box" id="daily-mission-box"><div class="loading-note">読み込み中…</div></div>
+  </div>
+
+  <div class="quest-block-label quest-section-label">🎯 はじめてクエスト</div>
+  <div class="quest-list" id="quest-list"><div class="loading-note">ログインすると表示されます</div></div>
+</section>
+
 <section id="shop" class="tab-panel">
   <div class="section-head">
     <div class="section-tag">Shop</div>
@@ -1494,13 +1575,29 @@
 
   <div class="shop-block">
     <div class="shop-block-label">😈 いたずら(20pt)</div>
-    <p class="shop-sub-note">団員を選んで、名前の後ろに3文字以内の単語をこっそり付け足せます。自分のプロフィールは通常どおり自分で編集できますが、他の団員のプロフィールは基本的に編集できません(このいたずらだけは例外です)。</p>
+    <p class="shop-sub-note">団員を選んで、名前の前か後ろに3文字以内の単語をこっそり付け足せます。一度付いたいたずらは、いたずらされた本人であっても消せません。自分のプロフィールは通常どおり自分で編集できますが、他の団員のプロフィールは基本的に編集できません(このいたずらだけは例外です)。</p>
     <label>対象の団員</label>
     <select id="prank-target-select"></select>
+    <label>付ける位置</label>
+    <div class="prank-position-row">
+      <label class="prank-position-opt"><input type="radio" name="prank-position" value="prefix">名前の前に</label>
+      <label class="prank-position-opt"><input type="radio" name="prank-position" value="suffix" checked>名前の後ろに</label>
+    </div>
     <label>付け足す単語(3文字以内)</label>
     <input type="text" id="prank-word-input" maxlength="3" placeholder="例: 様">
     <div class="login-error hidden" id="prank-error"></div>
     <button type="button" id="prank-btn" class="mc-btn primary">いたずらする(20pt)</button>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">🎲 サイコロ対決(1日1回無料)</div>
+    <p class="shop-sub-note">団員を選んでサイコロ対決を挑めます。5つのサイコロを振り、①1つだけ選んで振り直す、②全部振り直す、③そのまま勝負、のどれかを選べます(振り直しは1日1回まで)。合計の目が大きい方の勝ちで、勝った方が相手から1ポイント奪えます。ただし、挑まれた側がポイントを奪われるのは1日1回までです(挑戦自体は何度でも受けられます)。</p>
+    <div class="shop-sub-note" id="dice-status">読み込み中…</div>
+    <label>挑む相手</label>
+    <select id="dice-target-select"></select>
+    <div class="login-error hidden" id="dice-error"></div>
+    <button type="button" id="dice-challenge-btn" class="mc-btn primary">挑戦する</button>
+    <div id="dice-pending-list"></div>
   </div>
 
   <div class="shop-block">
@@ -1633,26 +1730,17 @@
     return (Date.now() - parseInt(ts, 10)) < LOGIN_EXPIRY_MS;
   }
   async function awardPostPoints(amount){
-    if(!isLoginValid() || !storageAvailable()) return false;
+    if(!isLoginValid()) return;
     var uid = localStorage.getItem('loggedInUserId');
     try{
-      var authOK = await authReadyPromise;
-      if(!authOK) throw new Error('AUTH_NOT_READY');
-      var ref = db.collection('users').doc(uid);
-      var result = await db.runTransaction(async function(tx){
-        var snap = await tx.get(ref);
-        var data = snap.exists ? (snap.data() || {}) : {};
-        var points = Number(data.points || 0) + Number(amount || 0);
-        var totalPoints = (data.totalPoints !== undefined ? Number(data.totalPoints || 0) : Number(data.points || 0)) + Number(amount || 0);
-        tx.set(ref, {points: points, totalPoints: totalPoints}, {merge:true});
-        return points;
-      });
-      updateUserBar(localStorage.getItem('loggedInUserName'), result);
-      return true;
-    }catch(e){
-      console.error('ポイント付与エラー', e);
-      return false;
-    }
+      await authReadyPromise;
+      var doc = await db.collection('users').doc(uid).get();
+      var data = doc.exists ? doc.data() : {};
+      var points = (data.points || 0) + amount;
+      var totalPoints = (data.totalPoints !== undefined ? data.totalPoints : (data.points || 0)) + amount;
+      await db.collection('users').doc(uid).set({ points: points, totalPoints: totalPoints }, { merge: true });
+      updateUserBar(localStorage.getItem('loggedInUserName'), points);
+    }catch(e){ /* ignore */ }
   }
 
   function renderNotifBadge(total){
@@ -1666,7 +1754,7 @@
     }
   }
   async function fetchNotifCounts(lastSeen){
-    var counts = { photos: 0, quotes: 0, voices: 0, rules: false };
+    var counts = { photos: 0, quotes: 0, voices: 0, rules: false, diceBattles: 0 };
     try{
       var photosSnap = await db.collection('photos').where('addedAt', '>', lastSeen).get();
       counts.photos = photosSnap.size;
@@ -1683,6 +1771,13 @@
       var rulesDoc = await db.collection('siteContent').doc('rules').get();
       if(rulesDoc.exists && (rulesDoc.data().updatedAt || 0) > lastSeen) counts.rules = true;
     }catch(e){}
+    if(isLoginValid()){
+      try{
+        var uid = localStorage.getItem('loggedInUserId');
+        var diceSnap = await db.collection('diceBattles').where('targetId', '==', uid).where('status', '==', 'pending').get();
+        counts.diceBattles = diceSnap.size;
+      }catch(e){}
+    }
     return counts;
   }
   async function checkNotifications(){
@@ -1694,7 +1789,7 @@
       var lastSeen = doc.exists ? (doc.data().lastSeen || 0) : 0;
       var counts = await fetchNotifCounts(lastSeen);
       window.__notifCounts = counts;
-      var total = counts.photos + counts.quotes + counts.voices + (counts.rules ? 1 : 0);
+      var total = counts.photos + counts.quotes + counts.voices + (counts.rules ? 1 : 0) + counts.diceBattles;
       renderNotifBadge(total);
     }catch(e){ /* ignore */ }
   }
@@ -1704,13 +1799,14 @@
     try{
       await authReadyPromise;
       await db.collection('users').doc(uid).set({ lastSeen: Date.now() }, { merge: true });
-      renderNotifBadge(0);
+      if(typeof checkNotifications === 'function') checkNotifications();
     }catch(e){ /* ignore */ }
   }
   function openNotifModal(){
-    var counts = window.__notifCounts || { photos: 0, quotes: 0, voices: 0, rules: false };
+    var counts = window.__notifCounts || { photos: 0, quotes: 0, voices: 0, rules: false, diceBattles: 0 };
     var list = document.getElementById('notif-list');
     var items = [];
+    if(counts.diceBattles > 0) items.push('<div class="notif-item">🎲 <a href="#shop">サイコロ対決に挑まれています</a><span class="notif-count">' + counts.diceBattles + '</span></div>');
     if(counts.photos > 0) items.push('<div class="notif-item">📷 <a href="#gallery">新しい写真</a><span class="notif-count">' + counts.photos + '</span></div>');
     if(counts.quotes > 0) items.push('<div class="notif-item">💬 <a href="#quotes">新しい名言</a><span class="notif-count">' + counts.quotes + '</span></div>');
     if(counts.voices > 0) items.push('<div class="notif-item">📢 <a href="#voices">新しいみんなの声</a><span class="notif-count">' + counts.voices + '</span></div>');
@@ -1824,42 +1920,29 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(key);
+          var doc = await docRef.get();
           var today = todayStr();
-          var loginResult = await db.runTransaction(async function(tx){
-            var snap = await tx.get(docRef);
-            var data = snap.exists ? (snap.data() || {}) : {};
-            var hasPin = typeof data.pin === 'string' && /^\d{4}$/.test(data.pin);
-            var points = Number(data.points || 0);
-            var totalPoints = data.totalPoints !== undefined ? Number(data.totalPoints || 0) : points;
-            var update = { displayName: displayName, lastSeen: Date.now() };
-            var firstLogin = false;
-
-            if(!hasPin){
-              // プロフィール用の users ドキュメントが先に作られていても、
-              // PIN未登録なら「初回ログイン」として扱う。
-              firstLogin = data.firstLoginAwarded !== true;
-              update.pin = pin;
-              if(firstLogin){
-                points += 20;
-                totalPoints += 20;
-                update.firstLoginAwarded = true;
-              }
-            }else if(data.pin !== pin){
-              throw new Error('WRONG_PIN');
+          var points;
+          if(doc.exists){
+            var data = doc.data();
+            if(data.pin !== pin){
+              errorEl.textContent = 'パスワードが違います';
+              errorEl.classList.remove('hidden');
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'ログインする';
+              return;
             }
-
-            // 初回ログインでも「本日のログイン1pt」を加算する。
+            points = data.points || 0;
+            var totalPoints = data.totalPoints !== undefined ? data.totalPoints : points;
             if(data.lastLoginDate !== today){
               points += 1;
               totalPoints += 1;
-              update.lastLoginDate = today;
+              await docRef.set({ points: points, totalPoints: totalPoints, lastLoginDate: today }, { merge: true });
             }
-            update.points = points;
-            update.totalPoints = totalPoints;
-            tx.set(docRef, update, { merge: true });
-            return { points: points, totalPoints: totalPoints, firstLogin: firstLogin };
-          });
-          var points = loginResult.points;
+          } else {
+            points = 20;
+            await docRef.set({ displayName: displayName, pin: pin, points: points, totalPoints: points, lastLoginDate: today, lastSeen: Date.now() });
+          }
           localStorage.setItem('loggedInUserId', key);
           localStorage.setItem('loggedInUserName', displayName);
           localStorage.setItem('loginTimestamp', String(Date.now()));
@@ -1868,6 +1951,9 @@
           modal.classList.remove('open');
           if(typeof render === 'function') render();
           checkNotifications();
+          if(typeof renderQuests === 'function') renderQuests();
+          if(typeof renderDailyMission === 'function') renderDailyMission();
+          if(typeof renderDiceSection === 'function') renderDiceSection();
         }catch(e){
           errorEl.textContent = '通信に失敗しました。もう一度お試しください。';
           errorEl.classList.remove('hidden');
@@ -1941,11 +2027,16 @@
     });
   }
   function mergedMember(m, overrides){
-    var o = overrides[m.id];
-    if(!o) return m;
+    var o = overrides[m.id] || {};
+    var baseName = o.name !== undefined ? o.name : m.name;
+    var prankPrefix = o.prankPrefix !== undefined ? o.prankPrefix : (m.prankPrefix || '');
+    var prankSuffix = o.prankSuffix !== undefined ? o.prankSuffix : (m.prankSuffix || '');
     return {
       id:m.id, role:m.role, color:m.color,
-      name:o.name || m.name, icon:o.icon || m.icon,
+      name: prankPrefix + baseName + prankSuffix,
+      baseName: baseName,
+      prankPrefix: prankPrefix, prankSuffix: prankSuffix,
+      icon:o.icon !== undefined ? o.icon : m.icon,
       birthday:o.birthday!==undefined ? o.birthday : m.birthday,
       food:o.food!==undefined ? o.food : m.food,
       hobby:o.hobby!==undefined ? o.hobby : (m.hobby || ''),
@@ -2062,7 +2153,7 @@
       + '    <label>アイコン文字(1〜4文字)</label>'
       + '    <input type="text" class="f-icon" maxlength="4" value="' + esc(m.icon) + '">'
       + '    <label>ニックネーム</label>'
-      + '    <input type="text" class="f-name" value="' + esc(m.name) + '">'
+      + '    <input type="text" class="f-name" value="' + esc(m.baseName !== undefined ? m.baseName : m.name) + '">'
       + '    <label>誕生日</label>'
       + '    <div class="birthday-selects">'
       + '      <select class="f-birthday-month">' + monthOptionsHTML(bd.month) + '</select>'
@@ -2091,11 +2182,11 @@
       + '  </div>';
 
     return ''
-      + '<div class="member-card' + frameClass + '" data-id="' + m.id + '"' + extraAttr + '>'
+      + '<div class="member-card" data-id="' + m.id + '"' + extraAttr + '>'
       + '  <div class="mc-view">'
       + '    <div class="mc-head">'
       + '      <div class="avatar-wrap">'
-      + '        <div class="avatar" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
+      + '        <div class="avatar' + frameClass + '" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
       + badgeSpan
       + '      </div>'
       + '      <div>'
@@ -2164,10 +2255,16 @@
       var out = [];
       snap.forEach(function(doc){
         var d = doc.data();
+        var baseName = d.name || '';
+        var prankPrefix = d.prankPrefix || '';
+        var prankSuffix = d.prankSuffix || '';
         out.push({
           id: doc.id, isExtra: true,
           role: d.role || '団員', color: d.color || 0,
-          name: d.name || '', icon: d.icon || '',
+          name: prankPrefix + baseName + prankSuffix,
+          baseName: baseName,
+          prankPrefix: prankPrefix, prankSuffix: prankSuffix,
+          icon: d.icon || '',
           birthday: d.birthday || '', food: d.food || '',
           hobby: d.hobby || '', mbti: d.mbti || '', adv: d.adv || '', title: d.title || '', intro: d.intro || ''
         });
@@ -2824,12 +2921,15 @@
             title: titleInput.value.trim(),
             desc: descInput.value.trim(),
             dataUrl: dataUrl,
-            addedAt: Date.now()
+            addedAt: Date.now(),
+            postedBy: isLoginValid() ? localStorage.getItem('loggedInUserId') : null
           };
           await authReadyPromise;
           await db.collection('photos').add(data);
           await buildCategoryFolders(cat);
-          await awardPostPoints(2);
+          awardPostPoints(2);
+          if(typeof renderDailyMission === 'function') renderDailyMission();
+          if(typeof renderQuests === 'function') renderQuests();
 
           fileInput.value = '';
           titleInput.value = '';
@@ -2856,6 +2956,8 @@
     });
     var homeExtras = document.getElementById('home-extras');
     if(homeExtras) homeExtras.style.display = (id === 'about') ? '' : 'none';
+    if(id === 'members' && typeof recordDailyProfileView === 'function') recordDailyProfileView();
+    if(id === 'rules' && typeof recordRulesViewed === 'function') recordRulesViewed();
   }
   document.addEventListener('click', function(e){
     var a = e.target.closest('a[href^="#"]');
@@ -2995,11 +3097,13 @@
         msg.textContent = '送信中…';
         try{
           await authReadyPromise;
-          await db.collection('anonMessages').add({ text: text, addedAt: Date.now() });
+          await db.collection('anonMessages').add({ text: text, addedAt: Date.now(), postedBy: isLoginValid() ? localStorage.getItem('loggedInUserId') : null });
           input.value = '';
           msg.textContent = '匿名で投稿しました。';
           loadVoices();
-          await awardPostPoints(2);
+          awardPostPoints(2);
+          if(typeof renderDailyMission === 'function') renderDailyMission();
+          if(typeof renderQuests === 'function') renderQuests();
         }catch(e){
           msg.textContent = '投稿に失敗しました。もう一度お試しください。';
         }
@@ -3100,12 +3204,14 @@
         msg.textContent = '投稿中…';
         try{
           await authReadyPromise;
-          await db.collection('quotes').add({ text: text, speaker: speaker, addedAt: Date.now() });
+          await db.collection('quotes').add({ text: text, speaker: speaker, addedAt: Date.now(), postedBy: isLoginValid() ? localStorage.getItem('loggedInUserId') : null });
           input.value = '';
           speakerInput.value = '';
           msg.textContent = '投稿しました。';
           loadQuoteList();
-          await awardPostPoints(2);
+          awardPostPoints(2);
+          if(typeof renderDailyMission === 'function') renderDailyMission();
+          if(typeof renderQuests === 'function') renderQuests();
         }catch(e){
           msg.textContent = '投稿に失敗しました。もう一度お試しください。';
         }
@@ -3525,10 +3631,482 @@
     }
   }
 
+  var QUEST_TASKS = [
+    { id:'t_food',  label:'好きな食べ物を書く',       reward:3, auto:true, check:function(p){ return !!p.food; } },
+    { id:'t_hobby', label:'趣味を書く',               reward:3, auto:true, check:function(p){ return !!p.hobby; } },
+    { id:'t_intro', label:'自己紹介を書く',           reward:3, auto:true, check:function(p){ return !!p.intro; } },
+    { id:'t_mbti',  label:'MBTI診断を受ける',         reward:3, auto:true, check:function(p){ return !!p.mbti; } },
+    { id:'t_adv',   label:'冒険タイプ診断を受ける',   reward:3, auto:true, check:function(p){ return !!p.adv; } },
+    { id:'t_title', label:'称号を作ってみる',         reward:3, auto:true, check:function(p){ return !!p.title; } },
+    { id:'t_gacha', label:'ガチャを1回引いてみる',     reward:3, auto:true, check:function(p, u){ return (u.inventory || []).length > 0; } },
+    { id:'t_equip', label:'アイテムを装備してみる',   reward:3, auto:true, check:function(p, u){ return !!(u.equippedFrame || u.equippedBadge); } },
+    { id:'t_post',  label:'写真・名言・みんなの声のどれかに投稿する', reward:5, auto:true, check:function(p, u){ return !!u.hasPostedEverComputed; } },
+    { id:'t_rules', label:'ルールを読む',             reward:2, auto:true, check:function(p, u){ return !!u.rulesViewedEver; } },
+    { id:'t_dice',  label:'サイコロ対決をする',       reward:3, auto:true, check:function(p, u){ return !!u.hasDiceBattledEverComputed; } }
+  ];
+
+  async function hasCollectionActivity(collectionName, uid, sinceMs){
+    try{
+      var snap = await db.collection(collectionName).where('postedBy', '==', uid).get();
+      var found = false;
+      snap.forEach(function(doc){
+        if(sinceMs === undefined || (doc.data().addedAt || 0) >= sinceMs) found = true;
+      });
+      return found;
+    }catch(e){ return false; }
+  }
+  async function hasPostedEver(uid){
+    var results = await Promise.all([
+      hasCollectionActivity('photos', uid),
+      hasCollectionActivity('quotes', uid),
+      hasCollectionActivity('anonMessages', uid)
+    ]);
+    return results.some(function(r){ return r; });
+  }
+
+  // 挑戦した(challengerId==uid)か、挑まれて実際に振った(targetId==uid かつ resolved済み)かのどちらかがあれば「対決した」とみなす
+  async function hasDiceBattledEver(uid){
+    try{
+      var results = await Promise.all([
+        db.collection('diceBattles').where('challengerId', '==', uid).get(),
+        db.collection('diceBattles').where('targetId', '==', uid).where('status', '==', 'resolved').get()
+      ]);
+      return results.some(function(snap){ return !snap.empty; });
+    }catch(e){ return false; }
+  }
+
+  async function getMyProfileAndUserData(uid){
+    var userData = (await loadShopUserDoc()) || {};
+    var myProfile = {};
+    if(uid.indexOf('m_') === 0){
+      var myId = uid.slice(2);
+      var members = [];
+      try{ members = await getAllMembers(); }catch(e){}
+      myProfile = members.find(function(m){ return m.id === myId; }) || {};
+    }
+    userData.hasPostedEverComputed = await hasPostedEver(uid);
+    userData.hasDiceBattledEverComputed = await hasDiceBattledEver(uid);
+    return { userData: userData, myProfile: myProfile };
+  }
+
+  async function autoClaimQuests(){
+    if(!isLoginValid()) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var info = await getMyProfileAndUserData(uid);
+      var data = info.userData;
+      var myProfile = info.myProfile;
+      var claimed = data.claimedTasks || [];
+      var newlyClaimed = [];
+      var addPoints = 0;
+      QUEST_TASKS.forEach(function(t){
+        if(!t.auto) return;
+        if(claimed.indexOf(t.id) !== -1) return;
+        if(t.check(myProfile, data)){
+          newlyClaimed.push(t.id);
+          addPoints += t.reward;
+        }
+      });
+      if(newlyClaimed.length > 0){
+        var docRef = db.collection('users').doc(uid);
+        var points = (data.points || 0) + addPoints;
+        var totalPoints = (data.totalPoints !== undefined ? data.totalPoints : (data.points || 0)) + addPoints;
+        var allClaimed = claimed.concat(newlyClaimed);
+        await docRef.set({ points: points, totalPoints: totalPoints, claimedTasks: allClaimed }, { merge: true });
+        updateUserBar(localStorage.getItem('loggedInUserName'), points);
+      }
+    }catch(e){ /* ignore */ }
+  }
+
+  var DAILY_MISSION_REWARD = 5;
+  var DAILY_MISSION_POOL = [
+    { id:'view_profile', label:'誰かのプロフィールを見る' },
+    { id:'post_photo',   label:'写真を投稿する' },
+    { id:'post_voice',   label:'みんなの声に書き込む' },
+    { id:'post_quote',   label:'名言集に投稿する' }
+  ];
+  function getTodayMission(){
+    var d = new Date();
+    var start = new Date(d.getFullYear(), 0, 0);
+    var dayOfYear = Math.floor((d - start) / 86400000);
+    return DAILY_MISSION_POOL[dayOfYear % DAILY_MISSION_POOL.length];
+  }
+  function startOfTodayMs(){
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d.getTime();
+  }
+  async function checkDailyMissionDone(mission, uid, userData){
+    if(mission.id === 'view_profile'){
+      return userData.dailyProfileViewDate === todayStr();
+    }
+    if(mission.id === 'post_photo') return await hasCollectionActivity('photos', uid, startOfTodayMs());
+    if(mission.id === 'post_voice') return await hasCollectionActivity('anonMessages', uid, startOfTodayMs());
+    if(mission.id === 'post_quote') return await hasCollectionActivity('quotes', uid, startOfTodayMs());
+    return false;
+  }
+  async function renderDailyMission(){
+    var container = document.getElementById('daily-mission-box');
+    if(!container) return;
+    if(!isLoginValid()){
+      container.innerHTML = '<div class="notif-empty">ログインすると挑戦できます</div>';
+      return;
+    }
+    var mission = getTodayMission();
+    var uid = localStorage.getItem('loggedInUserId');
+    var today = todayStr();
+    var userData = (await loadShopUserDoc()) || {};
+
+    if(userData.dailyMissionClaimedDate === today){
+      container.innerHTML = '<div class="daily-mission-label">' + esc(mission.label) + '</div><span class="quest-done">今日は達成済み✓</span>';
+      return;
+    }
+
+    var done = await checkDailyMissionDone(mission, uid, userData);
+    if(done){
+      try{
+        await authReadyPromise;
+        var docRef = db.collection('users').doc(uid);
+        var freshDoc = await docRef.get();
+        var freshData = freshDoc.exists ? freshDoc.data() : {};
+        if(freshData.dailyMissionClaimedDate !== today){
+          var points = (freshData.points || 0) + DAILY_MISSION_REWARD;
+          var totalPoints = (freshData.totalPoints !== undefined ? freshData.totalPoints : (freshData.points || 0)) + DAILY_MISSION_REWARD;
+          await docRef.set({ points: points, totalPoints: totalPoints, dailyMissionClaimedDate: today }, { merge: true });
+          updateUserBar(localStorage.getItem('loggedInUserName'), points);
+        }
+      }catch(e){ /* ignore */ }
+      container.innerHTML = '<div class="daily-mission-label">' + esc(mission.label) + '</div><span class="quest-done">達成しました!+' + DAILY_MISSION_REWARD + 'pt✓</span>';
+    } else {
+      container.innerHTML = '<div class="daily-mission-label">' + esc(mission.label) + '</div><span class="quest-pending">未達成</span>';
+    }
+  }
+
+  async function recordDailyProfileView(){
+    if(!isLoginValid()) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var docRef = db.collection('users').doc(uid);
+      var doc = await docRef.get();
+      var data = doc.exists ? doc.data() : {};
+      var today = todayStr();
+      if(data.dailyProfileViewDate !== today){
+        await docRef.set({ dailyProfileViewDate: today }, { merge: true });
+      }
+    }catch(e){ /* ignore */ }
+    if(typeof renderDailyMission === 'function') renderDailyMission();
+  }
+  async function recordRulesViewed(){
+    if(!isLoginValid()) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var docRef = db.collection('users').doc(uid);
+      var doc = await docRef.get();
+      var data = doc.exists ? doc.data() : {};
+      if(!data.rulesViewedEver){
+        await docRef.set({ rulesViewedEver: true }, { merge: true });
+      }
+    }catch(e){ /* ignore */ }
+    if(typeof renderQuests === 'function') renderQuests();
+  }
+
+  async function renderQuests(){
+    var container = document.getElementById('quest-list');
+    if(!container) return;
+    if(!isLoginValid()){
+      container.innerHTML = '<div class="notif-empty">ログインするとクエストに挑戦できます</div>';
+      return;
+    }
+    await autoClaimQuests();
+    var uid = localStorage.getItem('loggedInUserId');
+    var userData = (await loadShopUserDoc()) || {};
+    var claimed = userData.claimedTasks || [];
+
+    var myProfile = {};
+    if(uid.indexOf('m_') === 0){
+      var myId = uid.slice(2);
+      var members = [];
+      try{ members = await getAllMembers(); }catch(e){}
+      myProfile = members.find(function(m){ return m.id === myId; }) || {};
+    }
+
+    container.innerHTML = QUEST_TASKS.map(function(t){
+      var isClaimed = claimed.indexOf(t.id) !== -1;
+      var statusHTML;
+      if(isClaimed){
+        statusHTML = '<span class="quest-done">受け取り済み✓</span>';
+      } else if(t.auto){
+        statusHTML = '<span class="quest-pending">未達成</span>';
+      } else {
+        statusHTML = '<button type="button" class="mc-btn quest-claim-btn" data-task="' + t.id + '" data-reward="' + t.reward + '">できたら押す</button>';
+      }
+      return '<div class="quest-item">'
+        + '<div class="quest-item-text"><div class="quest-item-label">' + esc(t.label) + '</div><div class="quest-item-reward">+' + t.reward + 'pt</div></div>'
+        + statusHTML
+        + '</div>';
+    }).join('');
+  }
+
+    var DICE_FACES = ['','⚀','⚁','⚂','⚃','⚄','⚅'];
+    function rollDie(){ return 1 + Math.floor(Math.random() * 6); }
+
+    // 5つのサイコロを振り、①1つだけ選んで振り直す ②全部振り直す ③そのまま決定、を選ばせるモーダル。
+    // 振り直し(①②のどちらか)は1日1回まで(canReroll=falseなら③しか選べない)。
+    // resolve()には { dice:[5個の目], total:合計, rerollUsed:振り直しを使ったか } または キャンセル時 null が渡る。
+    function openDiceRollModal(opts){
+      return new Promise(function(resolve){
+        var modal = document.getElementById('dice-roll-modal');
+        var titleEl = document.getElementById('dice-roll-modal-title');
+        var subEl = document.getElementById('dice-roll-modal-sub');
+        var rowEl = document.getElementById('dice-roll-row');
+        var hintEl = document.getElementById('dice-roll-hint');
+        var errorEl = document.getElementById('dice-roll-error');
+        var oneBtn = document.getElementById('dice-reroll-one-btn');
+        var allBtn = document.getElementById('dice-reroll-all-btn');
+        var confirmBtn = document.getElementById('dice-roll-confirm-btn');
+        var closeBtn = document.getElementById('dice-roll-modal-close');
+
+        titleEl.textContent = (opts && opts.title) || '🎲 サイコロ対決';
+        subEl.textContent = (opts && opts.subLabel) || '';
+        errorEl.classList.add('hidden');
+
+        var dice = [rollDie(), rollDie(), rollDie(), rollDie(), rollDie()];
+        var selected = -1;
+        var rerollUsed = false;
+        var canRerollToday = !!(opts && opts.canReroll);
+        var settled = false;
+        var animating = false;
+        var spinTimer = null;
+
+        function faceEl(i){
+          return rowEl.querySelector('.dice-face[data-idx="' + i + '"]');
+        }
+
+        // サイコロの見た目(DOM要素)を作り直す。値の更新はupdateFace()で個別に行う。
+        function buildFaces(){
+          rowEl.innerHTML = dice.map(function(v, i){
+            return '<div class="dice-face" data-idx="' + i + '">' + DICE_FACES[v] + '</div>';
+          }).join('');
+        }
+        buildFaces();
+
+        function updateFaceClasses(){
+          dice.forEach(function(v, i){
+            var el = faceEl(i);
+            if(!el) return;
+            el.textContent = DICE_FACES[v];
+            var cls = 'dice-face';
+            if(i === selected) cls += ' selected';
+            if(!canRerollToday || rerollUsed) cls += ' locked';
+            el.className = cls;
+          });
+        }
+
+        function updateHintAndButtons(){
+          var total = dice.reduce(function(a, b){ return a + b; }, 0);
+          var note;
+          if(!canRerollToday) note = '(本日はすでに振り直しを使っているため、このままの目で決定します)';
+          else if(rerollUsed) note = '(振り直しを使いました。この目で決定してください)';
+          else note = '(サイコロを1つ選ぶと「選んだ1つを振り直す」が使えます。振り直しは1日1回までです)';
+          hintEl.textContent = '合計: ' + total + ' ' + note;
+          oneBtn.disabled = animating || !canRerollToday || rerollUsed || selected === -1;
+          allBtn.disabled = animating || !canRerollToday || rerollUsed;
+          confirmBtn.disabled = animating;
+        }
+
+        function render(){
+          updateFaceClasses();
+          updateHintAndButtons();
+        }
+
+        // indices のサイコロを実際に回っているように見せる演出。dice[]の最終値はすでに決まっている前提で、
+        // 一定時間ランダムな目を高速に切り替えてから、本当の目に着地させる。
+        function animateRoll(indices, done){
+          animating = true;
+          updateHintAndButtons();
+          indices.forEach(function(i){
+            var el = faceEl(i);
+            if(el) el.classList.add('rolling');
+          });
+          var ticks = 0;
+          var maxTicks = 9;
+          if(spinTimer) clearInterval(spinTimer);
+          spinTimer = setInterval(function(){
+            ticks++;
+            indices.forEach(function(i){
+              var el = faceEl(i);
+              if(el) el.textContent = DICE_FACES[rollDie()];
+            });
+            if(ticks >= maxTicks){
+              clearInterval(spinTimer);
+              spinTimer = null;
+              indices.forEach(function(i){
+                var el = faceEl(i);
+                if(el) el.classList.remove('rolling');
+              });
+              animating = false;
+              render();
+              if(done) done();
+            }
+          }, 70);
+        }
+
+        render();
+        animateRoll([0, 1, 2, 3, 4]);
+
+        function onDiceClick(e){
+          if(animating) return;
+          var face = e.target.closest('.dice-face');
+          if(!face || !canRerollToday || rerollUsed) return;
+          var idx = parseInt(face.dataset.idx, 10);
+          selected = (selected === idx) ? -1 : idx;
+          render();
+        }
+        function onOne(){
+          if(oneBtn.disabled || animating) return;
+          var idx = selected;
+          dice[idx] = rollDie();
+          rerollUsed = true;
+          selected = -1;
+          animateRoll([idx]);
+        }
+        function onAll(){
+          if(allBtn.disabled || animating) return;
+          dice = [rollDie(), rollDie(), rollDie(), rollDie(), rollDie()];
+          rerollUsed = true;
+          selected = -1;
+          animateRoll([0, 1, 2, 3, 4]);
+        }
+        function cleanup(){
+          if(spinTimer){ clearInterval(spinTimer); spinTimer = null; }
+          rowEl.removeEventListener('click', onDiceClick);
+          oneBtn.removeEventListener('click', onOne);
+          allBtn.removeEventListener('click', onAll);
+          confirmBtn.removeEventListener('click', onConfirm);
+          closeBtn.removeEventListener('click', onCancel);
+          modal.removeEventListener('click', onBackdrop);
+          modal.classList.remove('open');
+        }
+        function onConfirm(){
+          if(settled || animating) return;
+          settled = true;
+          var total = dice.reduce(function(a, b){ return a + b; }, 0);
+          cleanup();
+          resolve({ dice: dice.slice(), total: total, rerollUsed: rerollUsed });
+        }
+        function onCancel(){
+          if(settled) return;
+          settled = true;
+          cleanup();
+          resolve(null);
+        }
+        function onBackdrop(e){
+          if(e.target === modal) onCancel();
+        }
+
+        rowEl.addEventListener('click', onDiceClick);
+        oneBtn.addEventListener('click', onOne);
+        allBtn.addEventListener('click', onAll);
+        confirmBtn.addEventListener('click', onConfirm);
+        closeBtn.addEventListener('click', onCancel);
+        modal.addEventListener('click', onBackdrop);
+
+        modal.classList.add('open');
+      });
+    }
+
+    async function loadMyPendingDiceBattles(uid){
+      try{
+        var snap = await db.collection('diceBattles').where('targetId', '==', uid).where('status', '==', 'pending').get();
+        var out = [];
+        snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; out.push(d); });
+        return out;
+      }catch(e){ return []; }
+    }
+
+    async function renderDiceSection(){
+      var statusEl = document.getElementById('dice-status');
+      var targetSelect = document.getElementById('dice-target-select');
+      var pendingListEl = document.getElementById('dice-pending-list');
+      var challengeBtn = document.getElementById('dice-challenge-btn');
+      if(!statusEl) return;
+      if(!isLoginValid()){
+        statusEl.textContent = 'ログインすると挑戦できます';
+        targetSelect.innerHTML = '';
+        pendingListEl.innerHTML = '';
+        challengeBtn.disabled = true;
+        return;
+      }
+      var uid = localStorage.getItem('loggedInUserId');
+      var userData = (await loadShopUserDoc()) || {};
+      var today = todayStr();
+      var usedToday = userData.diceChallengeUsedDate === today;
+      statusEl.textContent = usedToday
+        ? '本日の無料挑戦は使用済みです(また明日挑戦できます)'
+        : '本日はまだ挑戦していません(無料で1回挑戦できます)';
+      challengeBtn.disabled = usedToday;
+
+      var members = [];
+      try{ members = await getAllMembers(); }catch(e){}
+      targetSelect.innerHTML = members
+        .filter(function(m){ return ('m_' + m.id) !== uid; })
+        .map(function(m){ return '<option value="' + m.id + '" data-name="' + esc(m.name) + '">' + esc(m.name) + '</option>'; })
+        .join('');
+
+      var pending = await loadMyPendingDiceBattles(uid);
+      if(pending.length === 0){
+        pendingListEl.innerHTML = '';
+      } else {
+        pendingListEl.innerHTML = '<div class="quest-block-label" style="margin-top:20px;">⚔️ 挑まれています(' + pending.length + '件)</div>'
+          + pending.map(function(b){
+              return '<div class="dice-pending-item">'
+                + '<span>' + esc(b.challengerName) + 'さんから挑戦中</span>'
+                + '<button type="button" class="mc-btn primary dice-resolve-btn" data-battle="' + b.id + '">受けて立つ🎲</button>'
+                + '</div>';
+            }).join('');
+      }
+    }
+
   document.addEventListener('DOMContentLoaded', function(){
     refreshShopUI();
     renderRanking();
     initTheme();
+    renderQuests();
+    renderDailyMission();
+
+
+    var questList = document.getElementById('quest-list');
+    if(questList){
+      questList.addEventListener('click', async function(e){
+        var btn = e.target.closest('.quest-claim-btn');
+        if(!btn || btn.disabled) return;
+        if(!isLoginValid()) return;
+        var taskId = btn.dataset.task;
+        var reward = parseInt(btn.dataset.reward, 10);
+        btn.disabled = true;
+        var uid = localStorage.getItem('loggedInUserId');
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var claimed = data.claimedTasks || [];
+          if(claimed.indexOf(taskId) === -1){
+            claimed.push(taskId);
+            var points = (data.points || 0) + reward;
+            var totalPoints = (data.totalPoints !== undefined ? data.totalPoints : (data.points || 0)) + reward;
+            await docRef.set({ points: points, totalPoints: totalPoints, claimedTasks: claimed }, { merge: true });
+            updateUserBar(localStorage.getItem('loggedInUserName'), points);
+          }
+        }catch(err){ /* ignore */ }
+        await renderQuests();
+        await refreshShopUI();
+        renderRanking();
+      });
+    }
 
     var themeRow = document.getElementById('theme-swatch-row');
     if(themeRow){
@@ -3555,15 +4133,16 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var points = await db.runTransaction(async function(tx){
-            var doc = await tx.get(docRef);
-            var data = doc.exists ? (doc.data() || {}) : {};
-            var current = Number(data.points || 0);
-            if(current < THEME_COST) throw new Error('INSUFFICIENT_POINTS');
-            current -= THEME_COST;
-            tx.set(docRef, { points: current }, { merge: true });
-            return current;
-          });
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < THEME_COST){
+            alert('ポイントが足りません(テーマ変更は' + THEME_COST + 'pt)。');
+            themeBuyBtn.disabled = false;
+            return;
+          }
+          points -= THEME_COST;
+          await docRef.set({ points: points }, { merge: true });
           updateUserBar(displayName, points);
           await db.collection('siteContent').doc('theme').set({
             colorKey: key,
@@ -3585,9 +4164,17 @@
         var members = [];
         try{ members = await getAllMembers(); }catch(e){}
         prankSelect.innerHTML = members.map(function(m){
-          return '<option value="' + m.id + '" data-extra="' + (m.isExtra ? '1' : '0') + '" data-name="' + esc(m.name) + '">' + esc(m.name) + '</option>';
+          return '<option value="' + m.id + '" data-extra="' + (m.isExtra ? '1' : '0') + '">' + esc(m.name) + '</option>';
         }).join('');
       })();
+    }
+    var PRANK_MAX_LEN = 12;
+    async function getCurrentPrankAffix(targetId, isExtra, field){
+      try{
+        var col = isExtra ? 'extraMembers' : 'memberOverrides';
+        var doc = await db.collection(col).doc(targetId).get();
+        return doc.exists ? (doc.data()[field] || '') : '';
+      }catch(e){ return ''; }
     }
     var prankBtn = document.getElementById('prank-btn');
     if(prankBtn){
@@ -3605,31 +4192,44 @@
           errorEl.classList.remove('hidden');
           return;
         }
+        var positionInput = document.querySelector('input[name="prank-position"]:checked');
+        var position = positionInput ? positionInput.value : 'suffix';
+        var field = position === 'prefix' ? 'prankPrefix' : 'prankSuffix';
         var opt = prankSelect.options[prankSelect.selectedIndex];
         if(!opt) return;
         var targetId = opt.value;
         var isExtra = opt.dataset.extra === '1';
-        var currentName = opt.dataset.name;
         var uid = localStorage.getItem('loggedInUserId');
         prankBtn.disabled = true;
         try{
+          var currentAffix = await getCurrentPrankAffix(targetId, isExtra, field);
+          var newAffix = position === 'prefix' ? (word + currentAffix) : (currentAffix + word);
+          if(newAffix.length > PRANK_MAX_LEN){
+            errorEl.textContent = 'これ以上いたずらできません(この団員はもう上限まで付いています)';
+            errorEl.classList.remove('hidden');
+            prankBtn.disabled = false;
+            return;
+          }
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var points = await db.runTransaction(async function(tx){
-            var doc = await tx.get(docRef);
-            var data = doc.exists ? (doc.data() || {}) : {};
-            var current = Number(data.points || 0);
-            if(current < 20) throw new Error('INSUFFICIENT_POINTS');
-            current -= 20;
-            tx.set(docRef, { points: current }, { merge: true });
-            return current;
-          });
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < 20){
+            errorEl.textContent = 'ポイントが足りません(いたずらは20pt)';
+            errorEl.classList.remove('hidden');
+            prankBtn.disabled = false;
+            return;
+          }
+          points -= 20;
+          await docRef.set({ points: points }, { merge: true });
           updateUserBar(localStorage.getItem('loggedInUserName'), points);
-          var newName = currentName + word;
+          var payload = {};
+          payload[field] = newAffix;
           if(isExtra){
-            await saveExtraMember(targetId, { name: newName });
+            await saveExtraMember(targetId, payload);
           } else {
-            await saveOverride(targetId, { name: newName });
+            await saveOverride(targetId, payload);
           }
           wordInput.value = '';
           if(typeof render === 'function') render();
@@ -3642,51 +4242,200 @@
       });
     }
 
+
+    var diceChallengeBtn = document.getElementById('dice-challenge-btn');
+    if(diceChallengeBtn){
+      diceChallengeBtn.addEventListener('click', async function(){
+        var errorEl = document.getElementById('dice-error');
+        errorEl.classList.add('hidden');
+        if(!isLoginValid()){
+          alert('サイコロ対決に挑戦するにはログインしてください。');
+          return;
+        }
+        var targetSelect = document.getElementById('dice-target-select');
+        var opt = targetSelect.options[targetSelect.selectedIndex];
+        if(!opt) return;
+        var uid = localStorage.getItem('loggedInUserId');
+        var myName = localStorage.getItem('loggedInUserName');
+        diceChallengeBtn.disabled = true;
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var today = todayStr();
+          if(data.diceChallengeUsedDate === today){
+            errorEl.textContent = '本日の無料挑戦はすでに使用済みです';
+            errorEl.classList.remove('hidden');
+            diceChallengeBtn.disabled = false;
+            return;
+          }
+          var canReroll = data.diceRerollUsedDate !== today;
+          var result = await openDiceRollModal({
+            title: '🎲 ' + opt.dataset.name + 'さんへの挑戦',
+            subLabel: '5つのサイコロが出ました。1つだけ選んで振り直す・全部振り直す・そのまま挑戦する、から選んでください。',
+            canReroll: canReroll
+          });
+          if(!result){
+            diceChallengeBtn.disabled = false;
+            return;
+          }
+          var payload = { diceChallengeUsedDate: today };
+          if(result.rerollUsed) payload.diceRerollUsedDate = today;
+          await docRef.set(payload, { merge: true });
+          await db.collection('diceBattles').add({
+            challengerId: uid,
+            challengerName: myName,
+            targetId: 'm_' + opt.value,
+            targetName: opt.dataset.name,
+            challengerDice: result.dice,
+            challengerRoll: result.total,
+            targetDice: null,
+            targetRoll: null,
+            status: 'pending',
+            winner: null,
+            createdAt: Date.now()
+          });
+          alert('🎲 合計' + result.total + 'の目で挑戦しました!相手が振るのを待ちましょう。');
+          await renderDiceSection();
+        }catch(err){
+          errorEl.textContent = '通信に失敗しました。もう一度お試しください。';
+          errorEl.classList.remove('hidden');
+        }
+        diceChallengeBtn.disabled = false;
+      });
+    }
+
+    var dicePendingList = document.getElementById('dice-pending-list');
+    if(dicePendingList){
+      dicePendingList.addEventListener('click', async function(e){
+        var btn = e.target.closest('.dice-resolve-btn');
+        if(!btn || btn.disabled) return;
+        if(!isLoginValid()) return;
+        var battleId = btn.dataset.battle;
+        var uid = localStorage.getItem('loggedInUserId');
+        btn.disabled = true;
+        try{
+          await authReadyPromise;
+          var battleRef = db.collection('diceBattles').doc(battleId);
+          var battleDoc = await battleRef.get();
+          if(!battleDoc.exists){ await renderDiceSection(); return; }
+          var battle = battleDoc.data();
+          if(battle.status !== 'pending'){ await renderDiceSection(); return; }
+
+          var myDocRef = db.collection('users').doc(uid);
+          var myRerollSnap = await myDocRef.get();
+          var myRerollData = myRerollSnap.exists ? myRerollSnap.data() : {};
+          var today = todayStr();
+          var canReroll = myRerollData.diceRerollUsedDate !== today;
+          var rollResult = await openDiceRollModal({
+            title: '🎲 ' + battle.challengerName + 'さんとの対決',
+            subLabel: '5つのサイコロが出ました。1つだけ選んで振り直す・全部振り直す・そのまま対決する、から選んでください。',
+            canReroll: canReroll
+          });
+          if(!rollResult){ btn.disabled = false; return; }
+          if(rollResult.rerollUsed){
+            await myDocRef.set({ diceRerollUsedDate: today }, { merge: true });
+          }
+
+          var targetRoll = rollResult.total;
+          var challengerRoll = battle.challengerRoll;
+          var winnerId = null;
+          var resultText;
+          if(challengerRoll === targetRoll){
+            resultText = '引き分け!(あなた:' + targetRoll + ' / 相手:' + challengerRoll + ')';
+          } else if(targetRoll > challengerRoll){
+            winnerId = battle.targetId;
+            resultText = 'あなたの勝ち!(あなた:' + targetRoll + ' / 相手:' + challengerRoll + ')';
+          } else {
+            winnerId = battle.challengerId;
+            resultText = 'あなたの負け…(あなた:' + targetRoll + ' / 相手:' + challengerRoll + ')';
+          }
+
+          var pointNote = '';
+          if(winnerId === battle.challengerId){
+            // 挑まれた側(自分)が負けた -> 1日1回までの保護つき
+            var myDoc = await db.collection('users').doc(battle.targetId).get();
+            var myData = myDoc.exists ? myDoc.data() : {};
+            if(myData.diceLossUsedDate !== today){
+              await db.collection('users').doc(battle.targetId).set({
+                points: Math.max(0, (myData.points || 0) - 1),
+                diceLossUsedDate: today
+              }, { merge: true });
+              var chDoc = await db.collection('users').doc(battle.challengerId).get();
+              var chData = chDoc.exists ? chDoc.data() : {};
+              await db.collection('users').doc(battle.challengerId).set({
+                points: (chData.points || 0) + 1
+              }, { merge: true });
+              pointNote = '(1pt奪われました)';
+            } else {
+              pointNote = '(本日はすでにポイントを保護しているため、減点はありませんでした)';
+            }
+          } else if(winnerId === battle.targetId){
+            // 自分が勝った -> 相手から1pt奪う(相手側の保護なし)
+            var loserDoc = await db.collection('users').doc(battle.challengerId).get();
+            var loserData = loserDoc.exists ? loserDoc.data() : {};
+            await db.collection('users').doc(battle.challengerId).set({
+              points: Math.max(0, (loserData.points || 0) - 1)
+            }, { merge: true });
+            var meDoc = await db.collection('users').doc(battle.targetId).get();
+            var meData = meDoc.exists ? meDoc.data() : {};
+            await db.collection('users').doc(battle.targetId).set({
+              points: (meData.points || 0) + 1
+            }, { merge: true });
+            pointNote = '(相手から1pt奪いました!)';
+          }
+
+          await battleRef.set({
+            status: 'resolved',
+            targetDice: rollResult.dice,
+            targetRoll: targetRoll,
+            winner: winnerId || 'draw',
+            resolvedAt: Date.now()
+          }, { merge: true });
+
+          alert('🎲 ' + resultText + (pointNote ? ' ' + pointNote : ''));
+
+          var freshMe = await db.collection('users').doc(uid).get();
+          if(freshMe.exists) updateUserBar(localStorage.getItem('loggedInUserName'), freshMe.data().points || 0);
+          await renderDiceSection();
+          await refreshShopUI();
+          renderRanking();
+        }catch(err){
+          alert('通信に失敗しました。もう一度お試しください。');
+        }
+        btn.disabled = false;
+      });
+    }
+
+    renderDiceSection();
+
     var shopGrid = document.getElementById('shop-grid');
     if(shopGrid){
       shopGrid.addEventListener('click', async function(e){
         var btn = e.target.closest('.shop-buy-btn');
         if(!btn || btn.disabled) return;
-        if(!isLoginValid()){
-          alert('ショップを利用するにはログインしてください。');
-          return;
-        }
+        if(!isLoginValid()) return;
         var key = btn.dataset.item;
         var item = ITEM_CATALOG[key];
-        if(!item || !item.shopCost){
-          alert('商品情報が見つかりません。');
-          return;
-        }
         var uid = localStorage.getItem('loggedInUserId');
         btn.disabled = true;
         try{
-          var authOK = await authReadyPromise;
-          if(!authOK) throw new Error('AUTH_NOT_READY');
+          await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var result = await db.runTransaction(async function(tx){
-            var doc = await tx.get(docRef);
-            if(!doc.exists) throw new Error('USER_NOT_FOUND');
-            var data = doc.data() || {};
-            var points = Number(data.points || 0);
-            var inventory = Array.isArray(data.inventory) ? data.inventory.slice() : [];
-            if(inventory.indexOf(key) !== -1) throw new Error('ALREADY_OWNED');
-            if(points < Number(item.shopCost)) throw new Error('INSUFFICIENT_POINTS');
-            points -= Number(item.shopCost);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          var inventory = data.inventory || [];
+          if(points >= item.shopCost && inventory.indexOf(key) === -1){
+            points -= item.shopCost;
             inventory.push(key);
-            tx.set(docRef, {points: points, inventory: inventory}, {merge:true});
-            return points;
-          });
-          updateUserBar(localStorage.getItem('loggedInUserName'), result);
-          alert(item.name + 'を購入しました！');
-        }catch(err){
-          console.error('ショップ購入エラー', err);
-          if(err.message === 'INSUFFICIENT_POINTS') alert('ポイントが足りません。');
-          else if(err.message === 'ALREADY_OWNED') alert('このアイテムはすでに持っています。');
-          else alert('購入に失敗しました。通信状態とFirestoreのルールを確認してください。');
-        }
+            await docRef.set({ points: points, inventory: inventory }, { merge: true });
+            updateUserBar(localStorage.getItem('loggedInUserName'), points);
+          }
+        }catch(err){ /* ignore */ }
         await refreshShopUI();
         renderRanking();
-        btn.disabled = false;
       });
     }
 
@@ -3698,28 +4447,20 @@
         if(!isLoginValid()) return;
         var key = btn.dataset.item;
         var item = ITEM_CATALOG[key];
-        if(!item) return;
         var uid = localStorage.getItem('loggedInUserId');
         btn.disabled = true;
         try{
-          var authOK = await authReadyPromise;
-          if(!authOK) throw new Error('AUTH_NOT_READY');
+          await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          await db.runTransaction(async function(tx){
-            var doc = await tx.get(docRef);
-            if(!doc.exists) throw new Error('USER_NOT_FOUND');
-            var data = doc.data() || {};
-            var inventory = Array.isArray(data.inventory) ? data.inventory : [];
-            if(inventory.indexOf(key) === -1) throw new Error('NOT_OWNED');
-            var field = item.type === 'frame' ? 'equippedFrame' : 'equippedBadge';
-            var current = data[field] || '';
-            var update = {}; update[field] = current === key ? '' : key;
-            tx.set(docRef, update, {merge:true});
-          });
-        }catch(err){
-          console.error('装備エラー', err);
-          alert('装備の変更に失敗しました。');
-        }
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var field = item.type === 'frame' ? 'equippedFrame' : 'equippedBadge';
+          var current = data[field] || '';
+          var next = current === key ? '' : key;
+          var update = {};
+          update[field] = next;
+          await docRef.set(update, { merge: true });
+        }catch(err){ /* ignore */ }
         btn.disabled = false;
         await refreshShopUI();
         if(typeof render === 'function') render();
@@ -3740,33 +4481,27 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var gachaResult = await db.runTransaction(async function(tx){
-            var doc = await tx.get(docRef);
-            if(!doc.exists) throw new Error('USER_NOT_FOUND');
-            var data = doc.data() || {};
-            var points = Number(data.points || 0);
-            if(points < GACHA_COST) throw new Error('INSUFFICIENT_POINTS');
-            var picked = pickGachaItem();
-            var item = ITEM_CATALOG[picked];
-            if(!item) throw new Error('ITEM_NOT_FOUND');
-            points -= GACHA_COST;
-            var inventory = Array.isArray(data.inventory) ? data.inventory.slice() : [];
-            var duplicate = inventory.indexOf(picked) !== -1;
-            var refund = 0;
-            if(duplicate){
-              refund = Number(RARITY_REFUND[item.rarity] || 0);
-              points += refund;
-            }else{
-              inventory.push(picked);
-            }
-            tx.set(docRef, {points: points, inventory: inventory}, {merge:true});
-            return {points: points, picked: picked, item: item, duplicate: duplicate, refund: refund};
-          });
-          var points = gachaResult.points;
-          var picked = gachaResult.picked;
-          var item = gachaResult.item;
-          var duplicate = gachaResult.duplicate;
-          var refund = gachaResult.refund;
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < GACHA_COST){
+            alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
+            gachaBtn.disabled = false;
+            return;
+          }
+          points -= GACHA_COST;
+          var picked = pickGachaItem();
+          var item = ITEM_CATALOG[picked];
+          var inventory = data.inventory || [];
+          var duplicate = inventory.indexOf(picked) !== -1;
+          var refund = 0;
+          if(duplicate){
+            refund = RARITY_REFUND[item.rarity] || 0;
+            points += refund;
+          } else {
+            inventory.push(picked);
+          }
+          await docRef.set({ points: points, inventory: inventory }, { merge: true });
           updateUserBar(localStorage.getItem('loggedInUserName'), points);
 
           await playGachaSuspense(resultEl, item.rarity);
@@ -3785,9 +4520,7 @@
           await refreshShopUI();
           renderRanking();
         }catch(err){
-          console.error('ガチャエラー', err);
-          if(err.message === 'INSUFFICIENT_POINTS') alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
-          else alert('ガチャに失敗しました。通信状態とFirestoreのルールを確認してください。');
+          alert('通信に失敗しました。もう一度お試しください。');
         }
         gachaBtn.disabled = false;
       });
