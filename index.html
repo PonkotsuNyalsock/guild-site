@@ -5014,19 +5014,23 @@ document.addEventListener('DOMContentLoaded',function(){
       if(typeof authReadyPromise !== 'undefined') await authReadyPromise;
 
       var options = [];
-      if(typeof getAllMembers === 'function'){
-        var members = await getAllMembers();
-        options = members.map(function(m){
-          return {id:m.id, name:m.name || m.id};
-        });
-      }
 
-      /* getAllMembers が使えない場合は Firestore users から取得 */
-      if(!options.length && typeof db !== 'undefined'){
+      if(typeof db !== 'undefined'){
         var snap = await db.collection('users').get();
         snap.forEach(function(doc){
           var d = doc.data() || {};
-          options.push({id:doc.id, name:d.displayName || doc.id});
+          options.push({
+            id: doc.id,
+            name: d.displayName || d.name || doc.id,
+            points: Number(d.points || 0)
+          });
+        });
+      }
+
+      if(!options.length && typeof getAllMembers === 'function'){
+        var members = await getAllMembers();
+        options = members.map(function(m){
+          return {id:m.id, name:m.name || m.id, points:0};
         });
       }
 
@@ -5035,8 +5039,10 @@ document.addEventListener('DOMContentLoaded',function(){
       });
 
       sel.innerHTML = options.map(function(x){
-        return '<option value="'+admin2Esc(x.id)+'">'+admin2Esc(x.name)+' ('+admin2Esc(x.id)+')</option>';
+        return '<option value="'+admin2Esc(x.id)+'">'+
+          admin2Esc(x.name)+' ('+admin2Esc(x.id)+') - '+admin2Num(x.points)+'pt</option>';
       }).join('');
+
       sel.dataset.loaded = '1';
       await admin2ShowCurrent();
     }catch(e){
@@ -5107,7 +5113,8 @@ document.addEventListener('DOMContentLoaded',function(){
     var status=document.getElementById('admin2-reset-status');
     if(!sel || !sel.value){ status.textContent='団員を選択してください。'; return; }
 
-    var name=sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : sel.value;
+    var targetId = sel.value;
+    var name=sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : targetId;
     var ok=confirm(
       name+' を初期化します。\n\n'+
       'ポイント・PIN・初回ログイン・クエスト・デイリー・所持品・装備をリセットします。\n'+
@@ -5117,10 +5124,12 @@ document.addEventListener('DOMContentLoaded',function(){
 
     try{
       if(typeof authReadyPromise !== 'undefined') await authReadyPromise;
-      var ref=db.collection('users').doc(sel.value);
+
+      var ref=db.collection('users').doc(targetId);
+
       await db.runTransaction(async function(tx){
         var snap=await tx.get(ref);
-        if(!snap.exists) throw new Error('対象ユーザーが見つかりません。');
+        if(!snap.exists) throw new Error('対象ユーザーが users コレクションに見つかりません。');
         var d=snap.data()||{};
         var before=admin2Num(d.points);
 
@@ -5152,7 +5161,9 @@ document.addEventListener('DOMContentLoaded',function(){
       });
 
       status.textContent='初期化しました。次回ログインは初回扱いになります。';
-      await admin2ShowCurrent();
+      sel.dataset.loaded = '';
+      sel.innerHTML = '';
+      await admin2EnsureMembers();
       if(typeof renderRanking === 'function') renderRanking();
     }catch(e){
       status.textContent='初期化に失敗しました: '+(e && e.message ? e.message : '通信エラー');
