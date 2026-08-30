@@ -70,7 +70,14 @@
     box-shadow:0 2px 0 rgba(0,0,0,0.06);
   }
   .nav-links a:hover{background:var(--sky);border-color:var(--sky-dark);color:#fff;}
-  @media(max-width:640px){.nav-links{display:none;}}
+  @media(max-width:640px){
+    .nav-links{
+      display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+      gap:8px;padding:2px 2px 6px;margin:0 -4px;scrollbar-width:none;
+    }
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{padding:8px 14px;font-size:12.5px;}
+  }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -904,6 +911,34 @@
 
   footer{padding:40px 24px;text-align:center;color:var(--ink-soft);font-size:13px;}
   footer .fbrand{font-family:'M PLUS Rounded 1c';font-weight:800;color:var(--ink);margin-bottom:6px;}
+
+  /* ---------- スマホ表示の微調整(ユーザーバー・クエスト・ログイン) ---------- */
+  @media(max-width:640px){
+    .user-bar{padding:8px 14px;}
+    .user-bar-inner{
+      display:flex;flex-wrap:wrap;justify-content:space-between;row-gap:6px;
+    }
+    #user-bar-logged{
+      width:100%;justify-content:space-between;flex-wrap:wrap;row-gap:6px;
+    }
+    #user-bar-logged .user-bar-name{flex:1 0 auto;}
+    #user-bar-guest{
+      width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;row-gap:6px;
+    }
+
+    .quest-item{
+      flex-wrap:wrap;padding:12px 14px;row-gap:8px;
+    }
+    .quest-item-text{flex:1 1 100%;}
+    .quest-item-text + *{flex:1 1 100%;text-align:left;}
+
+    .daily-mission-box{
+      flex-direction:column;align-items:flex-start;padding:14px 16px;
+    }
+    .daily-mission-box > *{width:100%;}
+
+    .login-modal-inner{max-width:92vw;padding:26px 18px;}
+  }
 </style>
 </head>
 <body>
@@ -3685,7 +3720,7 @@
 
   async function hasCollectionActivity(collectionName, uid, sinceMs){
     try{
-      var snap = await db.collection(collectionName).where('postedBy', '==', uid).get();
+      var snap = await db.collection(collectionName).where('postedBy', '==', uid).limit(30).get();
       var found = false;
       snap.forEach(function(doc){
         if(sinceMs === undefined || (doc.data().addedAt || 0) >= sinceMs) found = true;
