@@ -693,51 +693,75 @@
   .ranking-total{color:var(--ink-soft);}
 
   /* ---------- FRAMES & BADGES ---------- */
+  /* フレームはプロフィールカード(.member-card)の外枠として表示する */
   .avatar-wrap{position:relative;flex:none;}
-  .avatar.frame-n-red{box-shadow:0 0 0 3px #E24B4A,0 0 0 5px #fff;}
-  .avatar.frame-n-orange{box-shadow:0 0 0 3px #F0997B,0 0 0 5px #fff;}
-  .avatar.frame-n-yellow{box-shadow:0 0 0 3px #FFC94D,0 0 0 5px #fff;}
-  .avatar.frame-n-green{box-shadow:0 0 0 3px #63C43B,0 0 0 5px #fff;}
-  .avatar.frame-n-teal{box-shadow:0 0 0 3px #1D9E75,0 0 0 5px #fff;}
-  .avatar.frame-n-sky{box-shadow:0 0 0 3px #4FB4E8,0 0 0 5px #fff;}
-  .avatar.frame-n-blue{box-shadow:0 0 0 3px #185FA5,0 0 0 5px #fff;}
-  .avatar.frame-n-purple{box-shadow:0 0 0 3px #7F77DD,0 0 0 5px #fff;}
-  .avatar.frame-n-pink{box-shadow:0 0 0 3px #D4537E,0 0 0 5px #fff;}
-  .avatar.frame-n-brown{box-shadow:0 0 0 3px #8B5E3C,0 0 0 5px #fff;}
-  .avatar.frame-gold{box-shadow:0 0 0 3px #E8B800,0 0 0 5px #fff;}
-  .avatar.frame-fire{
-    border:3px solid #fff;
-    box-shadow:0 0 0 3px #FF6B35,0 0 10px 3px rgba(232,64,42,0.6);
+  .member-card.frame-n-red{box-shadow:0 0 0 3px #E24B4A,0 0 0 6px #fff;}
+  .member-card.frame-n-orange{box-shadow:0 0 0 3px #F0997B,0 0 0 6px #fff;}
+  .member-card.frame-n-yellow{box-shadow:0 0 0 3px #FFC94D,0 0 0 6px #fff;}
+  .member-card.frame-n-green{box-shadow:0 0 0 3px #63C43B,0 0 0 6px #fff;}
+  .member-card.frame-n-teal{box-shadow:0 0 0 3px #1D9E75,0 0 0 6px #fff;}
+  .member-card.frame-n-sky{box-shadow:0 0 0 3px #4FB4E8,0 0 0 6px #fff;}
+  .member-card.frame-n-blue{box-shadow:0 0 0 3px #185FA5,0 0 0 6px #fff;}
+  .member-card.frame-n-purple{box-shadow:0 0 0 3px #7F77DD,0 0 0 6px #fff;}
+  .member-card.frame-n-pink{box-shadow:0 0 0 3px #D4537E,0 0 0 6px #fff;}
+  .member-card.frame-n-brown{box-shadow:0 0 0 3px #8B5E3C,0 0 0 6px #fff;}
+  .member-card.frame-gold{box-shadow:0 0 0 3px #E8B800,0 0 0 6px #fff;}
+  .member-card.frame-fire{
+    box-shadow:0 0 0 3px #FF6B35,0 0 16px 4px rgba(232,64,42,0.55);
   }
-  .avatar.frame-water{
-    border:3px solid #fff;
-    box-shadow:0 0 0 3px #4FB4E8,0 0 10px 3px rgba(29,95,168,0.6);
+  .member-card.frame-water{
+    box-shadow:0 0 0 3px #4FB4E8,0 0 16px 4px rgba(29,95,168,0.55);
   }
   @keyframes lightningFlicker{
-    0%,100%{box-shadow:0 0 0 3px #FFC94D,0 0 10px 3px rgba(255,201,77,0.6);}
-    50%{box-shadow:0 0 0 3px #B266FF,0 0 14px 5px rgba(178,102,255,0.8);}
+    0%,100%{box-shadow:0 0 0 3px #FFC94D,0 0 16px 4px rgba(255,201,77,0.55);}
+    50%{box-shadow:0 0 0 3px #B266FF,0 0 20px 6px rgba(178,102,255,0.75);}
   }
-  .avatar.frame-lightning{
-    border:3px solid #fff;
+  .member-card.frame-lightning{
     animation:lightningFlicker 1.6s infinite;
   }
   @keyframes galaxyGlow{
-    0%{box-shadow:0 0 6px 2px rgba(160,80,255,0.6);} 100%{box-shadow:0 0 14px 6px rgba(80,180,255,0.8);}
+    0%{box-shadow:0 0 10px 3px rgba(160,80,255,0.55);} 100%{box-shadow:0 0 20px 7px rgba(80,180,255,0.75);}
   }
-  .avatar.frame-galaxy{animation:galaxyGlow 1.4s infinite alternate;border:2px solid #fff;}
+  .member-card.frame-galaxy{animation:galaxyGlow 1.4s infinite alternate;}
   @keyframes phoenixGlow{
-    0%{box-shadow:0 0 0 3px #FF8FA0,0 0 10px 3px rgba(255,143,160,0.7);}
-    50%{box-shadow:0 0 0 3px #FFC94D,0 0 12px 4px rgba(255,201,77,0.8);}
-    100%{box-shadow:0 0 0 3px #FF3B1F,0 0 16px 6px rgba(255,59,31,0.9);}
+    0%{box-shadow:0 0 0 3px #FF8FA0,0 0 16px 4px rgba(255,143,160,0.65);}
+    50%{box-shadow:0 0 0 3px #FFC94D,0 0 18px 5px rgba(255,201,77,0.75);}
+    100%{box-shadow:0 0 0 3px #FF3B1F,0 0 22px 7px rgba(255,59,31,0.85);}
   }
-  .avatar.frame-phoenix{
-    border:3px solid #fff;
+  .member-card.frame-phoenix{
     animation:phoenixGlow 1.2s infinite alternate;
   }
   .avatar-badge{
     position:absolute;bottom:-4px;right:-4px;font-size:16px;
     background:#fff;border-radius:50%;width:22px;height:22px;
     display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.25);
+  }
+
+  /* ---------- PROFILE BACKGROUNDS(プロフィール内部の薄い色・柄) ---------- */
+  .bg-n-sky{background:#EAF6FC;}
+  .bg-n-mint{background:#EAFBF3;}
+  .bg-n-coral{background:#FFF1F3;}
+  .bg-n-sun{background:#FFF8E6;}
+  .bg-n-lavender{background:#F3F0FF;}
+  .bg-dot{
+    background-color:#FFFDF7;
+    background-image:radial-gradient(rgba(79,180,232,0.22) 1.5px, transparent 1.5px);
+    background-size:14px 14px;
+  }
+  .bg-stripe{
+    background-color:#FFFDF7;
+    background-image:repeating-linear-gradient(45deg, rgba(255,143,160,0.16) 0 8px, transparent 8px 16px);
+  }
+  .bg-star{
+    background-color:#FFFDF7;
+    background-image:
+      radial-gradient(rgba(255,201,77,0.4) 1px, transparent 1.6px),
+      radial-gradient(rgba(111,217,181,0.35) 1px, transparent 1.6px);
+    background-size:22px 22px, 34px 34px;
+    background-position:0 0, 11px 17px;
+  }
+  .bg-swatch{
+    width:100%;height:26px;border-radius:8px;border:1px solid var(--line);margin:6px 0 2px;
   }
 
   .site-gate{
@@ -2140,6 +2164,7 @@
     var bd = parseBirthday(m.birthday);
     var extraAttr = m.isExtra ? ' data-extra="1"' : '';
     var frameClass = m.frameClass ? ' ' + m.frameClass : '';
+    var bgClass = m.bgClass ? ' ' + m.bgClass : '';
     var badgeSpan = m.badgeIcon ? '<span class="avatar-badge">' + m.badgeIcon + '</span>' : '';
     var editable = canEditMember(m.id);
     var deleteBtn = (editable && m.isExtra) ? '<button type="button" class="mc-btn delete-member-btn">削除</button>' : '';
@@ -2182,11 +2207,11 @@
       + '  </div>';
 
     return ''
-      + '<div class="member-card" data-id="' + m.id + '"' + extraAttr + '>'
+      + '<div class="member-card' + frameClass + bgClass + '" data-id="' + m.id + '"' + extraAttr + '>'
       + '  <div class="mc-view">'
       + '    <div class="mc-head">'
       + '      <div class="avatar-wrap">'
-      + '        <div class="avatar' + frameClass + '" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
+      + '        <div class="avatar" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
       + badgeSpan
       + '      </div>'
       + '      <div>'
@@ -2491,7 +2516,7 @@
       var map = {};
       snap.forEach(function(doc){
         var d = doc.data();
-        map[doc.id] = { frame: d.equippedFrame || '', badge: d.equippedBadge || '' };
+        map[doc.id] = { frame: d.equippedFrame || '', badge: d.equippedBadge || '', bg: d.equippedBg || '' };
       });
       return map;
     }catch(e){ return {}; }
@@ -2505,8 +2530,10 @@
       var c = cosmetics['m_' + m.id] || {};
       var frameItem = c.frame && typeof ITEM_CATALOG !== 'undefined' ? ITEM_CATALOG[c.frame] : null;
       var badgeItem = c.badge && typeof ITEM_CATALOG !== 'undefined' ? ITEM_CATALOG[c.badge] : null;
+      var bgItem = c.bg && typeof ITEM_CATALOG !== 'undefined' ? ITEM_CATALOG[c.bg] : null;
       m.frameClass = frameItem ? frameItem.cssClass : '';
       m.badgeIcon = badgeItem ? badgeItem.icon : '';
+      m.bgClass = bgItem ? bgItem.cssClass : '';
     });
     grid.innerHTML = mergedList.map(cardHTML).join('') + addMemberCardHTML();
     buildBirthdayCalendar(mergedList);
@@ -3380,10 +3407,19 @@
     frame_n_pink:   { name:'ピンクフレーム', type:'frame', rarity:'N', cssClass:'frame-n-pink',   shopCost:10, gachaWeight:8, source:'both' },
     frame_n_brown:  { name:'ブラウンフレーム', type:'frame', rarity:'N', cssClass:'frame-n-brown',  shopCost:10, gachaWeight:8, source:'both' },
 
+    bg_n_sky:      { name:'水色の背景',       type:'bg', rarity:'N', icon:'💧', cssClass:'bg-n-sky',      shopCost:10, gachaWeight:8, source:'both' },
+    bg_n_mint:     { name:'ミントの背景',     type:'bg', rarity:'N', icon:'🌿', cssClass:'bg-n-mint',     shopCost:10, gachaWeight:8, source:'both' },
+    bg_n_coral:    { name:'コーラルの背景',   type:'bg', rarity:'N', icon:'🌸', cssClass:'bg-n-coral',    shopCost:10, gachaWeight:8, source:'both' },
+    bg_n_sun:      { name:'サンイエローの背景', type:'bg', rarity:'N', icon:'🌞', cssClass:'bg-n-sun',      shopCost:10, gachaWeight:8, source:'both' },
+    bg_n_lavender: { name:'ラベンダーの背景', type:'bg', rarity:'N', icon:'💜', cssClass:'bg-n-lavender', shopCost:10, gachaWeight:8, source:'both' },
+
     frame_gold:   { name:'ゴールドフレーム', type:'frame', rarity:'R', cssClass:'frame-gold', shopCost:40, gachaWeight:10, source:'both' },
     badge_crown:  { name:'👑 クラウンバッジ', type:'badge', rarity:'R', icon:'👑', shopCost:35, gachaWeight:10, source:'both' },
     badge_heart:  { name:'💗 ハートバッジ', type:'badge', rarity:'R', icon:'💗', shopCost:35, gachaWeight:10, source:'both' },
     badge_paw:    { name:'🐾 肉球バッジ', type:'badge', rarity:'R', icon:'🐾', shopCost:35, gachaWeight:10, source:'both' },
+    bg_dot:    { name:'水玉柄の背景',     type:'bg', rarity:'R', icon:'⚪', cssClass:'bg-dot',    shopCost:35, gachaWeight:10, source:'both' },
+    bg_stripe: { name:'ストライプ柄の背景', type:'bg', rarity:'R', icon:'〰️', cssClass:'bg-stripe', shopCost:35, gachaWeight:10, source:'both' },
+    bg_star:   { name:'星柄の背景',       type:'bg', rarity:'R', icon:'⭐', cssClass:'bg-star',   shopCost:35, gachaWeight:10, source:'both' },
 
     frame_fire:      { name:'炎のフレーム', type:'frame', rarity:'SR', cssClass:'frame-fire',      gachaWeight:3, source:'gacha' },
     frame_water:     { name:'水のフレーム', type:'frame', rarity:'SR', cssClass:'frame-water',     gachaWeight:3, source:'gacha' },
@@ -3538,9 +3574,11 @@
     var item = ITEM_CATALOG[key];
     if(!item) return '';
     var iconDisplay = item.icon || '🖼️';
+    var swatchHTML = item.type === 'bg' ? '<div class="bg-swatch ' + item.cssClass + '"></div>' : '';
     var html = '<div class="shop-item rarity-' + item.rarity + '">'
       + '<div class="shop-item-name">' + iconDisplay + ' ' + esc(item.name) + '</div>'
-      + '<div class="shop-item-rarity">' + RARITY_LABEL[item.rarity] + '</div>';
+      + '<div class="shop-item-rarity">' + RARITY_LABEL[item.rarity] + '</div>'
+      + swatchHTML;
     if(mode === 'shop'){
       var owned = extra.inventory.indexOf(key) !== -1;
       var can = extra.points >= item.shopCost && !owned;
@@ -3548,7 +3586,7 @@
         + '<button type="button" class="mc-btn primary shop-buy-btn" data-item="' + key + '"' + (can ? '' : ' disabled') + '>'
         + (owned ? '所持済み' : '購入する') + '</button>';
     } else {
-      var equipped = (item.type === 'frame' && key === extra.equippedFrame) || (item.type === 'badge' && key === extra.equippedBadge);
+      var equipped = (item.type === 'frame' && key === extra.equippedFrame) || (item.type === 'badge' && key === extra.equippedBadge) || (item.type === 'bg' && key === extra.equippedBg);
       html += '<button type="button" class="mc-btn ' + (equipped ? 'primary' : '') + ' inventory-equip-btn" data-item="' + key + '">'
         + (equipped ? '装備中' : '装備する') + '</button>';
     }
@@ -3585,7 +3623,7 @@
         invGrid.innerHTML = '<div class="notif-empty">まだアイテムがありません。ショップやガチャで手に入れてみましょう!</div>';
       } else {
         invGrid.innerHTML = inventory.map(function(k){
-          return shopItemCardHTML(k, 'inventory', { equippedFrame: data.equippedFrame || '', equippedBadge: data.equippedBadge || '' });
+          return shopItemCardHTML(k, 'inventory', { equippedFrame: data.equippedFrame || '', equippedBadge: data.equippedBadge || '', equippedBg: data.equippedBg || '' });
         }).join('');
       }
     }
@@ -3639,7 +3677,7 @@
     { id:'t_adv',   label:'冒険タイプ診断を受ける',   reward:3, auto:true, check:function(p){ return !!p.adv; } },
     { id:'t_title', label:'称号を作ってみる',         reward:3, auto:true, check:function(p){ return !!p.title; } },
     { id:'t_gacha', label:'ガチャを1回引いてみる',     reward:3, auto:true, check:function(p, u){ return (u.inventory || []).length > 0; } },
-    { id:'t_equip', label:'アイテムを装備してみる',   reward:3, auto:true, check:function(p, u){ return !!(u.equippedFrame || u.equippedBadge); } },
+    { id:'t_equip', label:'アイテムを装備してみる',   reward:3, auto:true, check:function(p, u){ return !!(u.equippedFrame || u.equippedBadge || u.equippedBg); } },
     { id:'t_post',  label:'写真・名言・みんなの声のどれかに投稿する', reward:5, auto:true, check:function(p, u){ return !!u.hasPostedEverComputed; } },
     { id:'t_rules', label:'ルールを読む',             reward:2, auto:true, check:function(p, u){ return !!u.rulesViewedEver; } },
     { id:'t_dice',  label:'サイコロ対決をする',       reward:3, auto:true, check:function(p, u){ return !!u.hasDiceBattledEverComputed; } }
@@ -4454,7 +4492,7 @@
           var docRef = db.collection('users').doc(uid);
           var doc = await docRef.get();
           var data = doc.exists ? doc.data() : {};
-          var field = item.type === 'frame' ? 'equippedFrame' : 'equippedBadge';
+          var field = item.type === 'frame' ? 'equippedFrame' : (item.type === 'bg' ? 'equippedBg' : 'equippedBadge');
           var current = data[field] || '';
           var next = current === key ? '' : key;
           var update = {};
