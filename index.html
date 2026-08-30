@@ -641,44 +641,55 @@
 
   /* ---------- FRAMES & BADGES ---------- */
   .avatar-wrap{position:relative;flex:none;}
-  .avatar.frame-n-red{box-shadow:0 0 0 3px #E24B4A,0 0 0 5px #fff;}
-  .avatar.frame-n-orange{box-shadow:0 0 0 3px #F0997B,0 0 0 5px #fff;}
-  .avatar.frame-n-yellow{box-shadow:0 0 0 3px #FFC94D,0 0 0 5px #fff;}
-  .avatar.frame-n-green{box-shadow:0 0 0 3px #63C43B,0 0 0 5px #fff;}
-  .avatar.frame-n-teal{box-shadow:0 0 0 3px #1D9E75,0 0 0 5px #fff;}
-  .avatar.frame-n-sky{box-shadow:0 0 0 3px #4FB4E8,0 0 0 5px #fff;}
-  .avatar.frame-n-blue{box-shadow:0 0 0 3px #185FA5,0 0 0 5px #fff;}
-  .avatar.frame-n-purple{box-shadow:0 0 0 3px #7F77DD,0 0 0 5px #fff;}
-  .avatar.frame-n-pink{box-shadow:0 0 0 3px #D4537E,0 0 0 5px #fff;}
-  .avatar.frame-n-brown{box-shadow:0 0 0 3px #8B5E3C,0 0 0 5px #fff;}
-  .avatar.frame-gold{box-shadow:0 0 0 3px #E8B800,0 0 0 5px #fff;}
-  .avatar.frame-fire{
-    border:3px solid #fff;
-    box-shadow:0 0 0 3px #FF6B35,0 0 10px 3px rgba(232,64,42,0.6);
+  /* ガチャで獲得したフレームはプロフィールカード全体の外枠に適用 */
+  .member-card.frame-n-red{border:3px solid #E24B4A;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(226,75,74,0.22);}
+  .member-card.frame-n-orange{border:3px solid #F0997B;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(240,153,123,0.22);}
+  .member-card.frame-n-yellow{border:3px solid #FFC94D;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(255,201,77,0.22);}
+  .member-card.frame-n-green{border:3px solid #63C43B;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(99,196,59,0.22);}
+  .member-card.frame-n-teal{border:3px solid #1D9E75;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(29,158,117,0.22);}
+  .member-card.frame-n-sky{border:3px solid #4FB4E8;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(79,180,232,0.22);}
+  .member-card.frame-n-blue{border:3px solid #185FA5;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(24,95,165,0.22);}
+  .member-card.frame-n-purple{border:3px solid #7F77DD;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(127,119,221,0.22);}
+  .member-card.frame-n-pink{border:3px solid #D4537E;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(212,83,126,0.22);}
+  .member-card.frame-n-brown{border:3px solid #8B5E3C;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(139,94,60,0.22);}
+  .member-card.frame-gold{
+    border:3px solid #E8B800;
+    box-shadow:0 0 0 2px #fff,0 4px 16px rgba(232,184,0,0.35);
   }
-  .avatar.frame-water{
-    border:3px solid #fff;
-    box-shadow:0 0 0 3px #4FB4E8,0 0 10px 3px rgba(29,95,168,0.6);
+  .member-card.frame-fire{
+    border:3px solid #FF6B35;
+    box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(232,64,42,0.45);
+  }
+  .member-card.frame-water{
+    border:3px solid #4FB4E8;
+    box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(29,95,168,0.45);
   }
   @keyframes lightningFlicker{
-    0%,100%{box-shadow:0 0 0 3px #FFC94D,0 0 10px 3px rgba(255,201,77,0.6);}
-    50%{box-shadow:0 0 0 3px #B266FF,0 0 14px 5px rgba(178,102,255,0.8);}
+    0%,100%{box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(255,201,77,0.55);}
+    50%{box-shadow:0 0 0 2px #fff,0 0 18px 5px rgba(178,102,255,0.75);}
   }
-  .avatar.frame-lightning{
-    border:3px solid #fff;
+  .member-card.frame-lightning{
+    border:3px solid #FFC94D;
     animation:lightningFlicker 1.6s infinite;
   }
   @keyframes galaxyGlow{
-    0%{box-shadow:0 0 6px 2px rgba(160,80,255,0.6);} 100%{box-shadow:0 0 14px 6px rgba(80,180,255,0.8);}
+    0%{box-shadow:0 0 0 2px #fff,0 0 10px 2px rgba(160,80,255,0.55);}
+    100%{box-shadow:0 0 0 2px #fff,0 0 20px 7px rgba(80,180,255,0.75);}
   }
-  .avatar.frame-galaxy{animation:galaxyGlow 1.4s infinite alternate;border:2px solid #fff;}
+  .member-card.frame-galaxy{
+    border:3px solid transparent;
+    background:
+      linear-gradient(#fff,#fff) padding-box,
+      linear-gradient(135deg,#a050ff,#50b4ff,#6fd9b5,#ffc94d,#ff8fa0) border-box;
+    animation:galaxyGlow 1.4s infinite alternate;
+  }
   @keyframes phoenixGlow{
-    0%{box-shadow:0 0 0 3px #FF8FA0,0 0 10px 3px rgba(255,143,160,0.7);}
-    50%{box-shadow:0 0 0 3px #FFC94D,0 0 12px 4px rgba(255,201,77,0.8);}
-    100%{box-shadow:0 0 0 3px #FF3B1F,0 0 16px 6px rgba(255,59,31,0.9);}
+    0%{box-shadow:0 0 0 2px #fff,0 0 14px 3px rgba(255,143,160,0.65);}
+    50%{box-shadow:0 0 0 2px #fff,0 0 18px 5px rgba(255,201,77,0.75);}
+    100%{box-shadow:0 0 0 2px #fff,0 0 24px 8px rgba(255,59,31,0.85);}
   }
-  .avatar.frame-phoenix{
-    border:3px solid #fff;
+  .member-card.frame-phoenix{
+    border:3px solid #FF8FA0;
     animation:phoenixGlow 1.2s infinite alternate;
   }
   .avatar-badge{
@@ -2080,11 +2091,11 @@
       + '  </div>';
 
     return ''
-      + '<div class="member-card" data-id="' + m.id + '"' + extraAttr + '>'
+      + '<div class="member-card' + frameClass + '" data-id="' + m.id + '"' + extraAttr + '>'
       + '  <div class="mc-view">'
       + '    <div class="mc-head">'
       + '      <div class="avatar-wrap">'
-      + '        <div class="avatar' + frameClass + '" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
+      + '        <div class="avatar" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
       + badgeSpan
       + '      </div>'
       + '      <div>'
