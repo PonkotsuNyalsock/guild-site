@@ -942,6 +942,11 @@
 
     .login-modal-inner{max-width:92vw;padding:26px 18px;}
   }
+
+  #point-history-list{display:flex;flex-direction:column;gap:6px;max-height:360px;overflow:auto}
+  .point-history-row{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;font-size:13px}
+  .point-history-main{min-width:0}.point-history-reason{font-weight:700}.point-history-meta{color:#777;font-size:11px;margin-top:2px}
+  .point-history-plus,.point-history-minus{font-weight:800;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1629,7 +1634,36 @@
   </div>
   <div class="shop-balance" id="shop-balance">ログインすると使えます</div>
 
-  <div class="shop-block">
+  
+  <div class="shop-block" id="point-history-block">
+    <div class="shop-block-label">📜 ポイント履歴</div>
+    <p class="shop-sub-note">自分のポイントの増減履歴を確認できます。</p>
+    <div id="point-history-list"><div class="loading-note">ログインすると履歴を表示します。</div></div>
+  </div>
+  <div class="shop-block" id="admin-point-block" style="display:none;">
+    <div class="shop-block-label">🛠️ 管理者用ポイント調整</div>
+    <p class="shop-sub-note">管理者専用。ポイントを減らす場合は理由を記録します。</p>
+    <label>対象団員</label>
+    <select id="admin-point-target"></select>
+    <label>調整ポイント（減らす場合はマイナス）</label>
+    <input type="number" id="admin-point-amount" value="-1" step="1">
+    <label>理由</label>
+    <input type="text" id="admin-point-reason" maxlength="100" placeholder="例：不正取得分の返還">
+    <div class="login-error hidden" id="admin-point-error"></div>
+    <button type="button" id="admin-point-apply" class="mc-btn primary">ポイントを調整する</button>
+    <div id="admin-point-status" class="shop-sub-note"></div>
+    <hr style="margin:22px 0;border:none;border-top:1px dashed var(--line);">
+    <div class="shop-block-label">🔄 アカウント初期化</div>
+    <p class="shop-sub-note">
+      対象団員のログイン情報・ポイント・クエスト受取状況・所持アイテムを初期化します。
+      プロフィール本文は残します。次回ログインは初回扱いになり、初回20ptからやり直せます。
+    </p>
+    <button type="button" id="admin-reset-account" class="mc-btn">この団員を初期化する</button>
+    <div id="admin-reset-status" class="shop-sub-note"></div>
+
+  </div>
+
+<div class="shop-block">
     <div class="shop-block-label">🎨 テーマカラー</div>
     <p class="shop-sub-note" id="theme-status">読み込み中…</p>
     <div class="theme-swatch-row" id="theme-swatch-row"></div>
@@ -1721,7 +1755,212 @@
          }
        }
 -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
+/* ===== ポイント履歴・管理者調整 ===== */
+var POINT_HISTORY_LIMIT = 50;
+/*
+ * ここに管理者のFirebase Auth UIDを入れてください。
+ * Firestoreのセキュリティルール側でも管理者だけ書き込み可能にすることを強く推奨します。
+ */
+var ADMIN_UIDS = [
+  /* '管理者のFirebase Auth UID' */
+];
+
+function isPointAdmin(){
+  var uid=localStorage.getItem('loggedInUserId')||'';
+  return ADMIN_UIDS.indexOf(uid)!==-1;
+}
+function safePointNum(v){
+  var n=Number(v);
+  return Number.isFinite(n)?n:0;
+}
+function pointReasonLabel(r){
+  var m={
+    first_login:'初回ログインボーナス', daily_login:'ログインボーナス',
+    quest:'クエスト報酬', daily_mission:'今日のミッション',
+    post:'投稿報酬', dice_win:'サイコロ対決', dice_loss:'サイコロ対決',
+    shop:'ショップ購入', gacha:'ガチャ', theme:'テーマ変更',
+    prank:'いたずら', admin:'管理者によるポイント調整'
+  };
+  return m[r]||r||'ポイント変更';
+}
+async function writePointHistory(uid,delta,reason,meta){
+  if(!uid||!delta)return;
+  await db.collection('users').doc(uid).collection('pointHistory').doc().set({
+    delta:safePointNum(delta), reason:reason||'other',
+    reasonLabel:pointReasonLabel(reason), meta:meta||'',
+    createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+    createdAtMs:Date.now()
+  });
+}
+async function renderPointHistory(){
+  var box=document.getElementById('point-history-list');
+  if(!box)return;
+  if(!isLoginValid()){box.innerHTML='<div class="loading-note">ログインすると履歴を表示します。</div>';return;}
+  var uid=localStorage.getItem('loggedInUserId');
+  try{
+    await authReadyPromise;
+    var snap=await db.collection('users').doc(uid).collection('pointHistory')
+      .orderBy('createdAtMs','desc').limit(POINT_HISTORY_LIMIT).get();
+    if(snap.empty){box.innerHTML='<div class="loading-note">まだ履歴がありません。</div>';return;}
+    box.innerHTML=snap.docs.map(function(d){
+      var x=d.data()||{}, delta=safePointNum(x.delta);
+      var sign=delta>=0?'+':'';
+      var cls=delta>=0?'point-history-plus':'point-history-minus';
+      var dt=x.createdAtMs?new Date(x.createdAtMs).toLocaleString('ja-JP'):'';
+      return '<div class="point-history-row"><div class="point-history-main"><div class="point-history-reason">'+esc(x.reasonLabel||pointReasonLabel(x.reason))+'</div><div class="point-history-meta">'+esc(x.meta||'')+' '+esc(dt)+'</div></div><div class="'+cls+'">'+sign+delta+'pt</div></div>';
+    }).join('');
+  }catch(e){box.innerHTML='<div class="loading-note">履歴を読み込めませんでした。</div>';}
+}
+async function initAdminPointPanel(){
+  var panel=document.getElementById('admin-point-block');
+  if(!panel||!isPointAdmin())return;
+  panel.style.display='';
+  var sel=document.getElementById('admin-point-target');
+  try{
+    var members=await getAllMembers();
+    sel.innerHTML=members.map(function(m){return '<option value="'+esc(m.id)+'">'+esc(m.name)+'</option>';}).join('');
+  }catch(e){}
+  var btn=document.getElementById('admin-point-apply');
+  if(!btn||btn.dataset.bound)return;
+  btn.dataset.bound='1';
+  btn.addEventListener('click',async function(){
+    var err=document.getElementById('admin-point-error'),status=document.getElementById('admin-point-status');
+    err.classList.add('hidden');status.textContent='';
+    var target=sel.value, delta=parseInt(document.getElementById('admin-point-amount').value,10);
+    var reason=document.getElementById('admin-point-reason').value.trim();
+    if(!target||!Number.isFinite(delta)||delta===0||!reason){
+      err.textContent='対象・調整ポイント・理由を入力してください。';err.classList.remove('hidden');return;
+    }
+    btn.disabled=true;
+    try{
+      await authReadyPromise;
+      var adminUid=localStorage.getItem('loggedInUserId');
+      var ref=db.collection('users').doc(target);
+      await db.runTransaction(async function(tx){
+        var snap=await tx.get(ref), data=snap.exists?(snap.data()||{}):{};
+        var before=safePointNum(data.points), after=Math.max(0,before+delta), actual=after-before;
+        tx.set(ref,{points:after},{merge:true});
+        tx.set(ref.collection('pointHistory').doc(),{
+          delta:actual, requestedDelta:delta, reason:'admin',
+          reasonLabel:'管理者によるポイント調整', meta:reason,
+          adminUid:adminUid, createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+          createdAtMs:Date.now()
+        });
+      });
+      status.textContent='ポイントを調整しました。';
+      document.getElementById('admin-point-reason').value='';
+      if(target===localStorage.getItem('loggedInUserId')){
+        var fresh=await ref.get();updateUserBar(localStorage.getItem('loggedInUserName'),safePointNum(fresh.data().points));
+      }
+      await refreshShopUI();renderRanking();await renderPointHistory();
+    }catch(e){
+      err.textContent='調整に失敗しました: '+(e&&e.message?e.message:'通信エラー');err.classList.remove('hidden');
+    }finally{btn.disabled=false;}
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){renderPointHistory();initAdminPointPanel();},800);
+});
+
+
+/* ===== 管理者：団員アカウント初期化 ===== */
+async function adminResetAccount(targetId){
+  if(typeof isPointAdmin === 'function' && !isPointAdmin()){
+    throw new Error('管理者権限がありません。');
+  }
+  var ref = db.collection('users').doc(targetId);
+
+  await db.runTransaction(async function(tx){
+    var snap = await tx.get(ref);
+    var data = snap.exists ? (snap.data() || {}) : {};
+    var beforePoints = Number(data.points || 0);
+
+    tx.set(ref,{
+      points: 0,
+      totalPoints: 0,
+      pin: firebase.firestore.FieldValue.delete(),
+      firstLoginAwarded: false,
+      lastLoginDate: firebase.firestore.FieldValue.delete(),
+      dailyMissionClaimedDate: firebase.firestore.FieldValue.delete(),
+      diceChallengeUsedDate: firebase.firestore.FieldValue.delete(),
+      diceLossUsedDate: firebase.firestore.FieldValue.delete(),
+      claimedTasks: [],
+      inventory: [],
+      equippedFrame: '',
+      equippedBadge: ''
+    },{merge:true});
+
+    /* pointHistory が使える版では履歴も残す */
+    if(ref.collection){
+      var hRef = ref.collection('pointHistory').doc();
+      tx.set(hRef,{
+        delta: -beforePoints,
+        reason: 'admin',
+        reasonLabel: '管理者によるアカウント初期化',
+        meta: 'ログイン情報・ポイント・クエスト・所持アイテムを初期化',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAtMs: Date.now()
+      });
+    }
+  });
+}
+
+async function initAdminResetUI(){
+  var panel = document.getElementById('admin-point-block');
+  var btn = document.getElementById('admin-reset-account');
+  var sel = document.getElementById('admin-point-target');
+  if(!panel || !btn || !sel) return;
+
+  if(typeof isPointAdmin === 'function' && !isPointAdmin()) return;
+  panel.style.display = '';
+
+  if(!sel.options.length){
+    try{
+      var members = await getAllMembers();
+      sel.innerHTML = members.map(function(m){
+        return '<option value="'+esc(m.id)+'">'+esc(m.name)+'</option>';
+      }).join('');
+    }catch(e){}
+  }
+
+  if(btn.dataset.bound) return;
+  btn.dataset.bound = '1';
+
+  btn.addEventListener('click', async function(){
+    var targetId = sel.value;
+    var status = document.getElementById('admin-reset-status');
+    if(!targetId){
+      status.textContent = '対象団員を選んでください。';
+      return;
+    }
+    var name = sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : targetId;
+
+    if(!confirm(name+' のアカウントを初期化します。\nポイント・PIN・クエスト受取状況・所持アイテムが消え、次回ログインは初回扱いになります。\nよろしいですか？')){
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = '初期化中…';
+    try{
+      await authReadyPromise;
+      await adminResetAccount(targetId);
+      status.textContent = name+' を初期化しました。次回ログイン時に初回20ptからやり直せます。';
+      if(typeof renderRanking === 'function') renderRanking();
+      if(typeof refreshShopUI === 'function') await refreshShopUI();
+    }catch(e){
+      status.textContent = '初期化に失敗しました: ' + (e && e.message ? e.message : '通信エラー');
+    }finally{
+      btn.disabled = false;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(initAdminResetUI,800);
+});
+
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
@@ -3537,7 +3776,7 @@
     badge_diamond: { name:'💎 ダイヤモンドバッジ', type:'badge', rarity:'UR', icon:'💎', gachaWeight:2, source:'gacha' }
   };
   var RARITY_LABEL = { N:'ノーマル', R:'レア', SR:'スーパーレア', UR:'ウルトラレア' };
-  var RARITY_REFUND = { N:5, R:15, SR:35, UR:80 };
+  var RARITY_REFUND = { N:0, R:0, SR:0, UR:0 }; /* 重複還元は廃止 */
   var GACHA_COST = 5;
   var THEME_COST = 10;
   var THEME_PALETTES = {
@@ -4643,8 +4882,7 @@
               var duplicate = inventory.indexOf(picked) !== -1;
               var refund = 0;
               if(duplicate){
-                refund = Number(RARITY_REFUND[item.rarity] || 0);
-                points += refund;
+                refund = 0; // 重複してもポイント還元なし
               } else {
                 inventory.push(picked);
               }
@@ -4663,7 +4901,7 @@
           resultEl.innerHTML = '<div class="gacha-rarity-label">' + RARITY_LABEL[item.rarity] + '!</div>'
             + '<div class="gacha-item-name">' + (item.icon || '🖼️') + ' ' + esc(item.name) + '</div>'
             + (duplicate
-                ? '<div class="gacha-dup-note">すでに持っていたので +' + refund + 'pt に還元しました</div>'
+                ? '<div class="gacha-dup-note">すでに持っているアイテムでした（ポイント還元なし）</div>'
                 : '<div class="gacha-new-note">NEW!</div>');
           resultEl.classList.remove('hidden');
           if(item.rarity === 'SR' || item.rarity === 'UR'){
