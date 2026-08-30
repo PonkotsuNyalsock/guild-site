@@ -1762,13 +1762,23 @@ var POINT_HISTORY_LIMIT = 50;
  * ここに管理者のFirebase Auth UIDを入れてください。
  * Firestoreのセキュリティルール側でも管理者だけ書き込み可能にすることを強く推奨します。
  */
-var ADMIN_UIDS = [
-  'm_m01'
-];
+var ADMIN_UIDS = ['m_m01'];
 
 function isPointAdmin(){
   var uid=localStorage.getItem('loggedInUserId')||'';
   return ADMIN_UIDS.indexOf(uid)!==-1;
+}
+
+function refreshAdminVisibility(){
+  var panel = document.getElementById('admin-point-block');
+  if(!panel) return;
+  if(isPointAdmin()){
+    panel.style.display = '';
+    if(typeof initAdminPointPanel === 'function') initAdminPointPanel();
+    if(typeof initAdminResetUI === 'function') initAdminResetUI();
+  }else{
+    panel.style.display = 'none';
+  }
 }
 function safePointNum(v){
   var n=Number(v);
@@ -1860,7 +1870,10 @@ async function initAdminPointPanel(){
   });
 }
 document.addEventListener('DOMContentLoaded',function(){
-  setTimeout(function(){renderPointHistory();initAdminPointPanel();},800);
+  setTimeout(function(){
+    renderPointHistory();
+    refreshAdminVisibility();
+  },800);
 });
 
 
@@ -1957,7 +1970,7 @@ async function initAdminResetUI(){
 }
 
 document.addEventListener('DOMContentLoaded',function(){
-  setTimeout(initAdminResetUI,800);
+  setTimeout(refreshAdminVisibility,900);
 });
 
 </script>
@@ -2286,6 +2299,7 @@ document.addEventListener('DOMContentLoaded',function(){
           localStorage.setItem('loginTimestamp', String(Date.now()));
           localStorage.removeItem('guestModeTimestamp');
           updateUserBar(displayName, points);
+          if(typeof refreshAdminVisibility === 'function') refreshAdminVisibility();
           modal.classList.remove('open');
           if(typeof render === 'function') render();
           checkNotifications();
