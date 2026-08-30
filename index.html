@@ -70,7 +70,7 @@
     box-shadow:0 2px 0 rgba(0,0,0,0.06);
   }
   .nav-links a:hover{background:var(--sky);border-color:var(--sky-dark);color:#fff;}
-  @media(max-width:640px){.nav-links{display:none;}}
+  @media(max-width:640px){.nav-inner{padding:10px 12px;align-items:center;}.nav-links{display:flex;flex:1;min-width:0;overflow-x:auto;flex-wrap:nowrap;gap:7px;margin-left:10px;padding:2px 2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}.nav-links::-webkit-scrollbar{display:none;}.nav-links a{padding:7px 12px;font-size:11.5px;flex:0 0 auto;}.brand-name{font-size:13px;}.brand-emblem{width:32px;height:32px;font-size:14px;}.brand{gap:7px;flex:0 0 auto;}}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -909,7 +909,7 @@
     <a class="btn btn-secondary" href="#gallery">冒険の記録を見る</a>
   </div>
   <div class="stat-row">
-    <div class="stat-slot"><div class="num">16名</div><div class="lbl">団員数</div></div>
+    <div class="stat-slot"><div class="num">18名</div><div class="lbl">団員数</div></div>
     <div class="stat-slot"><div class="num">2026.6.8</div><div class="lbl">結成日</div></div>
     <div class="stat-slot"><div class="num">カーニバルパーティー</div><div class="lbl">拠点サーバー</div></div>
   </div>
@@ -1035,7 +1035,7 @@
       <div class="history-dot"></div>
       <div class="history-date">2026年8月24日・第4シーズン</div>
       <div class="history-title">新シーズン開始(騎士団名は検討中)</div>
-      <div class="history-desc">ぽむぽむおなぎ・ぽむぽむかりん・猫虫・ぽむぽむけある・ぽむぽむはかせが加入し、団員16名に。</div>
+      <div class="history-desc">ぽむぽむおなぎ・ぽむぽむかりん・猫虫・ぽむぽむけある・ぽむぽむはかせが加入し、団員18名に。</div>
     </div>
     <div class="history-item">
       <div class="history-dot"></div>
@@ -1622,17 +1622,26 @@
     return (Date.now() - parseInt(ts, 10)) < LOGIN_EXPIRY_MS;
   }
   async function awardPostPoints(amount){
-    if(!isLoginValid()) return;
+    if(!isLoginValid() || !storageAvailable()) return false;
     var uid = localStorage.getItem('loggedInUserId');
     try{
-      await authReadyPromise;
-      var doc = await db.collection('users').doc(uid).get();
-      var data = doc.exists ? doc.data() : {};
-      var points = (data.points || 0) + amount;
-      var totalPoints = (data.totalPoints !== undefined ? data.totalPoints : (data.points || 0)) + amount;
-      await db.collection('users').doc(uid).set({ points: points, totalPoints: totalPoints }, { merge: true });
-      updateUserBar(localStorage.getItem('loggedInUserName'), points);
-    }catch(e){ /* ignore */ }
+      var authOK = await authReadyPromise;
+      if(!authOK) throw new Error('AUTH_NOT_READY');
+      var ref = db.collection('users').doc(uid);
+      var result = await db.runTransaction(async function(tx){
+        var snap = await tx.get(ref);
+        var data = snap.exists ? (snap.data() || {}) : {};
+        var points = Number(data.points || 0) + Number(amount || 0);
+        var totalPoints = (data.totalPoints !== undefined ? Number(data.totalPoints || 0) : Number(data.points || 0)) + Number(amount || 0);
+        tx.set(ref, {points: points, totalPoints: totalPoints}, {merge:true});
+        return points;
+      });
+      updateUserBar(localStorage.getItem('loggedInUserName'), result);
+      return true;
+    }catch(e){
+      console.error('ポイント付与エラー', e);
+      return false;
+    }
   }
 
   function renderNotifBadge(total){
@@ -1804,29 +1813,42 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(key);
-          var doc = await docRef.get();
           var today = todayStr();
-          var points;
-          if(doc.exists){
-            var data = doc.data();
-            if(data.pin !== pin){
-              errorEl.textContent = 'パスワードが違います';
-              errorEl.classList.remove('hidden');
-              submitBtn.disabled = false;
-              submitBtn.textContent = 'ログインする';
-              return;
+          var loginResult = await db.runTransaction(async function(tx){
+            var snap = await tx.get(docRef);
+            var data = snap.exists ? (snap.data() || {}) : {};
+            var hasPin = typeof data.pin === 'string' && /^\d{4}$/.test(data.pin);
+            var points = Number(data.points || 0);
+            var totalPoints = data.totalPoints !== undefined ? Number(data.totalPoints || 0) : points;
+            var update = { displayName: displayName, lastSeen: Date.now() };
+            var firstLogin = false;
+
+            if(!hasPin){
+              // プロフィール用の users ドキュメントが先に作られていても、
+              // PIN未登録なら「初回ログイン」として扱う。
+              firstLogin = data.firstLoginAwarded !== true;
+              update.pin = pin;
+              if(firstLogin){
+                points += 20;
+                totalPoints += 20;
+                update.firstLoginAwarded = true;
+              }
+            }else if(data.pin !== pin){
+              throw new Error('WRONG_PIN');
             }
-            points = data.points || 0;
-            var totalPoints = data.totalPoints !== undefined ? data.totalPoints : points;
+
+            // 初回ログインでも「本日のログイン1pt」を加算する。
             if(data.lastLoginDate !== today){
               points += 1;
               totalPoints += 1;
-              await docRef.set({ points: points, totalPoints: totalPoints, lastLoginDate: today }, { merge: true });
+              update.lastLoginDate = today;
             }
-          } else {
-            points = 20;
-            await docRef.set({ displayName: displayName, pin: pin, points: points, totalPoints: points, lastLoginDate: today, lastSeen: Date.now() });
-          }
+            update.points = points;
+            update.totalPoints = totalPoints;
+            tx.set(docRef, update, { merge: true });
+            return { points: points, totalPoints: totalPoints, firstLogin: firstLogin };
+          });
+          var points = loginResult.points;
           localStorage.setItem('loggedInUserId', key);
           localStorage.setItem('loggedInUserName', displayName);
           localStorage.setItem('loginTimestamp', String(Date.now()));
@@ -2796,7 +2818,7 @@
           await authReadyPromise;
           await db.collection('photos').add(data);
           await buildCategoryFolders(cat);
-          awardPostPoints(2);
+          await awardPostPoints(2);
 
           fileInput.value = '';
           titleInput.value = '';
@@ -2966,7 +2988,7 @@
           input.value = '';
           msg.textContent = '匿名で投稿しました。';
           loadVoices();
-          awardPostPoints(2);
+          await awardPostPoints(2);
         }catch(e){
           msg.textContent = '投稿に失敗しました。もう一度お試しください。';
         }
@@ -3072,7 +3094,7 @@
           speakerInput.value = '';
           msg.textContent = '投稿しました。';
           loadQuoteList();
-          awardPostPoints(2);
+          await awardPostPoints(2);
         }catch(e){
           msg.textContent = '投稿に失敗しました。もう一度お試しください。';
         }
@@ -3522,16 +3544,15 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var points = data.points || 0;
-          if(points < THEME_COST){
-            alert('ポイントが足りません(テーマ変更は' + THEME_COST + 'pt)。');
-            themeBuyBtn.disabled = false;
-            return;
-          }
-          points -= THEME_COST;
-          await docRef.set({ points: points }, { merge: true });
+          var points = await db.runTransaction(async function(tx){
+            var doc = await tx.get(docRef);
+            var data = doc.exists ? (doc.data() || {}) : {};
+            var current = Number(data.points || 0);
+            if(current < THEME_COST) throw new Error('INSUFFICIENT_POINTS');
+            current -= THEME_COST;
+            tx.set(docRef, { points: current }, { merge: true });
+            return current;
+          });
           updateUserBar(displayName, points);
           await db.collection('siteContent').doc('theme').set({
             colorKey: key,
@@ -3583,17 +3604,15 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var points = data.points || 0;
-          if(points < 20){
-            errorEl.textContent = 'ポイントが足りません(いたずらは20pt)';
-            errorEl.classList.remove('hidden');
-            prankBtn.disabled = false;
-            return;
-          }
-          points -= 20;
-          await docRef.set({ points: points }, { merge: true });
+          var points = await db.runTransaction(async function(tx){
+            var doc = await tx.get(docRef);
+            var data = doc.exists ? (doc.data() || {}) : {};
+            var current = Number(data.points || 0);
+            if(current < 20) throw new Error('INSUFFICIENT_POINTS');
+            current -= 20;
+            tx.set(docRef, { points: current }, { merge: true });
+            return current;
+          });
           updateUserBar(localStorage.getItem('loggedInUserName'), points);
           var newName = currentName + word;
           if(isExtra){
@@ -3617,27 +3636,46 @@
       shopGrid.addEventListener('click', async function(e){
         var btn = e.target.closest('.shop-buy-btn');
         if(!btn || btn.disabled) return;
-        if(!isLoginValid()) return;
+        if(!isLoginValid()){
+          alert('ショップを利用するにはログインしてください。');
+          return;
+        }
         var key = btn.dataset.item;
         var item = ITEM_CATALOG[key];
+        if(!item || !item.shopCost){
+          alert('商品情報が見つかりません。');
+          return;
+        }
         var uid = localStorage.getItem('loggedInUserId');
         btn.disabled = true;
         try{
-          await authReadyPromise;
+          var authOK = await authReadyPromise;
+          if(!authOK) throw new Error('AUTH_NOT_READY');
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var points = data.points || 0;
-          var inventory = data.inventory || [];
-          if(points >= item.shopCost && inventory.indexOf(key) === -1){
-            points -= item.shopCost;
+          var result = await db.runTransaction(async function(tx){
+            var doc = await tx.get(docRef);
+            if(!doc.exists) throw new Error('USER_NOT_FOUND');
+            var data = doc.data() || {};
+            var points = Number(data.points || 0);
+            var inventory = Array.isArray(data.inventory) ? data.inventory.slice() : [];
+            if(inventory.indexOf(key) !== -1) throw new Error('ALREADY_OWNED');
+            if(points < Number(item.shopCost)) throw new Error('INSUFFICIENT_POINTS');
+            points -= Number(item.shopCost);
             inventory.push(key);
-            await docRef.set({ points: points, inventory: inventory }, { merge: true });
-            updateUserBar(localStorage.getItem('loggedInUserName'), points);
-          }
-        }catch(err){ /* ignore */ }
+            tx.set(docRef, {points: points, inventory: inventory}, {merge:true});
+            return points;
+          });
+          updateUserBar(localStorage.getItem('loggedInUserName'), result);
+          alert(item.name + 'を購入しました！');
+        }catch(err){
+          console.error('ショップ購入エラー', err);
+          if(err.message === 'INSUFFICIENT_POINTS') alert('ポイントが足りません。');
+          else if(err.message === 'ALREADY_OWNED') alert('このアイテムはすでに持っています。');
+          else alert('購入に失敗しました。通信状態とFirestoreのルールを確認してください。');
+        }
         await refreshShopUI();
         renderRanking();
+        btn.disabled = false;
       });
     }
 
@@ -3649,20 +3687,28 @@
         if(!isLoginValid()) return;
         var key = btn.dataset.item;
         var item = ITEM_CATALOG[key];
+        if(!item) return;
         var uid = localStorage.getItem('loggedInUserId');
         btn.disabled = true;
         try{
-          await authReadyPromise;
+          var authOK = await authReadyPromise;
+          if(!authOK) throw new Error('AUTH_NOT_READY');
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var field = item.type === 'frame' ? 'equippedFrame' : 'equippedBadge';
-          var current = data[field] || '';
-          var next = current === key ? '' : key;
-          var update = {};
-          update[field] = next;
-          await docRef.set(update, { merge: true });
-        }catch(err){ /* ignore */ }
+          await db.runTransaction(async function(tx){
+            var doc = await tx.get(docRef);
+            if(!doc.exists) throw new Error('USER_NOT_FOUND');
+            var data = doc.data() || {};
+            var inventory = Array.isArray(data.inventory) ? data.inventory : [];
+            if(inventory.indexOf(key) === -1) throw new Error('NOT_OWNED');
+            var field = item.type === 'frame' ? 'equippedFrame' : 'equippedBadge';
+            var current = data[field] || '';
+            var update = {}; update[field] = current === key ? '' : key;
+            tx.set(docRef, update, {merge:true});
+          });
+        }catch(err){
+          console.error('装備エラー', err);
+          alert('装備の変更に失敗しました。');
+        }
         btn.disabled = false;
         await refreshShopUI();
         if(typeof render === 'function') render();
@@ -3683,27 +3729,33 @@
         try{
           await authReadyPromise;
           var docRef = db.collection('users').doc(uid);
-          var doc = await docRef.get();
-          var data = doc.exists ? doc.data() : {};
-          var points = data.points || 0;
-          if(points < GACHA_COST){
-            alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
-            gachaBtn.disabled = false;
-            return;
-          }
-          points -= GACHA_COST;
-          var picked = pickGachaItem();
-          var item = ITEM_CATALOG[picked];
-          var inventory = data.inventory || [];
-          var duplicate = inventory.indexOf(picked) !== -1;
-          var refund = 0;
-          if(duplicate){
-            refund = RARITY_REFUND[item.rarity] || 0;
-            points += refund;
-          } else {
-            inventory.push(picked);
-          }
-          await docRef.set({ points: points, inventory: inventory }, { merge: true });
+          var gachaResult = await db.runTransaction(async function(tx){
+            var doc = await tx.get(docRef);
+            if(!doc.exists) throw new Error('USER_NOT_FOUND');
+            var data = doc.data() || {};
+            var points = Number(data.points || 0);
+            if(points < GACHA_COST) throw new Error('INSUFFICIENT_POINTS');
+            var picked = pickGachaItem();
+            var item = ITEM_CATALOG[picked];
+            if(!item) throw new Error('ITEM_NOT_FOUND');
+            points -= GACHA_COST;
+            var inventory = Array.isArray(data.inventory) ? data.inventory.slice() : [];
+            var duplicate = inventory.indexOf(picked) !== -1;
+            var refund = 0;
+            if(duplicate){
+              refund = Number(RARITY_REFUND[item.rarity] || 0);
+              points += refund;
+            }else{
+              inventory.push(picked);
+            }
+            tx.set(docRef, {points: points, inventory: inventory}, {merge:true});
+            return {points: points, picked: picked, item: item, duplicate: duplicate, refund: refund};
+          });
+          var points = gachaResult.points;
+          var picked = gachaResult.picked;
+          var item = gachaResult.item;
+          var duplicate = gachaResult.duplicate;
+          var refund = gachaResult.refund;
           updateUserBar(localStorage.getItem('loggedInUserName'), points);
 
           await playGachaSuspense(resultEl, item.rarity);
@@ -3722,7 +3774,9 @@
           await refreshShopUI();
           renderRanking();
         }catch(err){
-          alert('通信に失敗しました。もう一度お試しください。');
+          console.error('ガチャエラー', err);
+          if(err.message === 'INSUFFICIENT_POINTS') alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
+          else alert('ガチャに失敗しました。通信状態とFirestoreのルールを確認してください。');
         }
         gachaBtn.disabled = false;
       });
