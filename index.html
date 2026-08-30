@@ -977,6 +977,7 @@
       <a href="#voices">みんなの声</a>
       <a href="#rules">ルール</a>
       <a href="#shop">ショップ</a>
+      <a href="#admin" id="admin-nav-link" style="display:none;">🛠️ 管理</a>
       
     </div>
   </div>
@@ -1719,6 +1720,44 @@
   <div class="shop-block">
     <div class="shop-block-label">🏆 ポイントランキング</div>
     <div class="ranking-list" id="ranking-list"><div class="loading-note">読み込み中…</div></div>
+  </div>
+</section>
+
+
+<section id="admin" class="tab-panel">
+  <div class="section-head">
+    <div class="section-tag">Administrator</div>
+    <h2>🛠️ 管理</h2>
+    <p>リッキー専用の管理画面です。</p>
+  </div>
+
+  <div class="shop-block" style="max-width:720px;margin:0 auto 24px;">
+    <div class="shop-block-label">👤 対象団員</div>
+    <label>団員を選択</label>
+    <select id="admin2-target"></select>
+    <div id="admin2-current" class="shop-sub-note"></div>
+    <button type="button" id="admin2-refresh" class="mc-btn">情報を更新</button>
+  </div>
+
+  <div class="shop-block" style="max-width:720px;margin:0 auto 24px;">
+    <div class="shop-block-label">⭐ ポイント調整</div>
+    <p class="shop-sub-note">減らす場合はマイナス値を入力してください。0pt未満にはなりません。</p>
+    <label>調整ポイント</label>
+    <input type="number" id="admin2-delta" value="-10" step="1">
+    <label>理由</label>
+    <input type="text" id="admin2-reason" maxlength="100" placeholder="例：ガチャ不具合による過剰取得分の回収">
+    <button type="button" id="admin2-adjust" class="mc-btn primary">ポイントを調整</button>
+    <div id="admin2-adjust-status" class="shop-sub-note"></div>
+  </div>
+
+  <div class="shop-block" style="max-width:720px;margin:0 auto;">
+    <div class="shop-block-label">🔄 アカウント初期化</div>
+    <p class="shop-sub-note">
+      ポイント・累計ポイント・PIN・初回ログイン状態・クエスト受取状況・デイリー状況・
+      ガチャ所持品・装備を初期化します。プロフィール本文は残します。
+    </p>
+    <button type="button" id="admin2-reset" class="mc-btn primary">この団員を初期化する</button>
+    <div id="admin2-reset-status" class="shop-sub-note"></div>
   </div>
 </section>
 
@@ -4933,5 +4972,229 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   });
 </script>
+
+<script>
+/* ===== ADMIN TAB FIX V2 ===== */
+(function(){
+  var ADMIN_MEMBER_ID = 'm_m01';
+
+  function admin2IsAdmin(){
+    return (localStorage.getItem('loggedInUserId') || '') === ADMIN_MEMBER_ID;
+  }
+
+  function admin2Esc(v){
+    return String(v == null ? '' : v)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function admin2Num(v){
+    var n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function admin2UpdateVisibility(){
+    var link = document.getElementById('admin-nav-link');
+    var panel = document.getElementById('admin');
+    var ok = admin2IsAdmin();
+    if(link) link.style.display = ok ? '' : 'none';
+
+    /* 管理者でない状態で管理タブを開いていたら紹介へ戻す */
+    if(!ok && panel && panel.classList.contains('tab-active')){
+      if(typeof showTab === 'function') showTab('about');
+    }
+
+    if(ok) admin2EnsureMembers();
+  }
+
+  async function admin2EnsureMembers(){
+    var sel = document.getElementById('admin2-target');
+    if(!sel || sel.dataset.loaded === '1') return;
+    try{
+      if(typeof authReadyPromise !== 'undefined') await authReadyPromise;
+
+      var options = [];
+      if(typeof getAllMembers === 'function'){
+        var members = await getAllMembers();
+        options = members.map(function(m){
+          return {id:m.id, name:m.name || m.id};
+        });
+      }
+
+      /* getAllMembers が使えない場合は Firestore users から取得 */
+      if(!options.length && typeof db !== 'undefined'){
+        var snap = await db.collection('users').get();
+        snap.forEach(function(doc){
+          var d = doc.data() || {};
+          options.push({id:doc.id, name:d.displayName || doc.id});
+        });
+      }
+
+      options.sort(function(a,b){
+        return String(a.name).localeCompare(String(b.name),'ja');
+      });
+
+      sel.innerHTML = options.map(function(x){
+        return '<option value="'+admin2Esc(x.id)+'">'+admin2Esc(x.name)+' ('+admin2Esc(x.id)+')</option>';
+      }).join('');
+      sel.dataset.loaded = '1';
+      await admin2ShowCurrent();
+    }catch(e){
+      var cur=document.getElementById('admin2-current');
+      if(cur) cur.textContent='団員一覧の読み込みに失敗しました: '+(e && e.message ? e.message : '通信エラー');
+    }
+  }
+
+  async function admin2ShowCurrent(){
+    var sel=document.getElementById('admin2-target');
+    var out=document.getElementById('admin2-current');
+    if(!sel || !out || !sel.value || typeof db === 'undefined') return;
+    try{
+      if(typeof authReadyPromise !== 'undefined') await authReadyPromise;
+      var snap=await db.collection('users').doc(sel.value).get();
+      var d=snap.exists ? (snap.data()||{}) : {};
+      out.textContent='現在ポイント: '+admin2Num(d.points)+'pt / 累計: '+admin2Num(d.totalPoints)+'pt';
+    }catch(e){
+      out.textContent='情報を取得できませんでした。';
+    }
+  }
+
+  async function admin2Adjust(){
+    if(!admin2IsAdmin()) return alert('管理者専用です。');
+    var sel=document.getElementById('admin2-target');
+    var delta=parseInt(document.getElementById('admin2-delta').value,10);
+    var reason=document.getElementById('admin2-reason').value.trim();
+    var status=document.getElementById('admin2-adjust-status');
+    if(!sel.value || !Number.isFinite(delta) || delta===0){
+      status.textContent='対象団員と調整ポイントを確認してください。'; return;
+    }
+    if(!reason){
+      status.textContent='理由を入力してください。'; return;
+    }
+
+    try{
+      if(typeof authReadyPromise !== 'undefined') await authReadyPromise;
+      var ref=db.collection('users').doc(sel.value);
+      await db.runTransaction(async function(tx){
+        var snap=await tx.get(ref);
+        var d=snap.exists ? (snap.data()||{}) : {};
+        var before=admin2Num(d.points);
+        var after=Math.max(0,before+delta);
+        tx.set(ref,{points:after},{merge:true});
+
+        var h=ref.collection('pointHistory').doc();
+        tx.set(h,{
+          delta:after-before,
+          reason:'admin',
+          reasonLabel:'管理者によるポイント調整',
+          meta:reason,
+          adminMemberId:ADMIN_MEMBER_ID,
+          createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+          createdAtMs:Date.now()
+        });
+      });
+      status.textContent='ポイントを調整しました。';
+      await admin2ShowCurrent();
+      if(typeof renderRanking === 'function') renderRanking();
+    }catch(e){
+      status.textContent='調整に失敗しました: '+(e && e.message ? e.message : '通信エラー');
+    }
+  }
+
+  async function admin2Reset(){
+    if(!admin2IsAdmin()) return alert('管理者専用です。');
+    var sel=document.getElementById('admin2-target');
+    var status=document.getElementById('admin2-reset-status');
+    if(!sel || !sel.value){ status.textContent='団員を選択してください。'; return; }
+
+    var name=sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : sel.value;
+    var ok=confirm(
+      name+' を初期化します。\n\n'+
+      'ポイント・PIN・初回ログイン・クエスト・デイリー・所持品・装備をリセットします。\n'+
+      'プロフィール本文は残します。\n\n本当に実行しますか？'
+    );
+    if(!ok) return;
+
+    try{
+      if(typeof authReadyPromise !== 'undefined') await authReadyPromise;
+      var ref=db.collection('users').doc(sel.value);
+      await db.runTransaction(async function(tx){
+        var snap=await tx.get(ref);
+        if(!snap.exists) throw new Error('対象ユーザーが見つかりません。');
+        var d=snap.data()||{};
+        var before=admin2Num(d.points);
+
+        tx.set(ref,{
+          points:0,
+          totalPoints:0,
+          pin:firebase.firestore.FieldValue.delete(),
+          firstLoginAwarded:false,
+          lastLoginDate:firebase.firestore.FieldValue.delete(),
+          dailyMissionClaimedDate:firebase.firestore.FieldValue.delete(),
+          diceChallengeUsedDate:firebase.firestore.FieldValue.delete(),
+          diceLossUsedDate:firebase.firestore.FieldValue.delete(),
+          claimedTasks:[],
+          inventory:[],
+          equippedFrame:'',
+          equippedBadge:''
+        },{merge:true});
+
+        var h=ref.collection('pointHistory').doc();
+        tx.set(h,{
+          delta:-before,
+          reason:'admin',
+          reasonLabel:'管理者によるアカウント初期化',
+          meta:'ポイント・PIN・クエスト・所持品などを初期化',
+          adminMemberId:ADMIN_MEMBER_ID,
+          createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+          createdAtMs:Date.now()
+        });
+      });
+
+      status.textContent='初期化しました。次回ログインは初回扱いになります。';
+      await admin2ShowCurrent();
+      if(typeof renderRanking === 'function') renderRanking();
+    }catch(e){
+      status.textContent='初期化に失敗しました: '+(e && e.message ? e.message : '通信エラー');
+    }
+  }
+
+  function admin2Bind(){
+    var sel=document.getElementById('admin2-target');
+    var refresh=document.getElementById('admin2-refresh');
+    var adjust=document.getElementById('admin2-adjust');
+    var reset=document.getElementById('admin2-reset');
+
+    if(sel && !sel.dataset.bound){
+      sel.dataset.bound='1';
+      sel.addEventListener('change',admin2ShowCurrent);
+    }
+    if(refresh && !refresh.dataset.bound){
+      refresh.dataset.bound='1';
+      refresh.addEventListener('click',admin2ShowCurrent);
+    }
+    if(adjust && !adjust.dataset.bound){
+      adjust.dataset.bound='1';
+      adjust.addEventListener('click',admin2Adjust);
+    }
+    if(reset && !reset.dataset.bound){
+      reset.dataset.bound='1';
+      reset.addEventListener('click',admin2Reset);
+    }
+
+    admin2UpdateVisibility();
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    admin2Bind();
+    setTimeout(admin2UpdateVisibility,500);
+    setTimeout(admin2UpdateVisibility,1500);
+  });
+
+  /* ログイン後の localStorage 変更を確実に拾う */
+  setInterval(admin2UpdateVisibility,1000);
+})();
+</script>
+
 </body>
 </html>
