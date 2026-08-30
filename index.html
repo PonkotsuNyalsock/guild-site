@@ -70,7 +70,7 @@
     box-shadow:0 2px 0 rgba(0,0,0,0.06);
   }
   .nav-links a:hover{background:var(--sky);border-color:var(--sky-dark);color:#fff;}
-  @media(max-width:640px){.nav-links{display:flex;}}
+  @media(max-width:640px){.nav-links{display:none;}}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -308,6 +308,12 @@
     font-family:'M PLUS Rounded 1c';font-weight:800;color:#fff;font-size:15px;
   }
   .member-name{font-weight:800;font-size:16px;font-family:'M PLUS Rounded 1c';}
+  .member-title{
+    font-size:11.5px;font-weight:700;color:var(--coral-dark);margin-top:2px;
+  }
+  .title-gen-row{display:flex;gap:8px;}
+  .title-gen-row input{flex:1;}
+  .title-gen-row .mc-btn{flex:none;white-space:nowrap;}
   .member-role{
     display:inline-block;margin-top:3px;font-size:11px;font-weight:700;
     padding:2px 10px;border-radius:999px;background:var(--sky);color:#0b3550;
@@ -339,6 +345,10 @@
     display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
     gap:14px;max-width:1000px;margin:0 auto;
   }
+  .bday-guest-lock{
+    text-align:center;color:var(--ink-soft);font-size:13px;
+    border:2px dashed var(--line);border-radius:16px;padding:28px;max-width:1000px;margin:0 auto;
+  }
   .bday-month{
     background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px 16px;
   }
@@ -365,6 +375,7 @@
     font-family:'M PLUS Rounded 1c';font-weight:800;font-size:12px;color:var(--coral-dark);
     margin-bottom:8px;
   }
+  .quiz-q-text{font-weight:800;font-size:14.5px;color:var(--ink);margin-bottom:10px;line-height:1.6;}
   .quiz-opt{
     display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:8px;
     border:1px solid var(--line);border-radius:12px;font-size:13.5px;cursor:pointer;
@@ -392,6 +403,7 @@
   }
   .quiz-apply-msg{font-size:12px;color:var(--mint-dark);margin-top:8px;}
   #quiz-retry{margin-top:18px;}
+  .adv-quiz-block{margin-top:64px;padding-top:56px;border-top:1px dashed var(--line);}
 
   /* ---------- TABS ---------- */
   .tab-panel{display:none;}
@@ -516,6 +528,165 @@
   }
   .rules-actions{display:flex;align-items:center;gap:12px;margin-top:14px;}
 
+  .guide-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+  .guide-item{
+    background:var(--white);border:1px solid var(--line);border-radius:16px;padding:16px 20px;
+  }
+  .guide-item-title{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:14px;margin-bottom:6px;}
+  .guide-item-desc{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+
+  /* ---------- SHOP ---------- */
+  .shop-balance{
+    max-width:640px;margin:0 auto 32px;text-align:center;font-family:'M PLUS Rounded 1c';
+    font-weight:800;font-size:16px;background:var(--white);border:1px solid var(--line);
+    border-radius:16px;padding:14px 20px;
+  }
+  .shop-block{max-width:720px;margin:0 auto 40px;}
+  .shop-block-label{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:14px;margin-bottom:10px;}
+  .shop-sub-note{font-size:12px;color:var(--ink-soft);margin:0 0 12px;}
+  .shop-block label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin:10px 0 4px;}
+  .shop-block select,.shop-block input[type="text"]{
+    width:100%;font-family:'Zen Maru Gothic';font-size:13px;color:var(--ink);
+    border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--paper);
+    margin-bottom:4px;
+  }
+  #prank-btn{margin-top:14px;}
+  .theme-swatch-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .theme-swatch{
+    width:52px;height:52px;border-radius:50%;border:3px solid transparent;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .theme-swatch-circle{width:44px;height:44px;border-radius:50%;}
+  .theme-swatch.selected{border-color:var(--ink);}
+  .theme-swatch-label{font-size:9px;color:var(--ink-soft);margin-top:2px;white-space:nowrap;}
+  .shop-grid,.inventory-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;
+  }
+  .shop-item{
+    background:var(--white);border:2px solid var(--line);border-radius:16px;
+    padding:14px;text-align:center;
+  }
+  .shop-item-name{font-weight:700;font-size:13px;margin-bottom:4px;}
+  .shop-item-rarity{font-size:11px;font-weight:800;margin-bottom:8px;}
+  .shop-item-cost{font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
+  .shop-item.rarity-N{border-color:#bcbcbc;}
+  .shop-item.rarity-N .shop-item-rarity{color:#888;}
+  .shop-item.rarity-R{border-color:var(--sky);}
+  .shop-item.rarity-R .shop-item-rarity{color:var(--sky-dark);}
+  .shop-item.rarity-SR{border-color:var(--coral);}
+  .shop-item.rarity-SR .shop-item-rarity{color:var(--coral-dark);}
+  .shop-item.rarity-UR{
+    border-color:transparent;background:linear-gradient(#fff,#fff) padding-box,
+      linear-gradient(90deg,#ff8fa0,#ffc94d,#6fd9b5,#4fb4e8) border-box;
+  }
+  .shop-item.rarity-UR .shop-item-rarity{
+    background:linear-gradient(90deg,#ff8fa0,#ffc94d,#6fd9b5,#4fb4e8);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  .gacha-area{text-align:center;}
+  .gacha-result{
+    margin-top:18px;padding:24px;border-radius:18px;background:var(--paper);
+    border:2px solid var(--line);
+  }
+  .gacha-result.rarity-N{border-color:#bcbcbc;}
+  .gacha-result.rarity-R{border-color:var(--sky);background:#eef8fd;}
+  .gacha-result.rarity-SR{border-color:var(--coral);background:#fff0f3;}
+  .gacha-result.rarity-UR{
+    border-color:transparent;
+    background:linear-gradient(#fff8ec,#fff8ec) padding-box,
+      linear-gradient(90deg,#ff8fa0,#ffc94d,#6fd9b5,#4fb4e8) border-box;
+  }
+  .gacha-rarity-label{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:14px;margin-bottom:6px;}
+  .gacha-item-name{font-size:20px;font-weight:800;margin-bottom:6px;}
+  .gacha-new-note{color:var(--mint-dark);font-weight:800;font-size:13px;}
+  .gacha-dup-note{color:var(--ink-soft);font-size:12px;}
+  @keyframes gachaFlash{
+    0%{transform:scale(1);} 30%{transform:scale(1.08);} 60%{transform:scale(0.98);} 100%{transform:scale(1);}
+  }
+  .gacha-flash{animation:gachaFlash .6s ease;box-shadow:0 0 30px 6px rgba(255,201,77,0.6);}
+  @keyframes suspensePulse{0%{opacity:.55;}50%{opacity:1;}100%{opacity:.55;}}
+  .gacha-suspense{
+    padding:26px;border-radius:18px;border:2px dashed var(--line);background:var(--paper);text-align:center;
+  }
+  .gacha-suspense-text{
+    font-family:'M PLUS Rounded 1c';font-weight:800;font-size:15px;color:var(--ink);
+    animation:suspensePulse .8s infinite;
+  }
+  .gacha-suspense.confirm{
+    border-color:transparent;
+    background:linear-gradient(#fff8ec,#fff8ec) padding-box,
+      linear-gradient(90deg,#ff8fa0,#ffc94d,#6fd9b5,#4fb4e8) border-box;
+  }
+  .gacha-suspense.confirm .gacha-suspense-text{animation:suspensePulse .45s infinite;}
+  .gacha-suspense.reversal{border-color:#bcbcbc;background:#f1f1ee;}
+  .gacha-suspense.reversal .gacha-suspense-text{color:#888;}
+  .gacha-suspense.reversal.flip{
+    border-color:transparent;
+    background:linear-gradient(#fff8ec,#fff8ec) padding-box,
+      linear-gradient(90deg,#ff8fa0,#ffc94d,#6fd9b5,#4fb4e8) border-box;
+    animation:gachaFlash .5s ease;
+  }
+  .gacha-suspense.reversal.flip .gacha-suspense-text{color:var(--ink);}
+
+  .ranking-list{display:flex;flex-direction:column;gap:8px;max-width:640px;margin:0 auto;}
+  .ranking-row{
+    display:flex;align-items:center;gap:12px;background:var(--white);
+    border:1px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;
+  }
+  .ranking-rank{font-family:'M PLUS Rounded 1c';font-weight:800;color:var(--coral-dark);min-width:34px;}
+  .ranking-name{font-weight:700;flex:1;}
+  .ranking-points{color:var(--sky-dark);font-weight:700;}
+  .ranking-total{color:var(--ink-soft);}
+
+  /* ---------- FRAMES & BADGES ---------- */
+  .avatar-wrap{position:relative;flex:none;}
+  .avatar.frame-n-red{box-shadow:0 0 0 3px #E24B4A,0 0 0 5px #fff;}
+  .avatar.frame-n-orange{box-shadow:0 0 0 3px #F0997B,0 0 0 5px #fff;}
+  .avatar.frame-n-yellow{box-shadow:0 0 0 3px #FFC94D,0 0 0 5px #fff;}
+  .avatar.frame-n-green{box-shadow:0 0 0 3px #63C43B,0 0 0 5px #fff;}
+  .avatar.frame-n-teal{box-shadow:0 0 0 3px #1D9E75,0 0 0 5px #fff;}
+  .avatar.frame-n-sky{box-shadow:0 0 0 3px #4FB4E8,0 0 0 5px #fff;}
+  .avatar.frame-n-blue{box-shadow:0 0 0 3px #185FA5,0 0 0 5px #fff;}
+  .avatar.frame-n-purple{box-shadow:0 0 0 3px #7F77DD,0 0 0 5px #fff;}
+  .avatar.frame-n-pink{box-shadow:0 0 0 3px #D4537E,0 0 0 5px #fff;}
+  .avatar.frame-n-brown{box-shadow:0 0 0 3px #8B5E3C,0 0 0 5px #fff;}
+  .avatar.frame-gold{box-shadow:0 0 0 3px #E8B800,0 0 0 5px #fff;}
+  .avatar.frame-fire{
+    border:3px solid #fff;
+    box-shadow:0 0 0 3px #FF6B35,0 0 10px 3px rgba(232,64,42,0.6);
+  }
+  .avatar.frame-water{
+    border:3px solid #fff;
+    box-shadow:0 0 0 3px #4FB4E8,0 0 10px 3px rgba(29,95,168,0.6);
+  }
+  @keyframes lightningFlicker{
+    0%,100%{box-shadow:0 0 0 3px #FFC94D,0 0 10px 3px rgba(255,201,77,0.6);}
+    50%{box-shadow:0 0 0 3px #B266FF,0 0 14px 5px rgba(178,102,255,0.8);}
+  }
+  .avatar.frame-lightning{
+    border:3px solid #fff;
+    animation:lightningFlicker 1.6s infinite;
+  }
+  @keyframes galaxyGlow{
+    0%{box-shadow:0 0 6px 2px rgba(160,80,255,0.6);} 100%{box-shadow:0 0 14px 6px rgba(80,180,255,0.8);}
+  }
+  .avatar.frame-galaxy{animation:galaxyGlow 1.4s infinite alternate;border:2px solid #fff;}
+  @keyframes phoenixGlow{
+    0%{box-shadow:0 0 0 3px #FF8FA0,0 0 10px 3px rgba(255,143,160,0.7);}
+    50%{box-shadow:0 0 0 3px #FFC94D,0 0 12px 4px rgba(255,201,77,0.8);}
+    100%{box-shadow:0 0 0 3px #FF3B1F,0 0 16px 6px rgba(255,59,31,0.9);}
+  }
+  .avatar.frame-phoenix{
+    border:3px solid #fff;
+    animation:phoenixGlow 1.2s infinite alternate;
+  }
+  .avatar-badge{
+    position:absolute;bottom:-4px;right:-4px;font-size:16px;
+    background:#fff;border-radius:50%;width:22px;height:22px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.25);
+  }
+
   .site-gate{
     position:fixed;inset:0;z-index:300;
     background:
@@ -544,6 +715,58 @@
     margin-bottom:14px;
   }
   .site-gate-error{color:var(--coral-dark);font-size:12px;margin-top:12px;}
+
+  .user-bar{
+    background:var(--paper);border-bottom:1px solid var(--line);
+    padding:8px 24px;
+  }
+  .user-bar-inner{max-width:1080px;margin:0 auto;display:flex;justify-content:flex-end;align-items:center;gap:12px;}
+  .user-bar-name{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:13px;color:var(--ink);}
+  .user-bar-points{
+    font-size:12px;font-weight:700;color:#4a3200;background:var(--sun);
+    padding:3px 10px;border-radius:999px;
+  }
+  #user-bar-logged{display:flex;align-items:center;gap:10px;}
+
+  .login-modal-inner{max-width:360px;width:100%;background:#fff;border-radius:22px;padding:32px 26px;text-align:left;}
+  .login-modal-title{
+    font-family:'M PLUS Rounded 1c';font-weight:800;font-size:18px;text-align:center;margin-bottom:6px;
+  }
+  .login-modal-sub{font-size:12px;color:var(--ink-soft);text-align:center;margin-bottom:18px;}
+  .login-modal-inner label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin:12px 0 6px;}
+  .login-modal-inner select,
+  .login-modal-inner input{
+    width:100%;font-family:'Zen Maru Gothic';font-size:14px;color:var(--ink);
+    border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--paper);
+  }
+  .login-pin-input{letter-spacing:6px;text-align:center;font-size:18px !important;}
+  .login-first-note{font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.6;}
+  .login-error{color:var(--coral-dark);font-size:12px;margin-top:10px;text-align:center;}
+  #login-submit-btn{width:100%;margin-top:18px;}
+  .login-guest-divider{
+    text-align:center;color:var(--ink-soft);font-size:11px;margin:16px 0 10px;
+    position:relative;
+  }
+  #guest-view-btn{width:100%;}
+  .user-bar-guest-tag{font-size:11.5px;color:var(--ink-soft);margin-right:4px;}
+  .notif-bell{position:relative;padding:7px 12px;font-size:14px;}
+  .notif-badge{
+    position:absolute;top:-6px;right:-6px;background:var(--coral);color:#fff;
+    font-size:10px;font-weight:800;min-width:16px;height:16px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;padding:0 3px;
+  }
+  .notif-modal-inner{max-width:360px;width:100%;background:#fff;border-radius:22px;padding:32px 26px;text-align:left;}
+  .notif-list{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+  .notif-item{
+    display:flex;align-items:center;gap:10px;padding:12px 14px;
+    border:1px solid var(--line);border-radius:14px;font-size:13px;background:var(--paper);
+  }
+  .notif-item a{color:var(--sky-dark);font-weight:700;text-decoration:none;}
+  .notif-item .notif-count{
+    margin-left:auto;background:var(--coral);color:#fff;font-size:11px;font-weight:800;
+    padding:2px 8px;border-radius:999px;
+  }
+  .notif-empty{text-align:center;color:var(--ink-soft);font-size:13px;padding:20px;}
   .merged-block{margin-top:64px;padding-top:56px;border-top:1px dashed var(--line);}
   .mc-edit-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
   .delete-member-btn{color:var(--coral-dark);border-color:var(--coral);}
@@ -598,414 +821,6 @@
 
   footer{padding:40px 24px;text-align:center;color:var(--ink-soft);font-size:13px;}
   footer .fbrand{font-family:'M PLUS Rounded 1c';font-weight:800;color:var(--ink);margin-bottom:6px;}
-
-
-/* =========================================================
-   RESPONSIVE / SMARTPHONE OPTIMIZATION
-   PC・タブレット・スマートフォン共通で使える追加調整
-   ========================================================= */
-@media (max-width: 640px){
-  html{scroll-padding-top:64px;}
-  body{font-size:14px;line-height:1.75;overflow-x:hidden;}
-
-  /* ヘッダー / ナビ */
-  .nav-inner{padding:9px 12px;gap:10px;overflow:hidden;}
-  .brand{flex:0 0 auto;gap:7px;}
-  .brand-emblem{width:34px;height:34px;font-size:14px;}
-  .brand-name{font-size:14px;white-space:nowrap;}
-  .nav-links{
-    display:flex;
-    flex:1 1 auto;
-    min-width:0;
-    width:auto;
-    gap:6px;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    overflow-y:hidden;
-    padding:2px 2px 5px;
-    margin:0;
-    scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-  }
-  .nav-links::-webkit-scrollbar{display:none;}
-  .nav-links a{
-    flex:0 0 auto;
-    padding:7px 11px;
-    font-size:11px;
-    border-width:1.5px;
-  }
-
-  /* ヒーロー */
-  .hero{padding:54px 16px 42px;}
-  .hero-eyebrow{font-size:11px;padding:5px 12px;}
-  .hero h1{font-size:32px;line-height:1.35;margin:17px 0 12px;}
-  .hero p.lead{font-size:13.5px;line-height:1.85;max-width:100%;}
-  .hero-cta{flex-direction:column;gap:9px;margin-top:23px;}
-  .hero-cta .btn{width:100%;padding:12px 16px;font-size:13px;}
-  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:28px;}
-  .stat-slot{min-width:0;padding:10px 7px;border-radius:14px;}
-  .stat-slot:last-child{grid-column:1 / -1;}
-  .stat-slot .num{font-size:16px;overflow-wrap:anywhere;}
-  .stat-slot .lbl{font-size:10px;}
-
-  /* セクション共通 */
-  section{padding:54px 14px;}
-  .section-head{margin-bottom:28px;}
-  .section-tag{font-size:10px;}
-  .section-head h2{font-size:24px;line-height:1.45;}
-  .section-head p{font-size:12.5px;line-height:1.75;}
-
-  /* トップの画像・スポットライト */
-  .slideshow,.spotlight{padding-left:14px;padding-right:14px;}
-  .slideshow-frame{aspect-ratio:4/3;border-radius:18px;}
-  .slideshow-cap{padding:11px 12px;font-size:11px;}
-  .spotlight-card{flex-direction:column;align-items:stretch;gap:14px;padding:17px;border-radius:20px;}
-  .spotlight-illust{width:135px;margin:0 auto;}
-  .spotlight-info{min-width:0;}
-  .spotlight-name{font-size:20px;overflow-wrap:anywhere;}
-  .spotlight-meta{font-size:12px;}
-  .spotlight-quote{margin-bottom:24px;}
-  .quote-of-day{padding:19px 15px;border-radius:18px;}
-  .quote-text{font-size:16px;line-height:1.7;overflow-wrap:anywhere;}
-
-  /* 紹介 */
-  .about-grid{grid-template-columns:1fr;gap:20px;}
-  .badge-illust{max-width:270px;margin:0 auto;border-radius:22px;}
-  .about-card{padding:19px;border-radius:18px;}
-  .about-card h3{font-size:16px;line-height:1.5;}
-  .about-card p{font-size:13px;line-height:1.8;}
-  .tag-row{gap:6px;}
-  .tag{font-size:11px;padding:5px 10px;}
-
-  /* ギャラリー */
-  .gallery-category{margin-bottom:38px;}
-  .gallery-cat-head{flex-direction:column;align-items:stretch;gap:10px;}
-  .gallery-cat-head h3{font-size:16px;line-height:1.5;}
-  .gallery-cat-sub{font-size:11px;}
-  .add-photo-btn{width:100%;padding:9px 12px;}
-  .gallery-grid{grid-template-columns:1fr;gap:12px;}
-  .gallery-folder{padding:4px 12px 14px;border-radius:16px;}
-  .gallery-folder summary{font-size:13px;padding:12px 0;}
-  .item-card{border-radius:16px;padding:8px;}
-  .item-frame{border-radius:13px;}
-  .item-caption{padding:10px 6px 5px;}
-  .item-caption .t{font-size:13px;overflow-wrap:anywhere;}
-  .item-caption .d{font-size:11px;}
-  .item-actions{flex-wrap:wrap;}
-  .item-actions .mc-btn{padding:6px 10px;}
-  .add-photo-panel{padding:13px;border-radius:14px;}
-  .add-photo-panel input,.add-photo-panel textarea{font-size:13px;}
-
-  /* ライトボックス */
-  .lightbox{padding:12px;}
-  .lightbox-inner{max-width:96vw;max-height:90vh;}
-  .lightbox-inner img{max-height:72vh;border-radius:10px;}
-  .lightbox-close{top:10px;right:10px;width:40px;height:40px;}
-  .lightbox-caption{font-size:12px;margin-top:9px;}
-  .lightbox-caption .d{font-size:11px;}
-
-  /* 団員 */
-  .save-note{font-size:11.5px;padding:10px 13px;margin-bottom:22px;}
-  .member-grid{grid-template-columns:1fr;gap:11px;}
-  .member-card{padding:14px;border-radius:16px;}
-  .mc-head{gap:10px;}
-  .avatar{width:44px;height:44px;font-size:14px;}
-  .member-name{font-size:15px;overflow-wrap:anywhere;}
-  .member-meta{font-size:12px;}
-  .member-comment{font-size:12.5px;}
-  .mc-actions,.mc-edit-actions{flex-wrap:wrap;}
-  .mc-btn{font-size:11.5px;padding:7px 12px;min-height:36px;}
-  .mc-edit input,.mc-edit textarea,.birthday-selects select{font-size:13px;min-height:38px;}
-  .bday-grid{grid-template-columns:1fr 1fr;gap:8px;}
-  .bday-month{padding:10px 11px;border-radius:13px;}
-  .bday-month-label{font-size:13px;}
-  .bday-list li{font-size:11.5px;}
-
-  /* MBTI */
-  .quiz-box{padding:17px;border-radius:18px;}
-  .quiz-q{margin-bottom:18px;}
-  .quiz-opt{font-size:12.5px;line-height:1.55;padding:10px 11px;align-items:flex-start;}
-  .quiz-opt input{margin-top:3px;}
-  .quiz-result-type{font-size:28px;}
-  .quiz-result-desc{font-size:12.5px;}
-  .quiz-apply-row{flex-direction:column;align-items:stretch;}
-  .quiz-apply-row select{width:100%;font-size:13px;min-height:40px;}
-
-  /* みんなの声 / 名言 */
-  .voice-box{padding:14px;border-radius:16px;}
-  .voice-box textarea{min-height:100px;font-size:13px;}
-  .voice-actions{flex-direction:column;align-items:stretch;gap:8px;}
-  .voice-actions .mc-btn{width:100%;}
-  .voice-list{gap:10px;}
-  .voice-card{padding:14px;border-radius:14px;}
-  .voice-text{font-size:13px;overflow-wrap:anywhere;}
-  .voice-meta{margin-top:9px;}
-
-  /* チーム編成 */
-  .team-block{padding:14px;border-radius:15px;}
-  .team-check-grid{grid-template-columns:1fr 1fr;gap:6px;}
-  .team-check{font-size:11.5px;padding:8px;min-width:0;overflow-wrap:anywhere;}
-  .team-size-row{flex-direction:column;gap:7px;margin-bottom:15px;}
-  .team-size-row input{width:100%;max-width:120px;min-height:40px;}
-  .team-results{grid-template-columns:1fr;gap:10px;}
-  .team-card{padding:14px;}
-
-  /* ルール */
-  .rules-box textarea{min-height:280px;padding:14px;font-size:13px;line-height:1.75;}
-  .rules-actions{flex-direction:column;align-items:stretch;gap:8px;}
-  .rules-actions .mc-btn{width:100%;}
-
-  /* 沿革 */
-  .history-line{padding-left:19px;}
-  .history-dot{left:-30px;width:18px;height:18px;}
-  .history-item{padding-bottom:28px;}
-  .history-date{font-size:12px;line-height:1.5;}
-  .history-title{font-size:14px;line-height:1.55;}
-  .history-desc{font-size:12px;line-height:1.75;overflow-wrap:anywhere;}
-
-  /* 入団案内 */
-  .join{border-radius:22px;padding:38px 18px;}
-  .join h2{font-size:22px;line-height:1.45;}
-  .join p{font-size:13px;line-height:1.8;}
-  .join .btn-primary{width:100%;}
-
-  /* 合言葉画面 */
-  .site-gate{padding:16px;}
-  .site-gate-card{max-width:340px;padding:30px 20px;border-radius:20px;}
-  .site-gate-input{font-size:16px;min-height:46px;}
-  .site-gate-card .mc-btn{min-height:42px;}
-
-  footer{padding:30px 14px;font-size:12px;}
-}
-
-/* 小型スマホ（iPhone SE等） */
-@media (max-width: 380px){
-  .brand-name{font-size:13px;}
-  .nav-inner{gap:7px;}
-  .nav-links a{padding:6px 9px;font-size:10.5px;}
-  .hero{padding-top:48px;}
-  .hero h1{font-size:29px;}
-  .bday-grid{grid-template-columns:1fr;}
-  .team-check-grid{grid-template-columns:1fr;}
-}
-
-/* タッチ操作向け：ボタンを押しやすくする */
-@media (hover:none) and (pointer:coarse){
-  button,.btn,.nav-links a,.quiz-opt,.team-check,summary{touch-action:manipulation;}
-  .nav-links a,.btn,.mc-btn{min-height:40px;}
-}
-
-
-/* =========================================================
-   MOBILE NAVIGATION
-   上部タブを常時表示 + 下部固定ナビ
-   ========================================================= */
-
-.mobile-bottom-nav,
-.mobile-more-sheet,
-.mobile-more-backdrop{
-  display:none;
-}
-
-@media (max-width:640px){
-
-  /* 上部ナビは消さず、横スクロール可能にする */
-  .nav{
-    position:sticky;
-    top:0;
-    z-index:200;
-  }
-
-  .nav-inner{
-    display:block;
-    padding:8px 10px 9px;
-    overflow:hidden;
-  }
-
-  .brand{
-    justify-content:center;
-    margin-bottom:7px;
-  }
-
-  .brand-emblem{
-    width:32px;
-    height:32px;
-    font-size:14px;
-  }
-
-  .brand-name{
-    font-size:14px;
-  }
-
-  .nav-links{
-    display:flex !important;
-    width:100%;
-    gap:6px;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    overflow-y:hidden;
-    justify-content:flex-start;
-    padding:1px 2px 4px;
-    margin:0;
-    scrollbar-width:none;
-    -ms-overflow-style:none;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  .nav-links::-webkit-scrollbar{
-    display:none;
-  }
-
-  .nav-links a{
-    flex:0 0 auto;
-    white-space:nowrap;
-    padding:7px 12px;
-    font-size:11px;
-    min-height:38px;
-  }
-
-  /* 下部固定メニュー */
-  .mobile-bottom-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    z-index:250;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:0;
-    padding:6px 5px calc(6px + env(safe-area-inset-bottom));
-    background:rgba(255,253,247,.97);
-    border-top:1px solid var(--line);
-    box-shadow:0 -5px 18px rgba(46,49,72,.10);
-    backdrop-filter:blur(10px);
-  }
-
-  .mobile-bottom-nav button{
-    appearance:none;
-    border:0;
-    background:transparent;
-    color:var(--ink-soft);
-    min-width:0;
-    min-height:50px;
-    padding:5px 2px;
-    border-radius:12px;
-    font-family:'Zen Maru Gothic',sans-serif;
-    font-size:10px;
-    font-weight:700;
-    line-height:1.2;
-    cursor:pointer;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:3px;
-    touch-action:manipulation;
-  }
-
-  .mobile-bottom-nav button .mobile-nav-icon{
-    font-size:19px;
-    line-height:1;
-  }
-
-  .mobile-bottom-nav button.active{
-    color:var(--coral-dark);
-    background:rgba(255,143,160,.12);
-  }
-
-  /* 「その他」メニュー */
-  .mobile-more-backdrop{
-    position:fixed;
-    inset:0;
-    z-index:300;
-    display:block;
-    background:rgba(30,28,20,.35);
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .18s ease;
-  }
-
-  .mobile-more-backdrop.open{
-    opacity:1;
-    pointer-events:auto;
-  }
-
-  .mobile-more-sheet{
-    position:fixed;
-    left:10px;
-    right:10px;
-    bottom:calc(68px + env(safe-area-inset-bottom));
-    z-index:310;
-    display:block;
-    background:var(--white);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:10px;
-    box-shadow:0 12px 35px rgba(46,49,72,.20);
-    transform:translateY(18px);
-    opacity:0;
-    pointer-events:none;
-    transition:transform .18s ease,opacity .18s ease;
-  }
-
-  .mobile-more-sheet.open{
-    transform:translateY(0);
-    opacity:1;
-    pointer-events:auto;
-  }
-
-  .mobile-more-title{
-    text-align:center;
-    font-family:'M PLUS Rounded 1c',sans-serif;
-    font-weight:800;
-    font-size:13px;
-    padding:7px 4px 9px;
-  }
-
-  .mobile-more-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-  }
-
-  .mobile-more-grid button{
-    border:1px solid var(--line);
-    background:var(--paper);
-    color:var(--ink);
-    border-radius:12px;
-    min-height:44px;
-    font-family:'Zen Maru Gothic',sans-serif;
-    font-size:12px;
-    font-weight:700;
-    cursor:pointer;
-  }
-
-  /* 下部固定ナビに本文が隠れないよう余白を確保 */
-  body{
-    padding-bottom:calc(72px + env(safe-area-inset-bottom));
-  }
-
-  footer{
-    padding-bottom:calc(90px + env(safe-area-inset-bottom));
-  }
-
-  /* iPhoneの横幅が特に狭い場合 */
-  @media(max-width:380px){
-    .nav-links a{
-      padding:6px 9px;
-      font-size:10px;
-    }
-
-    .mobile-bottom-nav button{
-      font-size:9px;
-    }
-
-    .mobile-bottom-nav button .mobile-nav-icon{
-      font-size:17px;
-    }
-  }
-}
-
 </style>
 </head>
 <body>
@@ -1029,53 +844,62 @@
     </div>
     <div class="nav-links">
       <a href="#about">紹介</a>
+      <a href="#guide">使い方</a>
       <a href="#gallery">冒険の記録</a>
       <a href="#members">団員</a>
-      <a href="#mbti-quiz">MBTI診断</a>
+      <a href="#mbti-quiz">診断コーナー</a>
       <a href="#voices">みんなの声</a>
       <a href="#rules">ルール</a>
+      <a href="#shop">ショップ</a>
       
     </div>
   </div>
 </nav>
 
-<!-- =========================================================
-     スマホ専用：下部固定ナビ
-     ========================================================= -->
-<div class="mobile-more-backdrop" id="mobile-more-backdrop"></div>
-
-<div class="mobile-more-sheet" id="mobile-more-sheet" aria-hidden="true">
-  <div class="mobile-more-title">その他のメニュー</div>
-  <div class="mobile-more-grid">
-    <button type="button" data-mobile-tab="voices">💬 みんなの声</button>
-    <button type="button" data-mobile-tab="rules">📜 ルール</button>
+<div class="user-bar">
+  <div class="user-bar-inner">
+    <div id="user-bar-guest">
+      <span class="user-bar-guest-tag hidden" id="user-bar-guest-tag">ゲスト閲覧中</span>
+      <button type="button" id="login-open-btn" class="mc-btn primary">👤 ログイン</button>
+    </div>
+    <div id="user-bar-logged" class="hidden">
+      <span class="user-bar-name" id="user-bar-name"></span>
+      <span class="user-bar-points" id="user-bar-points"></span>
+      <button type="button" id="notif-bell-btn" class="mc-btn notif-bell">
+        🔔<span class="notif-badge hidden" id="notif-badge">0</span>
+      </button>
+      <button type="button" id="logout-btn" class="mc-btn">ログアウト</button>
+    </div>
   </div>
 </div>
 
-<nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="スマートフォン用メニュー">
-  <button type="button" data-mobile-tab="about" class="active">
-    <span class="mobile-nav-icon">🏠</span>
-    <span>紹介</span>
-  </button>
-  <button type="button" data-mobile-tab="gallery">
-    <span class="mobile-nav-icon">📷</span>
-    <span>写真</span>
-  </button>
-  <button type="button" data-mobile-tab="members">
-    <span class="mobile-nav-icon">👥</span>
-    <span>団員</span>
-  </button>
-  <button type="button" data-mobile-tab="mbti-quiz">
-    <span class="mobile-nav-icon">🧠</span>
-    <span>MBTI</span>
-  </button>
-  <button type="button" id="mobile-more-button">
-    <span class="mobile-nav-icon">☰</span>
-    <span>その他</span>
-  </button>
-</nav>
+<div class="lightbox" id="notif-modal">
+  <button type="button" class="lightbox-close" id="notif-modal-close">&times;</button>
+  <div class="lightbox-inner notif-modal-inner">
+    <div class="login-modal-title">🔔 通知</div>
+    <div id="notif-list" class="notif-list"></div>
+  </div>
+</div>
 
+<div class="lightbox" id="login-modal">
+  <button type="button" class="lightbox-close" id="login-modal-close">&times;</button>
+  <div class="lightbox-inner login-modal-inner">
+    <div class="login-modal-title">ログイン</div>
+    <p class="login-modal-sub">ログインするとポイントが貯まります(ログインで1日1pt、投稿で2pt)。</p>
+    <label>あなたは?</label>
+    <select id="login-identity-select"></select>
+    <label>パスワード(4桁の数字)</label>
+    <input type="text" inputmode="numeric" maxlength="4" id="login-pin-input" class="login-pin-input" placeholder="0000">
+    <p class="login-first-note">※初めての方は、今お好きな4桁の数字を入力すればそのまま新しいパスワードとして登録されます(初回特典で20pt付与!)。</p>
+    <div class="login-error hidden" id="login-error"></div>
+    <button type="button" id="login-submit-btn" class="mc-btn primary">ログインする</button>
+    <div class="login-guest-divider">または</div>
+    <button type="button" id="guest-view-btn" class="mc-btn">🚶 ゲストとして見る</button>
+    <p class="login-first-note">※ゲストはパスワード不要ですぐ見られますが、団員の誕生日は非表示になります。ポイントも貯まりません。</p>
+  </div>
+</div>
 
+<div id="home-extras">
 <header class="hero">
   <div class="hero-eyebrow"><span class="hero-dot"></span>Tree of Savior Neverland</div>
   <h1>のんびり冒険する、<br><span>脱走レイダー</span></h1>
@@ -1085,7 +909,7 @@
     <a class="btn btn-secondary" href="#gallery">冒険の記録を見る</a>
   </div>
   <div class="stat-row">
-    <div class="stat-slot"><div class="num">18名</div><div class="lbl">団員数</div></div>
+    <div class="stat-slot"><div class="num">16名</div><div class="lbl">団員数</div></div>
     <div class="stat-slot"><div class="num">2026.6.8</div><div class="lbl">結成日</div></div>
     <div class="stat-slot"><div class="num">カーニバルパーティー</div><div class="lbl">拠点サーバー</div></div>
   </div>
@@ -1111,6 +935,53 @@
     <div class="loading-note">読み込み中…</div>
   </div>
 </div>
+</div>
+
+<section id="guide" class="tab-panel">
+  <div class="section-head">
+    <div class="section-tag">Guide</div>
+    <h2>サイトの使い方</h2>
+    <p>各タブでできることをまとめました。</p>
+  </div>
+  <div class="guide-list">
+    <div class="guide-item">
+      <div class="guide-item-title">📖 紹介</div>
+      <div class="guide-item-desc">騎士団の紹介文・沿革(改名の歴史)・参加案内が見られます。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">📷 冒険の記録</div>
+      <div class="guide-item-desc">悪竜イベント・闘技台・その他の写真ギャラリーと、名言(迷言)集があります。「写真を追加」「投稿する」から誰でも投稿できます。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">👥 団員</div>
+      <div class="guide-item-desc">団員のプロフィール一覧、誕生日カレンダー、チーム分けツールがあります。「＋新しい団員を追加」から自分のプロフィールも作れます。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">🧭 診断コーナー</div>
+      <div class="guide-item-desc">MBTI診断と冒険タイプ診断ができます。結果はそのままプロフィールに反映できます。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">📜 ルール</div>
+      <div class="guide-item-desc">誰でも直接書き込んで保存できる、騎士団のルール欄です。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">💬 みんなの声</div>
+      <div class="guide-item-desc">名前を出さずに、相談ごとや伝えたいことを投稿できます。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">🛍️ ショップ</div>
+      <div class="guide-item-desc">ログインして貯めたポイントで、プロフィールを彩るフレーム・バッジと交換したり、ガチャを引いたりできます。サイト全体のテーマカラーもここで変更できます。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">👤 ログイン・ポイント</div>
+      <div class="guide-item-desc">右上の「ログイン」から団員一覧を選んで4桁のパスワードでログインします。初めての方は20ptの特典付き。1日1回のログインで1pt、写真・名言・みんなの声への投稿で1回2pt貯まります。</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-item-title">🔔 通知</div>
+      <div class="guide-item-desc">ログイン中は右上のベルから、前回見たあとに増えた写真・名言・みんなの声・ルール更新がまとめて確認できます。</div>
+    </div>
+  </div>
+</section>
 
 <section class="about tab-panel" id="about">
   <div class="section-head">
@@ -1374,61 +1245,73 @@
     <div class="quiz-questions">
     <div class="quiz-q">
       <div class="quiz-q-num">Q1</div>
+      <div class="quiz-q-text">大人数の集まりに参加すると元気が出る?</div>
       <label class="quiz-opt"><input type="radio" name="q0" value="E">大人数の集まりに参加すると元気が出る</label>
       <label class="quiz-opt"><input type="radio" name="q0" value="I">一人の時間でエネルギーを回復する</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q2</div>
+      <div class="quiz-q-text">初対面の人ともすぐ話せるほうだ?</div>
       <label class="quiz-opt"><input type="radio" name="q1" value="E">初対面の人ともすぐ話せるほうだ</label>
       <label class="quiz-opt"><input type="radio" name="q1" value="I">知らない人には様子を見てから話す</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q3</div>
+      <div class="quiz-q-text">賑やかな場所が好き?</div>
       <label class="quiz-opt"><input type="radio" name="q2" value="E">賑やかな場所が好き</label>
       <label class="quiz-opt"><input type="radio" name="q2" value="I">静かな場所でゆっくりしたい</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q4</div>
+      <div class="quiz-q-text">具体的な事実や経験を重視する?</div>
       <label class="quiz-opt"><input type="radio" name="q3" value="S">具体的な事実や経験を重視する</label>
       <label class="quiz-opt"><input type="radio" name="q3" value="N">可能性やアイデアを考えるのが好き</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q5</div>
+      <div class="quiz-q-text">目の前のことに集中するタイプ?</div>
       <label class="quiz-opt"><input type="radio" name="q4" value="S">目の前のことに集中するタイプ</label>
       <label class="quiz-opt"><input type="radio" name="q4" value="N">将来のことをあれこれ想像してしまう</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q6</div>
+      <div class="quiz-q-text">実際に手を動かして学ぶのが得意?</div>
       <label class="quiz-opt"><input type="radio" name="q5" value="S">実際に手を動かして学ぶのが得意</label>
       <label class="quiz-opt"><input type="radio" name="q5" value="N">頭の中でイメージしながら理解する</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q7</div>
+      <div class="quiz-q-text">物事を論理的に判断する?</div>
       <label class="quiz-opt"><input type="radio" name="q6" value="T">物事を論理的に判断する</label>
       <label class="quiz-opt"><input type="radio" name="q6" value="F">気持ちを大事にして判断する</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q8</div>
+      <div class="quiz-q-text">正しいかどうかを重視する?</div>
       <label class="quiz-opt"><input type="radio" name="q7" value="T">正しいかどうかを重視する</label>
       <label class="quiz-opt"><input type="radio" name="q7" value="F">相手がどう感じるかを重視する</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q9</div>
+      <div class="quiz-q-text">冷静に指摘するタイプ?</div>
       <label class="quiz-opt"><input type="radio" name="q8" value="T">冷静に指摘するタイプ</label>
       <label class="quiz-opt"><input type="radio" name="q8" value="F">共感して寄り添うタイプ</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q10</div>
+      <div class="quiz-q-text">計画を立ててから動く?</div>
       <label class="quiz-opt"><input type="radio" name="q9" value="J">計画を立ててから動く</label>
       <label class="quiz-opt"><input type="radio" name="q9" value="P">状況に合わせて臨機応変に動く</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q11</div>
+      <div class="quiz-q-text">予定通りに進めたい?</div>
       <label class="quiz-opt"><input type="radio" name="q10" value="J">予定通りに進めたい</label>
       <label class="quiz-opt"><input type="radio" name="q10" value="P">予定はゆるく決めたい</label>
     </div>
     <div class="quiz-q">
       <div class="quiz-q-num">Q12</div>
+      <div class="quiz-q-text">きっちり片付けるのが好き?</div>
       <label class="quiz-opt"><input type="radio" name="q11" value="J">きっちり片付けるのが好き</label>
       <label class="quiz-opt"><input type="radio" name="q11" value="P">多少散らかっていても気にならない</label>
     </div>
@@ -1451,6 +1334,99 @@
       <button type="button" id="quiz-retry" class="mc-btn">もう一度診断する</button>
     </div>
   </div>
+
+<div class="adv-quiz-block">
+  <div class="section-head">
+    <div class="section-tag">Adventure Type</div>
+    <h2>冒険タイプ診断</h2>
+    <p>8個の質問に答えると、あなたの冒険タイプが分かります。ゲームに限らず、普段の性格が出るかも?</p>
+  </div>
+  <div class="quiz-box" id="adv-quiz-box">
+    <div class="quiz-questions">
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q1</div>
+      <div class="quiz-q-text">戦いに挑むときのあなたは?</div>
+      <label class="quiz-opt"><input type="radio" name="aq0" value="A">誰よりも火力を出す</label>
+      <label class="quiz-opt"><input type="radio" name="aq0" value="B">絶対に死なないよう立ち回る</label>
+      <label class="quiz-opt"><input type="radio" name="aq0" value="C">味方を守ることを優先する</label>
+      <label class="quiz-opt"><input type="radio" name="aq0" value="D">信じられないくらいふざけたくなる</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q2</div>
+      <div class="quiz-q-text">新しい場所に着いたら?</div>
+      <label class="quiz-opt"><input type="radio" name="aq1" value="A">とにかく強い敵を探して突撃する</label>
+      <label class="quiz-opt"><input type="radio" name="aq1" value="B">罠や危険がないか慎重に確認する</label>
+      <label class="quiz-opt"><input type="radio" name="aq1" value="C">はぐれた仲間がいないか確認する</label>
+      <label class="quiz-opt"><input type="radio" name="aq1" value="D">とりあえず変なポーズをしてみる</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q3</div>
+      <div class="quiz-q-text">ピンチになったら?</div>
+      <label class="quiz-opt"><input type="radio" name="aq2" value="A">逆にテンションが上がる</label>
+      <label class="quiz-opt"><input type="radio" name="aq2" value="B">全力で逃げる算段を立てる</label>
+      <label class="quiz-opt"><input type="radio" name="aq2" value="C">仲間を先に逃がそうとする</label>
+      <label class="quiz-opt"><input type="radio" name="aq2" value="D">「死んでも笑い話になるか」と思う</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q4</div>
+      <div class="quiz-q-text">チームでの役割を選べるなら?</div>
+      <label class="quiz-opt"><input type="radio" name="aq3" value="A">前衛でガンガン殴りたい</label>
+      <label class="quiz-opt"><input type="radio" name="aq3" value="B">後方で安全に立ち回りたい</label>
+      <label class="quiz-opt"><input type="radio" name="aq3" value="C">みんなの盾になりたい</label>
+      <label class="quiz-opt"><input type="radio" name="aq3" value="D">特に決めず自由に動きたい</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q5</div>
+      <div class="quiz-q-text">レアアイテムを手に入れたら?</div>
+      <label class="quiz-opt"><input type="radio" name="aq4" value="A">すぐ試して強さを確かめる</label>
+      <label class="quiz-opt"><input type="radio" name="aq4" value="B">大事にしまってリスクを避ける</label>
+      <label class="quiz-opt"><input type="radio" name="aq4" value="C">必要としてる仲間に譲る</label>
+      <label class="quiz-opt"><input type="radio" name="aq4" value="D">とりあえずネタにして騒ぐ</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q6</div>
+      <div class="quiz-q-text">負けそうな戦いに直面したら?</div>
+      <label class="quiz-opt"><input type="radio" name="aq5" value="A">意地でも勝ちにいく</label>
+      <label class="quiz-opt"><input type="radio" name="aq5" value="B">潔く撤退する</label>
+      <label class="quiz-opt"><input type="radio" name="aq5" value="C">仲間を守りながら粘る</label>
+      <label class="quiz-opt"><input type="radio" name="aq5" value="D">笑いながら特攻する</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q7</div>
+      <div class="quiz-q-text">休憩中の過ごし方は?</div>
+      <label class="quiz-opt"><input type="radio" name="aq6" value="A">次の戦いに向けて特訓する</label>
+      <label class="quiz-opt"><input type="radio" name="aq6" value="B">安全な場所でのんびりする</label>
+      <label class="quiz-opt"><input type="radio" name="aq6" value="C">仲間の様子を気にかける</label>
+      <label class="quiz-opt"><input type="radio" name="aq6" value="D">くだらないことをして周りを笑わせる</label>
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">Q8</div>
+      <div class="quiz-q-text">冒険の目的といえば?</div>
+      <label class="quiz-opt"><input type="radio" name="aq7" value="A">誰よりも強くなること</label>
+      <label class="quiz-opt"><input type="radio" name="aq7" value="B">無事に生き延びること</label>
+      <label class="quiz-opt"><input type="radio" name="aq7" value="C">大切な人を守ること</label>
+      <label class="quiz-opt"><input type="radio" name="aq7" value="D">とにかく楽しむこと</label>
+    </div>
+    </div>
+    <div class="quiz-error hidden" id="adv-quiz-error">まだ答えていない質問があります。すべての質問に答えてください。</div>
+    <div class="quiz-actions">
+      <button type="button" id="adv-quiz-submit" class="mc-btn primary">結果を見る</button>
+    </div>
+    <div class="quiz-result hidden" id="adv-quiz-result">
+      <div class="quiz-result-type" id="adv-quiz-result-type"></div>
+      <div class="quiz-result-desc" id="adv-quiz-result-desc"></div>
+      <div class="quiz-apply">
+        <label>この結果をプロフィールに反映する</label>
+        <div class="quiz-apply-row">
+          <select id="adv-quiz-apply-select"></select>
+          <button type="button" id="adv-quiz-apply-btn" class="mc-btn primary">反映する</button>
+        </div>
+        <div class="quiz-apply-msg" id="adv-quiz-apply-msg"></div>
+      </div>
+      <button type="button" id="adv-quiz-retry" class="mc-btn">もう一度診断する</button>
+    </div>
+  </div>
+</div>
 </section>
 
 
@@ -1490,7 +1466,56 @@
   </div>
 </section>
 
+<section id="shop" class="tab-panel">
+  <div class="section-head">
+    <div class="section-tag">Shop</div>
+    <h2>ポイントショップ</h2>
+    <p>ログインして貯めたポイントで、プロフィールを彩る特別なアイテムと交換できます。</p>
+  </div>
+  <div class="shop-balance" id="shop-balance">ログインすると使えます</div>
 
+  <div class="shop-block">
+    <div class="shop-block-label">🎨 テーマカラー</div>
+    <p class="shop-sub-note" id="theme-status">読み込み中…</p>
+    <div class="theme-swatch-row" id="theme-swatch-row"></div>
+    <button type="button" id="theme-buy-btn" class="mc-btn primary">このテーマに1週間変更する(10pt)</button>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">😈 いたずら(20pt)</div>
+    <p class="shop-sub-note">団員を選んで、名前の後ろに3文字以内の単語をこっそり付け足せます。自分のプロフィールは通常どおり自分で編集できますが、他の団員のプロフィールは基本的に編集できません(このいたずらだけは例外です)。</p>
+    <label>対象の団員</label>
+    <select id="prank-target-select"></select>
+    <label>付け足す単語(3文字以内)</label>
+    <input type="text" id="prank-word-input" maxlength="3" placeholder="例: 様">
+    <div class="login-error hidden" id="prank-error"></div>
+    <button type="button" id="prank-btn" class="mc-btn primary">いたずらする(20pt)</button>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">🎰 ガチャ(1回 5pt・レアなアイテムはガチャ限定)</div>
+    <div class="gacha-area">
+      <button type="button" id="gacha-btn" class="mc-btn primary">ガチャを引く</button>
+      <div class="gacha-result hidden" id="gacha-result"></div>
+    </div>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">🛍️ 交換ショップ</div>
+    <div class="shop-grid" id="shop-grid"></div>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">🎒 持ち物・装備</div>
+    <p class="shop-sub-note">ボタンを押すとプロフィールに反映されます(フレームとバッジはそれぞれ1つまで装備できます)。</p>
+    <div class="inventory-grid" id="inventory-grid"></div>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">🏆 ポイントランキング</div>
+    <div class="ranking-list" id="ranking-list"><div class="loading-note">読み込み中…</div></div>
+  </div>
+</section>
 
 <footer>
   <div class="fbrand">脱走レイダー</div>
@@ -1560,23 +1585,285 @@
 </script>
 
 <script>
+  /* ---------- LOGIN & POINTS ---------- */
+  var LOGIN_EXPIRY_MS = 60 * 60 * 1000; // 1時間
+
+  function todayStr(){
+    var d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  }
+  function updateUserBar(name, points){
+    document.getElementById('user-bar-guest-tag').classList.add('hidden');
+    document.getElementById('user-bar-guest').classList.add('hidden');
+    document.getElementById('user-bar-logged').classList.remove('hidden');
+    document.getElementById('user-bar-name').textContent = name;
+    document.getElementById('user-bar-points').textContent = '⭐ ' + points + 'pt';
+  }
+  function showLoggedOutBar(){
+    document.getElementById('user-bar-logged').classList.add('hidden');
+    document.getElementById('user-bar-guest').classList.remove('hidden');
+    document.getElementById('user-bar-guest-tag').classList.add('hidden');
+  }
+  function showGuestBar(){
+    document.getElementById('user-bar-logged').classList.add('hidden');
+    document.getElementById('user-bar-guest').classList.remove('hidden');
+    document.getElementById('user-bar-guest-tag').classList.remove('hidden');
+  }
+  function isLoginValid(){
+    var ts = localStorage.getItem('loginTimestamp');
+    var id = localStorage.getItem('loggedInUserId');
+    if(!ts || !id) return false;
+    return (Date.now() - parseInt(ts, 10)) < LOGIN_EXPIRY_MS;
+  }
+  function isGuestMode(){
+    if(isLoginValid()) return false;
+    var ts = localStorage.getItem('guestModeTimestamp');
+    if(!ts) return false;
+    return (Date.now() - parseInt(ts, 10)) < LOGIN_EXPIRY_MS;
+  }
+  async function awardPostPoints(amount){
+    if(!isLoginValid()) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var doc = await db.collection('users').doc(uid).get();
+      var data = doc.exists ? doc.data() : {};
+      var points = (data.points || 0) + amount;
+      var totalPoints = (data.totalPoints !== undefined ? data.totalPoints : (data.points || 0)) + amount;
+      await db.collection('users').doc(uid).set({ points: points, totalPoints: totalPoints }, { merge: true });
+      updateUserBar(localStorage.getItem('loggedInUserName'), points);
+    }catch(e){ /* ignore */ }
+  }
+
+  function renderNotifBadge(total){
+    var badge = document.getElementById('notif-badge');
+    if(!badge) return;
+    if(total > 0){
+      badge.textContent = total > 99 ? '99+' : String(total);
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+  async function fetchNotifCounts(lastSeen){
+    var counts = { photos: 0, quotes: 0, voices: 0, rules: false };
+    try{
+      var photosSnap = await db.collection('photos').where('addedAt', '>', lastSeen).get();
+      counts.photos = photosSnap.size;
+    }catch(e){}
+    try{
+      var quotesSnap = await db.collection('quotes').where('addedAt', '>', lastSeen).get();
+      counts.quotes = quotesSnap.size;
+    }catch(e){}
+    try{
+      var voicesSnap = await db.collection('anonMessages').where('addedAt', '>', lastSeen).get();
+      counts.voices = voicesSnap.size;
+    }catch(e){}
+    try{
+      var rulesDoc = await db.collection('siteContent').doc('rules').get();
+      if(rulesDoc.exists && (rulesDoc.data().updatedAt || 0) > lastSeen) counts.rules = true;
+    }catch(e){}
+    return counts;
+  }
+  async function checkNotifications(){
+    if(!isLoginValid()){ renderNotifBadge(0); return; }
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var doc = await db.collection('users').doc(uid).get();
+      var lastSeen = doc.exists ? (doc.data().lastSeen || 0) : 0;
+      var counts = await fetchNotifCounts(lastSeen);
+      window.__notifCounts = counts;
+      var total = counts.photos + counts.quotes + counts.voices + (counts.rules ? 1 : 0);
+      renderNotifBadge(total);
+    }catch(e){ /* ignore */ }
+  }
+  async function markNotifsRead(){
+    if(!isLoginValid()) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      await db.collection('users').doc(uid).set({ lastSeen: Date.now() }, { merge: true });
+      renderNotifBadge(0);
+    }catch(e){ /* ignore */ }
+  }
+  function openNotifModal(){
+    var counts = window.__notifCounts || { photos: 0, quotes: 0, voices: 0, rules: false };
+    var list = document.getElementById('notif-list');
+    var items = [];
+    if(counts.photos > 0) items.push('<div class="notif-item">📷 <a href="#gallery">新しい写真</a><span class="notif-count">' + counts.photos + '</span></div>');
+    if(counts.quotes > 0) items.push('<div class="notif-item">💬 <a href="#quotes">新しい名言</a><span class="notif-count">' + counts.quotes + '</span></div>');
+    if(counts.voices > 0) items.push('<div class="notif-item">📢 <a href="#voices">新しいみんなの声</a><span class="notif-count">' + counts.voices + '</span></div>');
+    if(counts.rules) items.push('<div class="notif-item">📜 <a href="#rules">ルールが更新されました</a></div>');
+    list.innerHTML = items.length ? items.join('') : '<div class="notif-empty">新しい通知はありません</div>';
+    document.getElementById('notif-modal').classList.add('open');
+    markNotifsRead();
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var openBtn = document.getElementById('login-open-btn');
+    var modal = document.getElementById('login-modal');
+    var closeBtn = document.getElementById('login-modal-close');
+    var logoutBtn = document.getElementById('logout-btn');
+    var identitySelect = document.getElementById('login-identity-select');
+    var pinInput = document.getElementById('login-pin-input');
+    var errorEl = document.getElementById('login-error');
+    var submitBtn = document.getElementById('login-submit-btn');
+    var guestBtn = document.getElementById('guest-view-btn');
+    var notifBtn = document.getElementById('notif-bell-btn');
+    var notifModal = document.getElementById('notif-modal');
+    var notifCloseBtn = document.getElementById('notif-modal-close');
+
+    if(notifBtn) notifBtn.addEventListener('click', openNotifModal);
+    if(notifCloseBtn) notifCloseBtn.addEventListener('click', function(){ notifModal.classList.remove('open'); });
+    if(notifModal) notifModal.addEventListener('click', function(e){ if(e.target === notifModal) notifModal.classList.remove('open'); });
+
+    async function populateIdentitySelect(){
+      var members = [];
+      try{ members = await getAllMembers(); }catch(e){}
+      identitySelect.innerHTML = members.map(function(m){
+        return '<option value="m_' + m.id + '">' + esc(m.name) + '</option>';
+      }).join('');
+    }
+
+    async function openLoginModal(){
+      await populateIdentitySelect();
+      errorEl.classList.add('hidden');
+      pinInput.value = '';
+      modal.classList.add('open');
+    }
+
+    // 起動時チェック: 有効なログイン/ゲスト状態があれば復元、なければログイン画面を自動表示
+    if(isLoginValid()){
+      var savedId = localStorage.getItem('loggedInUserId');
+      var savedName = localStorage.getItem('loggedInUserName');
+      updateUserBar(savedName, '…');
+      (async function(){
+        try{
+          await authReadyPromise;
+          var doc = await db.collection('users').doc(savedId).get();
+          if(doc.exists) updateUserBar(savedName, doc.data().points || 0);
+        }catch(e){}
+        checkNotifications();
+      })();
+    } else {
+      localStorage.removeItem('loggedInUserId');
+      localStorage.removeItem('loggedInUserName');
+      localStorage.removeItem('loginTimestamp');
+      if(isGuestMode()){
+        showGuestBar();
+      } else {
+        localStorage.removeItem('guestModeTimestamp');
+        openLoginModal();
+      }
+    }
+
+    if(openBtn) openBtn.addEventListener('click', openLoginModal);
+    if(closeBtn) closeBtn.addEventListener('click', function(){ modal.classList.remove('open'); });
+    modal.addEventListener('click', function(e){ if(e.target === modal) modal.classList.remove('open'); });
+
+    if(guestBtn){
+      guestBtn.addEventListener('click', function(){
+        localStorage.setItem('guestModeTimestamp', String(Date.now()));
+        showGuestBar();
+        modal.classList.remove('open');
+        if(typeof render === 'function') render();
+      });
+    }
+
+    if(logoutBtn){
+      logoutBtn.addEventListener('click', function(){
+        localStorage.removeItem('loggedInUserId');
+        localStorage.removeItem('loggedInUserName');
+        localStorage.removeItem('loginTimestamp');
+        localStorage.removeItem('guestModeTimestamp');
+        showLoggedOutBar();
+      });
+    }
+
+    if(submitBtn){
+      submitBtn.addEventListener('click', async function(){
+        errorEl.classList.add('hidden');
+        var key = identitySelect.value;
+        var displayName = identitySelect.options[identitySelect.selectedIndex]
+          ? identitySelect.options[identitySelect.selectedIndex].textContent
+          : '';
+        var pin = pinInput.value.trim();
+        if(!/^\d{4}$/.test(pin)){
+          errorEl.textContent = '4桁の数字で入力してください';
+          errorEl.classList.remove('hidden');
+          return;
+        }
+        if(!storageAvailable()){
+          errorEl.textContent = 'サイトの設定が完了していません(管理者にご確認ください)。';
+          errorEl.classList.remove('hidden');
+          return;
+        }
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'ログイン中…';
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(key);
+          var doc = await docRef.get();
+          var today = todayStr();
+          var points;
+          if(doc.exists){
+            var data = doc.data();
+            if(data.pin !== pin){
+              errorEl.textContent = 'パスワードが違います';
+              errorEl.classList.remove('hidden');
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'ログインする';
+              return;
+            }
+            points = data.points || 0;
+            var totalPoints = data.totalPoints !== undefined ? data.totalPoints : points;
+            if(data.lastLoginDate !== today){
+              points += 1;
+              totalPoints += 1;
+              await docRef.set({ points: points, totalPoints: totalPoints, lastLoginDate: today }, { merge: true });
+            }
+          } else {
+            points = 20;
+            await docRef.set({ displayName: displayName, pin: pin, points: points, totalPoints: points, lastLoginDate: today, lastSeen: Date.now() });
+          }
+          localStorage.setItem('loggedInUserId', key);
+          localStorage.setItem('loggedInUserName', displayName);
+          localStorage.setItem('loginTimestamp', String(Date.now()));
+          localStorage.removeItem('guestModeTimestamp');
+          updateUserBar(displayName, points);
+          modal.classList.remove('open');
+          if(typeof render === 'function') render();
+          checkNotifications();
+        }catch(e){
+          errorEl.textContent = '通信に失敗しました。もう一度お試しください。';
+          errorEl.classList.remove('hidden');
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ログインする';
+      });
+    }
+  });
+</script>
+
+<script>
   var MEMBERS = [
-    {id:'m01', name:'ぽんこつりっき', role:'団長', icon:'り', color:0, birthday:'', food:'', intro:'団長やってます。よろしくお願いします!', hobby:'', mbti:''},
-    {id:'m02', name:'ぽんこつちぇる', role:'団員', icon:'ちぇ', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m03', name:'ぽんこつのぽん', role:'団員', icon:'のぽ', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m04', name:'ぽんこつのりず', role:'団員', icon:'のり', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m05', name:'おポンなばとら', role:'団員', icon:'ばと', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m06', name:'イデア', role:'団員', icon:'イデ', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m07', name:'えぃ', role:'団員', icon:'えぃ', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m08', name:'うぁ', role:'団員', icon:'うぁ', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m09', name:'ポンコロレモン', role:'団員', icon:'レモ', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m10', name:'ぴっぽ', role:'団員', icon:'ぴっ', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m11', name:'ルシア', role:'団員', icon:'ルシ', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m12', name:'ぽむぽむおなぎ', role:'団員', icon:'おな', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m13', name:'ぽむぽむかりん', role:'団員', icon:'かり', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m14', name:'猫虫', role:'団員', icon:'猫', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m15', name:'ぽむぽむけある', role:'団員', icon:'ける', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:''},
-    {id:'m16', name:'ぽむぽむはかせ', role:'団員', icon:'はか', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:''}
+    {id:'m01', name:'ぽんこつりっき', role:'団長', icon:'り', color:0, birthday:'', food:'', intro:'団長やってます。よろしくお願いします!', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m02', name:'ぽんこつちぇる', role:'団員', icon:'ちぇ', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m03', name:'ぽんこつのぽん', role:'団員', icon:'のぽ', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m04', name:'ぽんこつのりず', role:'団員', icon:'のり', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m05', name:'おポンなばとら', role:'団員', icon:'ばと', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m06', name:'イデア', role:'団員', icon:'イデ', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m07', name:'えぃ', role:'団員', icon:'えぃ', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m08', name:'うぁ', role:'団員', icon:'うぁ', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m09', name:'ポンコロレモン', role:'団員', icon:'レモ', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m10', name:'ぴっぽ', role:'団員', icon:'ぴっ', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m11', name:'ルシア', role:'団員', icon:'ルシ', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m12', name:'ぽむぽむおなぎ', role:'団員', icon:'おな', color:1, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m13', name:'ぽむぽむかりん', role:'団員', icon:'かり', color:2, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m14', name:'猫虫', role:'団員', icon:'猫', color:3, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m15', name:'ぽむぽむけある', role:'団員', icon:'ける', color:4, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''},
+    {id:'m16', name:'ぽむぽむはかせ', role:'団員', icon:'はか', color:0, birthday:'', food:'', intro:'', hobby:'', mbti:'', adv:'', title:''}
   ];
   var COLOR_PAIRS = [
     ['var(--coral)','var(--coral-dark)'],
@@ -1630,6 +1917,8 @@
       food:o.food!==undefined ? o.food : m.food,
       hobby:o.hobby!==undefined ? o.hobby : (m.hobby || ''),
       mbti:o.mbti!==undefined ? o.mbti : (m.mbti || ''),
+      adv:o.adv!==undefined ? o.adv : (m.adv || ''),
+      title:o.title!==undefined ? o.title : (m.title || ''),
       intro:o.intro!==undefined ? o.intro : m.intro
     };
   }
@@ -1661,32 +1950,81 @@
     });
     return html;
   }
+  var ADV_NAMES = {
+    AD: '信じられないくらい脳筋アタッカー',
+    AB: '冷静沈着な殲滅マシーン',
+    AC: '仲間思いの前衛タンク',
+    BA: '堅実な一撃必殺型',
+    BC: '石橋を叩いて渡る参謀',
+    BD: 'ビビりなのになぜか目立つ人',
+    CA: '頼れる猪突猛進ヒーラー',
+    CB: '陰から支える守護者',
+    CD: '愛されムードメーカー',
+    DA: 'ノリで無双するパリピ戦士',
+    DB: 'テンションお祭り、行動は超堅実',
+    DC: '縁の下のピエロ'
+  };
+  function advDisplayName(key){
+    return ADV_NAMES[key] || key || '';
+  }
+  function advOptionsHTML(selected){
+    var html = '<option value="">-</option>';
+    Object.keys(ADV_NAMES).forEach(function(k){
+      html += '<option value="' + k + '"' + (k === selected ? ' selected' : '') + '>' + ADV_NAMES[k] + '</option>';
+    });
+    return html;
+  }
+  var TITLE_TEMPLATES = [
+    { need: ['food'], make: function(f){ return f.food + 'に目がない、伝説の食いしん坊'; } },
+    { need: ['hobby'], make: function(f){ return f.hobby + 'を極めし者'; } },
+    { need: ['mbti'], make: function(f){ return f.mbti + '型冒険者'; } },
+    { need: ['adv'], make: function(f){ return f.advName + 'の道を征く者'; } },
+    { need: ['adv'], make: function(f){ return '通称『' + f.advName + '』'; } },
+    { need: ['adv'], make: function(f){ return '自称・' + f.advName; } },
+    { need: ['food', 'hobby'], make: function(f){ return f.hobby + 'と' + f.food + 'をこよなく愛する変わり者'; } },
+    { need: ['mbti', 'adv'], make: function(f){ return f.mbti + 'の心を持つ' + f.advName; } },
+    { need: ['food', 'adv'], make: function(f){ return f.food + '片手に征く' + f.advName; } },
+    { need: ['hobby', 'adv'], make: function(f){ return f.hobby + '好きの' + f.advName; } },
+    { need: ['hobby', 'mbti'], make: function(f){ return f.hobby + 'に魂を捧げた' + f.mbti + '型'; } },
+    { need: [], make: function(){
+        var fallback = ['ぽんこつ軍団が誇る謎多き団員', 'まだ見ぬ伝説を秘めた冒険者', '脱走レイダーの隠し玉'];
+        return fallback[Math.floor(Math.random() * fallback.length)];
+      } }
+  ];
+  function generateTitle(fields){
+    var f = {
+      food: fields.food || '', hobby: fields.hobby || '',
+      mbti: fields.mbti || '', adv: fields.adv || '',
+      advName: fields.adv ? advDisplayName(fields.adv).replace(/\(.*\)/, '') : ''
+    };
+    var usable = TITLE_TEMPLATES.filter(function(t){
+      return t.need.every(function(k){ return f[k]; });
+    });
+    var pick = usable[Math.floor(Math.random() * usable.length)];
+    return pick.make(f);
+  }
+  var MASTER_LOGIN_KEY = 'm_m01';
+  function canEditMember(memberId){
+    if(!isLoginValid()) return false;
+    var uid = localStorage.getItem('loggedInUserId');
+    return uid === ('m_' + memberId) || uid === MASTER_LOGIN_KEY;
+  }
   function cardHTML(m){
     var pair = COLOR_PAIRS[m.color % COLOR_PAIRS.length];
     var bg = 'linear-gradient(135deg,' + pair[0] + ',' + pair[1] + ')';
     var roleClass = m.role === '団長' ? 'member-role leader' : 'member-role';
     var bd = parseBirthday(m.birthday);
     var extraAttr = m.isExtra ? ' data-extra="1"' : '';
-    var deleteBtn = m.isExtra ? '<button type="button" class="mc-btn delete-member-btn">削除</button>' : '';
-    return ''
-      + '<div class="member-card" data-id="' + m.id + '"' + extraAttr + '>'
-      + '  <div class="mc-view">'
-      + '    <div class="mc-head">'
-      + '      <div class="avatar" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
-      + '      <div>'
-      + '        <div class="member-name">' + esc(m.name) + '</div>'
-      + '        <div class="' + roleClass + '">' + esc(m.role) + '</div>'
-      + '        <div class="member-meta">'
-      + '          <span>🎂 誕生日: ' + (m.birthday ? esc(m.birthday) : '未設定') + '</span>'
-      + '          <span>🍙 好きな食べ物: ' + (m.food ? esc(m.food) : '未設定') + '</span>'
-      + '          <span>🎮 趣味: ' + (m.hobby ? esc(m.hobby) : '未設定') + '</span>'
-      + '          <span>🧠 MBTI: ' + (m.mbti ? esc(m.mbti) : '未設定') + '</span>'
-      + '        </div>'
-      + '      </div>'
-      + '    </div>'
-      + '    <div class="member-comment">' + (m.intro ? esc(m.intro) : '自己紹介はまだありません。') + '</div>'
-      + '    <div class="mc-actions"><button type="button" class="mc-btn edit-btn">編集する</button></div>'
-      + '  </div>'
+    var frameClass = m.frameClass ? ' ' + m.frameClass : '';
+    var badgeSpan = m.badgeIcon ? '<span class="avatar-badge">' + m.badgeIcon + '</span>' : '';
+    var editable = canEditMember(m.id);
+    var deleteBtn = (editable && m.isExtra) ? '<button type="button" class="mc-btn delete-member-btn">削除</button>' : '';
+
+    var viewActionsHTML = editable
+      ? '<div class="mc-actions"><button type="button" class="mc-btn edit-btn">編集する</button></div>'
+      : '';
+
+    var editFormHTML = !editable ? '' : ''
       + '  <div class="mc-edit hidden">'
       + '    <label>アイコン文字(1〜4文字)</label>'
       + '    <input type="text" class="f-icon" maxlength="4" value="' + esc(m.icon) + '">'
@@ -1703,6 +2041,13 @@
       + '    <input type="text" class="f-hobby" placeholder="例: フィギュア集め" value="' + esc(m.hobby) + '">'
       + '    <label>MBTI</label>'
       + '    <select class="f-mbti">' + mbtiOptionsHTML(m.mbti) + '</select>'
+      + '    <label>冒険タイプ</label>'
+      + '    <select class="f-adv">' + advOptionsHTML(m.adv) + '</select>'
+      + '    <label>称号</label>'
+      + '    <div class="title-gen-row">'
+      + '      <input type="text" class="f-title" placeholder="例: 唐揚げに目がない伝説の食いしん坊" value="' + esc(m.title) + '">'
+      + '      <button type="button" class="mc-btn title-gen-btn">🎲 生成</button>'
+      + '    </div>'
       + '    <label>自己紹介</label>'
       + '    <textarea class="f-intro">' + esc(m.intro) + '</textarea>'
       + '    <div class="mc-edit-actions">'
@@ -1710,7 +2055,33 @@
       + '      <button type="button" class="mc-btn cancel-btn">キャンセル</button>'
       + deleteBtn
       + '    </div>'
+      + '  </div>';
+
+    return ''
+      + '<div class="member-card" data-id="' + m.id + '"' + extraAttr + '>'
+      + '  <div class="mc-view">'
+      + '    <div class="mc-head">'
+      + '      <div class="avatar-wrap">'
+      + '        <div class="avatar' + frameClass + '" style="background:' + bg + ';">' + esc(m.icon) + '</div>'
+      + badgeSpan
+      + '      </div>'
+      + '      <div>'
+      + '        <div class="member-name">' + esc(m.name) + '</div>'
+      + (m.title ? '<div class="member-title">『' + esc(m.title) + '』</div>' : '')
+      + '        <div class="' + roleClass + '">' + esc(m.role) + '</div>'
+      + '        <div class="member-meta">'
+      + '          <span>🎂 誕生日: ' + (isGuestMode() ? '🔒 ログインすると表示' : (m.birthday ? esc(m.birthday) : '未設定')) + '</span>'
+      + '          <span>🍙 好きな食べ物: ' + (m.food ? esc(m.food) : '未設定') + '</span>'
+      + '          <span>🎮 趣味: ' + (m.hobby ? esc(m.hobby) : '未設定') + '</span>'
+      + '          <span>🧠 MBTI: ' + (m.mbti ? esc(m.mbti) : '未設定') + '</span>'
+      + '          <span>🗺️ 冒険タイプ: ' + (m.adv ? esc(advDisplayName(m.adv)) : '未設定') + '</span>'
+      + '        </div>'
+      + '      </div>'
+      + '    </div>'
+      + '    <div class="member-comment">' + (m.intro ? esc(m.intro) : '自己紹介はまだありません。') + '</div>'
+      + viewActionsHTML
       + '  </div>'
+      + editFormHTML
       + '</div>';
   }
   function addMemberCardHTML(){
@@ -1737,6 +2108,13 @@
       + '    <input type="text" class="f-hobby" placeholder="例: フィギュア集め" value="">'
       + '    <label>MBTI</label>'
       + '    <select class="f-mbti">' + mbtiOptionsHTML('') + '</select>'
+      + '    <label>冒険タイプ</label>'
+      + '    <select class="f-adv">' + advOptionsHTML('') + '</select>'
+      + '    <label>称号</label>'
+      + '    <div class="title-gen-row">'
+      + '      <input type="text" class="f-title" placeholder="例: 唐揚げに目がない伝説の食いしん坊" value="">'
+      + '      <button type="button" class="mc-btn title-gen-btn">🎲 生成</button>'
+      + '    </div>'
       + '    <label>自己紹介</label>'
       + '    <textarea class="f-intro"></textarea>'
       + '    <div class="mc-edit-actions">'
@@ -1758,7 +2136,7 @@
           role: d.role || '団員', color: d.color || 0,
           name: d.name || '', icon: d.icon || '',
           birthday: d.birthday || '', food: d.food || '',
-          hobby: d.hobby || '', mbti: d.mbti || '', intro: d.intro || ''
+          hobby: d.hobby || '', mbti: d.mbti || '', adv: d.adv || '', title: d.title || '', intro: d.intro || ''
         });
       });
       out.sort(function(a, b){ return (a.addedAt || 0) - (b.addedAt || 0); });
@@ -1777,6 +2155,10 @@
   function buildBirthdayCalendar(mergedList){
     var container = document.getElementById('birthday-calendar');
     if(!container) return;
+    if(isGuestMode()){
+      container.innerHTML = '<div class="bday-guest-lock">🔒 誕生日カレンダーはログインすると見られます</div>';
+      return;
+    }
     var byMonth = {};
     mergedList.forEach(function(m){
       var bd = parseBirthday(m.birthday);
@@ -1888,16 +2270,121 @@
     });
   }
 
+  var ADV_DESC = {
+    AD: '考えるより先に突っ込む。生存本能ゼロ、勢いだけで生きている。',
+    AB: '火力は最大、でも死なない。効率厨の鑑と呼ばれる存在。',
+    AC: '殴りながら守る。前に出て盾になる、頼れる火力型。',
+    BA: '普段は超慎重、ここぞという時だけ全力を出す一撃必殺タイプ。',
+    BC: 'リスク管理の鬼。みんなの安全も一緒に計算している。',
+    BD: '慎重派のはずが、なぜかいつも注目の的になってしまう。',
+    CA: '守る気満々なのに、気づいたら一番前に出ているタイプ。',
+    CB: '目立たないけど、いないと絶対に困る守護者タイプ。',
+    CD: '支えることも笑わせることも得意な、パーティの太陽的存在。',
+    DA: '作戦なんて知らない。テンションだけで押し切るパリピ戦士。',
+    DB: '声はでかいのに、実は一番安全策を取っているタイプ。',
+    DC: 'みんなを笑わせつつ、実はしっかり支えている縁の下のピエロ。'
+  };
+  async function initAdvQuiz(){
+    var box = document.getElementById('adv-quiz-box');
+    if(!box) return;
+    var errorEl = document.getElementById('adv-quiz-error');
+    var resultEl = document.getElementById('adv-quiz-result');
+    var typeEl = document.getElementById('adv-quiz-result-type');
+    var descEl = document.getElementById('adv-quiz-result-desc');
+    var applySelect = document.getElementById('adv-quiz-apply-select');
+    var applyBtn = document.getElementById('adv-quiz-apply-btn');
+    var applyMsg = document.getElementById('adv-quiz-apply-msg');
+
+    var allMembers = await getAllMembers();
+    applySelect.innerHTML = allMembers.map(function(m){
+      return '<option value="' + m.id + '" data-extra="' + (m.isExtra ? '1' : '0') + '">' + esc(m.name) + '</option>';
+    }).join('');
+
+    document.getElementById('adv-quiz-submit').addEventListener('click', function(){
+      var counts = {};
+      var answered = 0;
+      for(var i = 0; i < 8; i++){
+        var checked = box.querySelector('input[name="aq' + i + '"]:checked');
+        if(checked){
+          answered++;
+          counts[checked.value] = (counts[checked.value] || 0) + 1;
+        }
+      }
+      if(answered < 8){
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      var order = ['A', 'B', 'C', 'D'];
+      var ranked = order.slice().sort(function(a, b){
+        return (counts[b] || 0) - (counts[a] || 0);
+      });
+      var comboKey = ranked[0] + ranked[1];
+      typeEl.textContent = advDisplayName(comboKey);
+      descEl.textContent = ADV_DESC[comboKey] || '';
+      applyMsg.textContent = '';
+      resultEl.classList.remove('hidden');
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      applyBtn.dataset.type = comboKey;
+    });
+
+    applyBtn.addEventListener('click', async function(){
+      var id = applySelect.value;
+      var isExtra = applySelect.options[applySelect.selectedIndex].dataset.extra === '1';
+      var type = applyBtn.dataset.type;
+      if(!id || !type) return;
+      applyBtn.disabled = true;
+      applyMsg.textContent = '反映中…';
+      var ok = isExtra ? await saveExtraMember(id, { adv: type }) : await saveOverride(id, { adv: type });
+      if(ok){
+        applyMsg.textContent = '反映しました!団員紹介にも表示されます。';
+        render();
+      } else {
+        applyMsg.textContent = storageAvailable()
+          ? '反映に失敗しました。もう一度お試しください。'
+          : 'サイトの設定が完了していません(管理者にご確認ください)。';
+      }
+      applyBtn.disabled = false;
+    });
+
+    document.getElementById('adv-quiz-retry').addEventListener('click', function(){
+      box.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+      resultEl.classList.add('hidden');
+      box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  async function loadCosmeticsMap(){
+    try{
+      await authReadyPromise;
+      var snap = await db.collection('users').get();
+      var map = {};
+      snap.forEach(function(doc){
+        var d = doc.data();
+        map[doc.id] = { frame: d.equippedFrame || '', badge: d.equippedBadge || '' };
+      });
+      return map;
+    }catch(e){ return {}; }
+  }
   async function render(){
     var grid = document.getElementById('member-grid');
     grid.innerHTML = '<div class="loading-note">読み込み中…</div>';
     var mergedList = await getAllMembers();
+    var cosmetics = await loadCosmeticsMap();
+    mergedList.forEach(function(m){
+      var c = cosmetics['m_' + m.id] || {};
+      var frameItem = c.frame && typeof ITEM_CATALOG !== 'undefined' ? ITEM_CATALOG[c.frame] : null;
+      var badgeItem = c.badge && typeof ITEM_CATALOG !== 'undefined' ? ITEM_CATALOG[c.badge] : null;
+      m.frameClass = frameItem ? frameItem.cssClass : '';
+      m.badgeIcon = badgeItem ? badgeItem.icon : '';
+    });
     grid.innerHTML = mergedList.map(cardHTML).join('') + addMemberCardHTML();
     buildBirthdayCalendar(mergedList);
   }
   document.addEventListener('DOMContentLoaded', function(){
     render();
     initQuiz();
+    initAdvQuiz();
     document.getElementById('member-grid').addEventListener('change', function(e){
       if(e.target.classList.contains('f-birthday-month')){
         var card = e.target.closest('.member-card');
@@ -1918,7 +2405,16 @@
       } else if(e.target.classList.contains('cancel-btn')){
         card.querySelector('.mc-edit').classList.add('hidden');
         card.querySelector('.mc-view').classList.remove('hidden');
+      } else if(e.target.classList.contains('title-gen-btn')){
+        var genFields = {
+          food: card.querySelector('.f-food').value.trim(),
+          hobby: card.querySelector('.f-hobby').value.trim(),
+          mbti: card.querySelector('.f-mbti').value,
+          adv: card.querySelector('.f-adv').value
+        };
+        card.querySelector('.f-title').value = generateTitle(genFields);
       } else if(e.target.classList.contains('save-btn')){
+        if(!canEditMember(id)){ return; }
         var btn = e.target;
         btn.disabled = true;
         btn.textContent = '保存中…';
@@ -1931,6 +2427,8 @@
           food: card.querySelector('.f-food').value.trim(),
           hobby: card.querySelector('.f-hobby').value.trim(),
           mbti: card.querySelector('.f-mbti').value,
+          adv: card.querySelector('.f-adv').value,
+          title: card.querySelector('.f-title').value.trim(),
           intro: card.querySelector('.f-intro').value.trim()
         };
         var isExtra = card.getAttribute('data-extra') === '1';
@@ -1989,6 +2487,8 @@
           food: card.querySelector('.f-food').value.trim(),
           hobby: card.querySelector('.f-hobby').value.trim(),
           mbti: card.querySelector('.f-mbti').value,
+          adv: card.querySelector('.f-adv').value,
+          title: card.querySelector('.f-title').value.trim(),
           intro: card.querySelector('.f-intro').value.trim(),
           role: '団員',
           color: Math.floor(Math.random() * COLOR_PAIRS.length),
@@ -2296,6 +2796,7 @@
           await authReadyPromise;
           await db.collection('photos').add(data);
           await buildCategoryFolders(cat);
+          awardPostPoints(2);
 
           fileInput.value = '';
           titleInput.value = '';
@@ -2320,17 +2821,37 @@
     document.querySelectorAll('.nav-links a').forEach(function(a){
       a.classList.toggle('active-tab', a.getAttribute('href') === '#' + id);
     });
+    var homeExtras = document.getElementById('home-extras');
+    if(homeExtras) homeExtras.style.display = (id === 'about') ? '' : 'none';
   }
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      var id = a.getAttribute('href').slice(1);
-      var target = document.getElementById(id);
-      if(target && target.classList.contains('tab-panel')){
-        e.preventDefault();
-        showTab(id);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if(!id) return;
+    var target = document.getElementById(id);
+    if(!target) return;
+
+    var notifModalEl = document.getElementById('notif-modal');
+    if(notifModalEl && notifModalEl.contains(a)){
+      notifModalEl.classList.remove('open');
+    }
+
+    if(target.classList.contains('tab-panel')){
+      e.preventDefault();
+      showTab(id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    var panel = target.closest('.tab-panel');
+    if(panel){
+      e.preventDefault();
+      showTab(panel.id);
+      setTimeout(function(){
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
   });
   document.addEventListener('DOMContentLoaded', function(){
     showTab('about');
@@ -2445,6 +2966,7 @@
           input.value = '';
           msg.textContent = '匿名で投稿しました。';
           loadVoices();
+          awardPostPoints(2);
         }catch(e){
           msg.textContent = '投稿に失敗しました。もう一度お試しください。';
         }
@@ -2550,6 +3072,7 @@
           speakerInput.value = '';
           msg.textContent = '投稿しました。';
           loadQuoteList();
+          awardPostPoints(2);
         }catch(e){
           msg.textContent = '投稿に失敗しました。もう一度お試しください。';
         }
@@ -2705,106 +3228,506 @@
 </script>
 
 <script>
-/* =========================================================
-   SMARTPHONE NAVIGATION
-   ========================================================= */
-(function(){
-  function mobileShowTab(id){
-    var topLink = document.querySelector('.nav-links a[href="#' + id + '"]');
+  /* ---------- SHOP / GACHA / RANKING ---------- */
+  var ITEM_CATALOG = {
+    frame_n_red:    { name:'赤フレーム',   type:'frame', rarity:'N', cssClass:'frame-n-red',    shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_orange: { name:'オレンジフレーム', type:'frame', rarity:'N', cssClass:'frame-n-orange', shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_yellow: { name:'イエローフレーム', type:'frame', rarity:'N', cssClass:'frame-n-yellow', shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_green:  { name:'グリーンフレーム', type:'frame', rarity:'N', cssClass:'frame-n-green',  shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_teal:   { name:'ティールフレーム', type:'frame', rarity:'N', cssClass:'frame-n-teal',   shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_sky:    { name:'スカイフレーム', type:'frame', rarity:'N', cssClass:'frame-n-sky',    shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_blue:   { name:'ブルーフレーム', type:'frame', rarity:'N', cssClass:'frame-n-blue',   shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_purple: { name:'パープルフレーム', type:'frame', rarity:'N', cssClass:'frame-n-purple', shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_pink:   { name:'ピンクフレーム', type:'frame', rarity:'N', cssClass:'frame-n-pink',   shopCost:10, gachaWeight:8, source:'both' },
+    frame_n_brown:  { name:'ブラウンフレーム', type:'frame', rarity:'N', cssClass:'frame-n-brown',  shopCost:10, gachaWeight:8, source:'both' },
 
-    /* 既存のタブ切替機能を利用 */
-    if(topLink){
-      topLink.click();
-    }else if(typeof showTab === 'function'){
-      showTab(id);
-      window.scrollTo({top:0, behavior:'smooth'});
-    }
+    frame_gold:   { name:'ゴールドフレーム', type:'frame', rarity:'R', cssClass:'frame-gold', shopCost:40, gachaWeight:10, source:'both' },
+    badge_crown:  { name:'👑 クラウンバッジ', type:'badge', rarity:'R', icon:'👑', shopCost:35, gachaWeight:10, source:'both' },
+    badge_heart:  { name:'💗 ハートバッジ', type:'badge', rarity:'R', icon:'💗', shopCost:35, gachaWeight:10, source:'both' },
+    badge_paw:    { name:'🐾 肉球バッジ', type:'badge', rarity:'R', icon:'🐾', shopCost:35, gachaWeight:10, source:'both' },
 
-    /* 上部タブを選択位置へ自動スクロール */
-    if(topLink){
-      var links = document.querySelector('.nav-links');
-      if(links){
-        try{
-          topLink.scrollIntoView({
-            behavior:'smooth',
-            block:'nearest',
-            inline:'center'
-          });
-        }catch(e){}
+    frame_fire:      { name:'炎のフレーム', type:'frame', rarity:'SR', cssClass:'frame-fire',      gachaWeight:3, source:'gacha' },
+    frame_water:     { name:'水のフレーム', type:'frame', rarity:'SR', cssClass:'frame-water',     gachaWeight:3, source:'gacha' },
+    frame_lightning: { name:'雷のフレーム', type:'frame', rarity:'SR', cssClass:'frame-lightning', gachaWeight:3, source:'gacha' },
+    badge_fire:      { name:'🔥 ファイアバッジ', type:'badge', rarity:'SR', icon:'🔥', gachaWeight:3, source:'gacha' },
+    badge_water:     { name:'💧 ウォーターバッジ', type:'badge', rarity:'SR', icon:'💧', gachaWeight:3, source:'gacha' },
+    badge_lightning: { name:'⚡ ライトニングバッジ', type:'badge', rarity:'SR', icon:'⚡', gachaWeight:3, source:'gacha' },
+
+    frame_galaxy:  { name:'ギャラクシーフレーム', type:'frame', rarity:'UR', cssClass:'frame-galaxy',  gachaWeight:2, source:'gacha' },
+    frame_phoenix: { name:'不死鳥フレーム', type:'frame', rarity:'UR', cssClass:'frame-phoenix', gachaWeight:2, source:'gacha' },
+    badge_diamond: { name:'💎 ダイヤモンドバッジ', type:'badge', rarity:'UR', icon:'💎', gachaWeight:2, source:'gacha' }
+  };
+  var RARITY_LABEL = { N:'ノーマル', R:'レア', SR:'スーパーレア', UR:'ウルトラレア' };
+  var RARITY_REFUND = { N:5, R:15, SR:35, UR:80 };
+  var GACHA_COST = 5;
+  var THEME_COST = 10;
+  var THEME_PALETTES = {
+    sunset:   { label:'サンセットオレンジ', swatch:'#FF6B35', sky:'#FF9A6C', skyDark:'#D9713F', sun:'#FFC94D', sunDark:'#E3A422', coral:'#FF6B6B', coralDark:'#D94A4A', mint:'#FFB088', mintDark:'#E08858' },
+    ocean:    { label:'オーシャンブルー',   swatch:'#2E86BE', sky:'#4FB4E8', skyDark:'#2E86BE', sun:'#7FD1E0', sunDark:'#4FA8BB', coral:'#5B8DEF', coralDark:'#3D68C4', mint:'#6FD9B5', mintDark:'#3FAE8C' },
+    forest:   { label:'フォレストグリーン', swatch:'#4A9A4E', sky:'#6FBF73', skyDark:'#4A9A4E', sun:'#B5D96B', sunDark:'#8FB84A', coral:'#3FAE8C', coralDark:'#2E8468', mint:'#8ED9A0', mintDark:'#5CB876' },
+    lavender: { label:'ラベンダーパープル', swatch:'#7C5FC4', sky:'#A98FE8', skyDark:'#7C5FC4', sun:'#D9A8F0', sunDark:'#B87BD9', coral:'#C48FE0', coralDark:'#9A5FC0', mint:'#B8A8F0', mintDark:'#8F7CD9' },
+    lemon:    { label:'レモンイエロー',     swatch:'#E0B93F', sky:'#FFD966', skyDark:'#E0B93F', sun:'#FFE58A', sunDark:'#F0C94D', coral:'#FFB84D', coralDark:'#E09A2E', mint:'#D9E066', mintDark:'#B8BF4A' },
+    cherry:   { label:'チェリーピンク',     swatch:'#E8677C', sky:'#FF8FA0', skyDark:'#E8677C', sun:'#FFB8C8', sunDark:'#F090A5', coral:'#FF6B8A', coralDark:'#D9456A', mint:'#FFAEC0', mintDark:'#E687A0' },
+    skyblue:  { label:'スカイブルー(定番)', swatch:'#4FB4E8', sky:'#4FB4E8', skyDark:'#2E86BE', sun:'#FFC94D', sunDark:'#E3A422', coral:'#FF8FA0', coralDark:'#E8677C', mint:'#6FD9B5', mintDark:'#3FAE8C' }
+  };
+  var THEME_ORDER = ['sunset', 'ocean', 'forest', 'lavender', 'lemon', 'cherry', 'skyblue'];
+  var SPECIAL_THEME_PALETTES = {
+    aurora:    { label:'オーロラ', gradient:'linear-gradient(135deg,#7F77DD,#4FB4E8,#3FAE8C)', sky:'#7F77DD', skyDark:'#534AB7', sun:'#6FD9B5', sunDark:'#3FAE8C', coral:'#4FB4E8', coralDark:'#2E86BE', mint:'#8FE3D0', mintDark:'#4FB4A8' },
+    goldnight: { label:'ゴールドナイト', gradient:'linear-gradient(135deg,#2C2C2A,#E8B800,#2C2C2A)', sky:'#E8B800', skyDark:'#A67F00', sun:'#FFD966', sunDark:'#C79A1F', coral:'#5F5E5A', coralDark:'#2C2C2A', mint:'#D9C36A', mintDark:'#A6893A' },
+    neon:      { label:'ネオンサイバー', gradient:'linear-gradient(135deg,#FF3D7F,#4FE0FF,#B266FF)', sky:'#4FE0FF', skyDark:'#1FB8D9', sun:'#B266FF', sunDark:'#8A3FE0', coral:'#FF3D7F', coralDark:'#D91F5C', mint:'#5CFFC4', mintDark:'#2FD9A0' },
+    sakurafubuki:{ label:'桜吹雪', gradient:'linear-gradient(135deg,#FFE0EC,#FFB8CE,#E8B800)', sky:'#FFB8CE', skyDark:'#F090AE', sun:'#FFE0EC', sunDark:'#F5C6D9', coral:'#FF8FB0', coralDark:'#E8677C', mint:'#E8B800', mintDark:'#C79A1F' },
+    deepsea:   { label:'深海', gradient:'linear-gradient(135deg,#04342C,#0F6E56,#4FB4E8)', sky:'#1D9E75', skyDark:'#085041', sun:'#4FB4E8', sunDark:'#2E86BE', coral:'#0F6E56', coralDark:'#04342C', mint:'#5DCAA5', mintDark:'#1D9E75' },
+    rainbow:   { label:'レインボー', gradient:'linear-gradient(135deg,#FF6B6B,#FFC94D,#6FD9B5,#4FB4E8,#B266FF)', sky:'#4FB4E8', skyDark:'#B266FF', sun:'#FFC94D', sunDark:'#FF6B6B', coral:'#FF6B8A', coralDark:'#D9456A', mint:'#6FD9B5', mintDark:'#3FAE8C' }
+  };
+  var SPECIAL_THEME_ORDER = ['aurora', 'goldnight', 'neon', 'sakurafubuki', 'deepsea', 'rainbow'];
+  var selectedThemeKey = null;
+
+  function getThemePalette(key){
+    return THEME_PALETTES[key] || SPECIAL_THEME_PALETTES[key] || null;
+  }
+  function applyTheme(key){
+    var p = getThemePalette(key);
+    if(!p) return;
+    var root = document.documentElement.style;
+    root.setProperty('--sky', p.sky);
+    root.setProperty('--sky-dark', p.skyDark);
+    root.setProperty('--sun', p.sun);
+    root.setProperty('--sun-dark', p.sunDark);
+    root.setProperty('--coral', p.coral);
+    root.setProperty('--coral-dark', p.coralDark);
+    root.setProperty('--mint', p.mint);
+    root.setProperty('--mint-dark', p.mintDark);
+  }
+  function todayDefaultThemeKey(){
+    return THEME_ORDER[new Date().getDay()];
+  }
+  function renderThemeSwatches(activeKey){
+    var row = document.getElementById('theme-swatch-row');
+    if(!row) return;
+    if(!selectedThemeKey) selectedThemeKey = SPECIAL_THEME_PALETTES[activeKey] ? activeKey : SPECIAL_THEME_ORDER[0];
+    row.innerHTML = SPECIAL_THEME_ORDER.map(function(key){
+      var p = SPECIAL_THEME_PALETTES[key];
+      var sel = key === selectedThemeKey ? ' selected' : '';
+      return '<button type="button" class="theme-swatch' + sel + '" data-theme="' + key + '">'
+        + '<span class="theme-swatch-circle" style="background:' + p.gradient + ';"></span>'
+        + '<span class="theme-swatch-label">' + p.label + '</span>'
+        + '</button>';
+    }).join('');
+  }
+  async function initTheme(){
+    var key = todayDefaultThemeKey();
+    var activeCustom = null;
+    try{
+      await authReadyPromise;
+      var doc = await db.collection('siteContent').doc('theme').get();
+      if(doc.exists){
+        var data = doc.data();
+        if(data.expiresAt && data.expiresAt > Date.now() && getThemePalette(data.colorKey)){
+          key = data.colorKey;
+          activeCustom = data;
+        }
+      }
+    }catch(e){ /* ignore, fall back to daily default */ }
+    applyTheme(key);
+    var statusEl = document.getElementById('theme-status');
+    if(statusEl){
+      if(activeCustom){
+        var daysLeft = Math.max(1, Math.ceil((activeCustom.expiresAt - Date.now()) / (24 * 60 * 60 * 1000)));
+        statusEl.textContent = '現在のテーマ: ' + getThemePalette(key).label + '(あと' + daysLeft + '日・' + (activeCustom.setBy || '団員') + 'さんが変更した限定テーマ)';
+      } else {
+        statusEl.textContent = '現在は自動ローテーションの「' + getThemePalette(key).label + '」です(曜日ごとに自動で変わります)。下の限定カラーを選ぶと1週間だけ特別なテーマにできます。';
       }
     }
-
-    /* 下部ナビのアクティブ状態 */
-    document.querySelectorAll('#mobile-bottom-nav [data-mobile-tab]').forEach(function(btn){
-      btn.classList.toggle('active', btn.getAttribute('data-mobile-tab') === id);
-    });
-
-    closeMobileMore();
+    renderThemeSwatches(key);
   }
 
-  function openMobileMore(){
-    var sheet = document.getElementById('mobile-more-sheet');
-    var backdrop = document.getElementById('mobile-more-backdrop');
-    if(!sheet || !backdrop) return;
-    sheet.classList.add('open');
-    backdrop.classList.add('open');
-    sheet.setAttribute('aria-hidden','false');
+  function pickGachaItem(){
+    var keys = Object.keys(ITEM_CATALOG).filter(function(k){ return ITEM_CATALOG[k].gachaWeight; });
+    var total = 0;
+    keys.forEach(function(k){ total += ITEM_CATALOG[k].gachaWeight; });
+    var r = Math.random() * total;
+    var acc = 0;
+    for(var i = 0; i < keys.length; i++){
+      acc += ITEM_CATALOG[keys[i]].gachaWeight;
+      if(r <= acc) return keys[i];
+    }
+    return keys[keys.length - 1];
   }
 
-  function closeMobileMore(){
-    var sheet = document.getElementById('mobile-more-sheet');
-    var backdrop = document.getElementById('mobile-more-backdrop');
-    if(!sheet || !backdrop) return;
-    sheet.classList.remove('open');
-    backdrop.classList.remove('open');
-    sheet.setAttribute('aria-hidden','true');
+  function gachaDelay(ms){
+    return new Promise(function(resolve){ setTimeout(resolve, ms); });
+  }
+
+  async function playGachaSuspense(resultEl, rarity){
+    resultEl.classList.remove('hidden');
+    var effect = 'normal';
+    if(rarity === 'UR'){
+      effect = Math.random() < 0.5 ? 'confirm' : 'reversal';
+    } else if(rarity === 'SR'){
+      effect = Math.random() < 0.4 ? 'reversal' : 'normal';
+    }
+
+    if(effect === 'confirm'){
+      resultEl.className = 'gacha-suspense confirm';
+      resultEl.innerHTML = '<div class="gacha-suspense-text">…!? これは期待できそう…</div>';
+      await gachaDelay(1400);
+    } else if(effect === 'reversal'){
+      resultEl.className = 'gacha-suspense reversal';
+      resultEl.innerHTML = '<div class="gacha-suspense-text">ん…普通、かな…</div>';
+      await gachaDelay(900);
+      resultEl.classList.add('flip');
+      resultEl.innerHTML = '<div class="gacha-suspense-text">まさかの…!?</div>';
+      await gachaDelay(500);
+    } else {
+      resultEl.className = 'gacha-suspense';
+      resultEl.innerHTML = '<div class="gacha-suspense-text">抽選中…</div>';
+      await gachaDelay(900);
+    }
+  }
+
+  async function loadShopUserDoc(){
+    if(!isLoginValid()) return null;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var doc = await db.collection('users').doc(uid).get();
+      return doc.exists ? doc.data() : {};
+    }catch(e){ return null; }
+  }
+
+  function shopItemCardHTML(key, mode, extra){
+    var item = ITEM_CATALOG[key];
+    if(!item) return '';
+    var iconDisplay = item.icon || '🖼️';
+    var html = '<div class="shop-item rarity-' + item.rarity + '">'
+      + '<div class="shop-item-name">' + iconDisplay + ' ' + esc(item.name) + '</div>'
+      + '<div class="shop-item-rarity">' + RARITY_LABEL[item.rarity] + '</div>';
+    if(mode === 'shop'){
+      var owned = extra.inventory.indexOf(key) !== -1;
+      var can = extra.points >= item.shopCost && !owned;
+      html += '<div class="shop-item-cost">' + item.shopCost + 'pt</div>'
+        + '<button type="button" class="mc-btn primary shop-buy-btn" data-item="' + key + '"' + (can ? '' : ' disabled') + '>'
+        + (owned ? '所持済み' : '購入する') + '</button>';
+    } else {
+      var equipped = (item.type === 'frame' && key === extra.equippedFrame) || (item.type === 'badge' && key === extra.equippedBadge);
+      html += '<button type="button" class="mc-btn ' + (equipped ? 'primary' : '') + ' inventory-equip-btn" data-item="' + key + '">'
+        + (equipped ? '装備中' : '装備する') + '</button>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  async function refreshShopUI(){
+    var balanceEl = document.getElementById('shop-balance');
+    var shopGrid = document.getElementById('shop-grid');
+    var invGrid = document.getElementById('inventory-grid');
+    if(!balanceEl) return;
+    if(!isLoginValid()){
+      balanceEl.textContent = 'ログインすると使えます';
+      if(shopGrid) shopGrid.innerHTML = '';
+      if(invGrid) invGrid.innerHTML = '';
+      return;
+    }
+    var data = await loadShopUserDoc();
+    if(!data) data = {};
+    var points = data.points || 0;
+    var total = data.totalPoints !== undefined ? data.totalPoints : points;
+    var inventory = data.inventory || [];
+    balanceEl.innerHTML = '⭐ 所持: ' + points + 'pt ／ 累計: ' + total + 'pt';
+
+    if(shopGrid){
+      var shopKeys = Object.keys(ITEM_CATALOG).filter(function(k){ return ITEM_CATALOG[k].shopCost; });
+      shopGrid.innerHTML = shopKeys.map(function(k){
+        return shopItemCardHTML(k, 'shop', { points: points, inventory: inventory });
+      }).join('');
+    }
+    if(invGrid){
+      if(inventory.length === 0){
+        invGrid.innerHTML = '<div class="notif-empty">まだアイテムがありません。ショップやガチャで手に入れてみましょう!</div>';
+      } else {
+        invGrid.innerHTML = inventory.map(function(k){
+          return shopItemCardHTML(k, 'inventory', { equippedFrame: data.equippedFrame || '', equippedBadge: data.equippedBadge || '' });
+        }).join('');
+      }
+    }
+  }
+
+  async function renderRanking(){
+    var list = document.getElementById('ranking-list');
+    if(!list) return;
+    list.innerHTML = '<div class="loading-note">読み込み中…</div>';
+    try{
+      await authReadyPromise;
+      var members = [];
+      try{ members = await getAllMembers(); }catch(e){}
+      var nameMap = {};
+      members.forEach(function(m){ nameMap['m_' + m.id] = m.name; });
+      var snap = await db.collection('users').get();
+      var rows = [];
+      snap.forEach(function(doc){
+        if(doc.id.indexOf('m_') !== 0) return;
+        var d = doc.data();
+        var points = d.points || 0;
+        rows.push({
+          name: nameMap[doc.id] || d.displayName || '???',
+          points: points,
+          total: d.totalPoints !== undefined ? d.totalPoints : points
+        });
+      });
+      rows.sort(function(a, b){ return b.total - a.total; });
+      if(rows.length === 0){
+        list.innerHTML = '<div class="notif-empty">まだ記録がありません</div>';
+        return;
+      }
+      list.innerHTML = rows.map(function(r, i){
+        return '<div class="ranking-row">'
+          + '<span class="ranking-rank">' + (i + 1) + '位</span>'
+          + '<span class="ranking-name">' + esc(r.name) + '</span>'
+          + '<span class="ranking-points">現在 ' + r.points + 'pt</span>'
+          + '<span class="ranking-total">累計 ' + r.total + 'pt</span>'
+          + '</div>';
+      }).join('');
+    }catch(e){
+      list.innerHTML = '<div class="notif-empty">読み込みに失敗しました</div>';
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    document.querySelectorAll('#mobile-bottom-nav [data-mobile-tab]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        mobileShowTab(btn.getAttribute('data-mobile-tab'));
-      });
-    });
+    refreshShopUI();
+    renderRanking();
+    initTheme();
 
-    var moreBtn = document.getElementById('mobile-more-button');
-    var backdrop = document.getElementById('mobile-more-backdrop');
-
-    if(moreBtn) moreBtn.addEventListener('click', function(){
-      var sheet = document.getElementById('mobile-more-sheet');
-      if(sheet && sheet.classList.contains('open')){
-        closeMobileMore();
-      }else{
-        openMobileMore();
-      }
-    });
-
-    if(backdrop) backdrop.addEventListener('click', closeMobileMore);
-
-    document.querySelectorAll('#mobile-more-sheet [data-mobile-tab]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        mobileShowTab(btn.getAttribute('data-mobile-tab'));
-      });
-    });
-
-    /* 既存の showTab が呼ばれた時にも下部ナビを同期 */
-    var originalShowTab = window.showTab;
-    if(typeof originalShowTab === 'function'){
-      window.showTab = function(id){
-        originalShowTab(id);
-        document.querySelectorAll('#mobile-bottom-nav [data-mobile-tab]').forEach(function(btn){
-          btn.classList.toggle('active', btn.getAttribute('data-mobile-tab') === id);
+    var themeRow = document.getElementById('theme-swatch-row');
+    if(themeRow){
+      themeRow.addEventListener('click', function(e){
+        var sw = e.target.closest('.theme-swatch');
+        if(!sw) return;
+        selectedThemeKey = sw.dataset.theme;
+        themeRow.querySelectorAll('.theme-swatch').forEach(function(el){
+          el.classList.toggle('selected', el === sw);
         });
-      };
+      });
+    }
+    var themeBuyBtn = document.getElementById('theme-buy-btn');
+    if(themeBuyBtn){
+      themeBuyBtn.addEventListener('click', async function(){
+        if(!isLoginValid()){
+          alert('テーマカラーを変更するにはログインしてください。');
+          return;
+        }
+        var key = selectedThemeKey || todayDefaultThemeKey();
+        var uid = localStorage.getItem('loggedInUserId');
+        var displayName = localStorage.getItem('loggedInUserName');
+        themeBuyBtn.disabled = true;
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < THEME_COST){
+            alert('ポイントが足りません(テーマ変更は' + THEME_COST + 'pt)。');
+            themeBuyBtn.disabled = false;
+            return;
+          }
+          points -= THEME_COST;
+          await docRef.set({ points: points }, { merge: true });
+          updateUserBar(displayName, points);
+          await db.collection('siteContent').doc('theme').set({
+            colorKey: key,
+            expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            setBy: displayName
+          });
+          await initTheme();
+          await refreshShopUI();
+        }catch(err){
+          alert('通信に失敗しました。もう一度お試しください。');
+        }
+        themeBuyBtn.disabled = false;
+      });
+    }
+
+    var prankSelect = document.getElementById('prank-target-select');
+    if(prankSelect){
+      (async function(){
+        var members = [];
+        try{ members = await getAllMembers(); }catch(e){}
+        prankSelect.innerHTML = members.map(function(m){
+          return '<option value="' + m.id + '" data-extra="' + (m.isExtra ? '1' : '0') + '" data-name="' + esc(m.name) + '">' + esc(m.name) + '</option>';
+        }).join('');
+      })();
+    }
+    var prankBtn = document.getElementById('prank-btn');
+    if(prankBtn){
+      prankBtn.addEventListener('click', async function(){
+        var errorEl = document.getElementById('prank-error');
+        var wordInput = document.getElementById('prank-word-input');
+        errorEl.classList.add('hidden');
+        if(!isLoginValid()){
+          alert('いたずらするにはログインしてください。');
+          return;
+        }
+        var word = wordInput.value.trim();
+        if(!word || word.length > 3){
+          errorEl.textContent = '単語を1〜3文字で入力してください';
+          errorEl.classList.remove('hidden');
+          return;
+        }
+        var opt = prankSelect.options[prankSelect.selectedIndex];
+        if(!opt) return;
+        var targetId = opt.value;
+        var isExtra = opt.dataset.extra === '1';
+        var currentName = opt.dataset.name;
+        var uid = localStorage.getItem('loggedInUserId');
+        prankBtn.disabled = true;
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < 20){
+            errorEl.textContent = 'ポイントが足りません(いたずらは20pt)';
+            errorEl.classList.remove('hidden');
+            prankBtn.disabled = false;
+            return;
+          }
+          points -= 20;
+          await docRef.set({ points: points }, { merge: true });
+          updateUserBar(localStorage.getItem('loggedInUserName'), points);
+          var newName = currentName + word;
+          if(isExtra){
+            await saveExtraMember(targetId, { name: newName });
+          } else {
+            await saveOverride(targetId, { name: newName });
+          }
+          wordInput.value = '';
+          if(typeof render === 'function') render();
+          await refreshShopUI();
+        }catch(err){
+          errorEl.textContent = '通信に失敗しました。もう一度お試しください。';
+          errorEl.classList.remove('hidden');
+        }
+        prankBtn.disabled = false;
+      });
+    }
+
+    var shopGrid = document.getElementById('shop-grid');
+    if(shopGrid){
+      shopGrid.addEventListener('click', async function(e){
+        var btn = e.target.closest('.shop-buy-btn');
+        if(!btn || btn.disabled) return;
+        if(!isLoginValid()) return;
+        var key = btn.dataset.item;
+        var item = ITEM_CATALOG[key];
+        var uid = localStorage.getItem('loggedInUserId');
+        btn.disabled = true;
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          var inventory = data.inventory || [];
+          if(points >= item.shopCost && inventory.indexOf(key) === -1){
+            points -= item.shopCost;
+            inventory.push(key);
+            await docRef.set({ points: points, inventory: inventory }, { merge: true });
+            updateUserBar(localStorage.getItem('loggedInUserName'), points);
+          }
+        }catch(err){ /* ignore */ }
+        await refreshShopUI();
+        renderRanking();
+      });
+    }
+
+    var invGrid = document.getElementById('inventory-grid');
+    if(invGrid){
+      invGrid.addEventListener('click', async function(e){
+        var btn = e.target.closest('.inventory-equip-btn');
+        if(!btn) return;
+        if(!isLoginValid()) return;
+        var key = btn.dataset.item;
+        var item = ITEM_CATALOG[key];
+        var uid = localStorage.getItem('loggedInUserId');
+        btn.disabled = true;
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var field = item.type === 'frame' ? 'equippedFrame' : 'equippedBadge';
+          var current = data[field] || '';
+          var next = current === key ? '' : key;
+          var update = {};
+          update[field] = next;
+          await docRef.set(update, { merge: true });
+        }catch(err){ /* ignore */ }
+        btn.disabled = false;
+        await refreshShopUI();
+        if(typeof render === 'function') render();
+      });
+    }
+
+    var gachaBtn = document.getElementById('gacha-btn');
+    if(gachaBtn){
+      gachaBtn.addEventListener('click', async function(){
+        if(!isLoginValid()){
+          alert('ガチャを引くにはログインしてください。');
+          return;
+        }
+        var uid = localStorage.getItem('loggedInUserId');
+        var resultEl = document.getElementById('gacha-result');
+        gachaBtn.disabled = true;
+        resultEl.classList.add('hidden');
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < GACHA_COST){
+            alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
+            gachaBtn.disabled = false;
+            return;
+          }
+          points -= GACHA_COST;
+          var picked = pickGachaItem();
+          var item = ITEM_CATALOG[picked];
+          var inventory = data.inventory || [];
+          var duplicate = inventory.indexOf(picked) !== -1;
+          var refund = 0;
+          if(duplicate){
+            refund = RARITY_REFUND[item.rarity] || 0;
+            points += refund;
+          } else {
+            inventory.push(picked);
+          }
+          await docRef.set({ points: points, inventory: inventory }, { merge: true });
+          updateUserBar(localStorage.getItem('loggedInUserName'), points);
+
+          await playGachaSuspense(resultEl, item.rarity);
+
+          resultEl.className = 'gacha-result rarity-' + item.rarity;
+          resultEl.innerHTML = '<div class="gacha-rarity-label">' + RARITY_LABEL[item.rarity] + '!</div>'
+            + '<div class="gacha-item-name">' + (item.icon || '🖼️') + ' ' + esc(item.name) + '</div>'
+            + (duplicate
+                ? '<div class="gacha-dup-note">すでに持っていたので +' + refund + 'pt に還元しました</div>'
+                : '<div class="gacha-new-note">NEW!</div>');
+          resultEl.classList.remove('hidden');
+          if(item.rarity === 'SR' || item.rarity === 'UR'){
+            resultEl.classList.add('gacha-flash');
+            setTimeout(function(){ resultEl.classList.remove('gacha-flash'); }, 700);
+          }
+          await refreshShopUI();
+          renderRanking();
+        }catch(err){
+          alert('通信に失敗しました。もう一度お試しください。');
+        }
+        gachaBtn.disabled = false;
+      });
     }
   });
-
-  /* ESCでその他メニューを閉じる */
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape') closeMobileMore();
-  });
-})();
 </script>
-
 </body>
 </html>
