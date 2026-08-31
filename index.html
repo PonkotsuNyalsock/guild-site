@@ -1708,7 +1708,8 @@
 
   <div class="shop-block">
     <div class="shop-block-label">🎰 ガチャ(1回 5pt・レアなアイテムはガチャ限定)</div>
-    <div class="gacha-area">
+    <div id="gacha-rare-notice-list" style="max-width:640px;margin:0 auto 16px;display:flex;flex-direction:column;gap:8px;"></div>
+<div class="gacha-area">
       <button type="button" id="gacha-btn" class="mc-btn primary">ガチャを引く</button>
       <div class="gacha-result hidden" id="gacha-result"></div>
     </div>
@@ -4105,7 +4106,79 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   }
 
-  async function renderRanking(){
+  async 
+  /* ---------- SR以上ガチャ通知（24時間） ---------- */
+  function isRareGachaRarity(rarity){
+    return rarity === 'SR' || rarity === 'UR';
+  }
+
+  async function saveRareGachaNotice(item){
+    if(!db || !isLoginValid() || !item || !isRareGachaRarity(item.rarity)) return;
+    try{
+      await authReadyPromise;
+      var uid = localStorage.getItem('loggedInUserId');
+      var name = localStorage.getItem('loggedInUserName') || uid || '団員';
+      var now = Date.now();
+      await db.collection('gachaRareNotices').add({
+        userId: uid,
+        userName: name,
+        itemId: item.id || '',
+        itemName: item.name || 'アイテム',
+        rarity: item.rarity || '',
+        createdAtMs: now,
+        expiresAtMs: now + 24 * 60 * 60 * 1000
+      });
+      renderRareGachaNotices();
+    }catch(e){
+      console.error('レアガチャ通知保存エラー:', e);
+    }
+  }
+
+  async function renderRareGachaNotices(){
+    var box = document.getElementById('gacha-rare-notice-list');
+    if(!box || !db) return;
+    try{
+      await authReadyPromise;
+      var now = Date.now();
+      var snap = await db.collection('gachaRareNotices')
+        .orderBy('createdAtMs','desc')
+        .limit(20)
+        .get();
+
+      var rows = [];
+      var expiredRefs = [];
+
+      snap.forEach(function(doc){
+        var d = doc.data() || {};
+        if(Number(d.expiresAtMs || 0) <= now){
+          expiredRefs.push(doc.ref);
+          return;
+        }
+        var rarity = d.rarity || 'SR';
+        var icon = rarity === 'UR' ? '🌈' : '✨';
+        rows.push(
+          '<div class="gacha-result rarity-' + esc(rarity) + '" style="margin-top:0;padding:12px 14px;text-align:left;">' +
+            '<div style="font-size:12px;font-weight:800;">' + icon + ' ' + esc(rarity) + '獲得！</div>' +
+            '<div style="font-size:13px;margin-top:2px;"><strong>' + esc(d.userName || '団員') +
+            '</strong>さんが「<strong>' + esc(d.itemName || 'アイテム') + '</strong>」を引きました！</div>' +
+          '</div>'
+        );
+      });
+
+      box.innerHTML = rows.join('');
+
+      /* 期限切れ通知はついでに削除 */
+      if(expiredRefs.length){
+        var batch = db.batch();
+        expiredRefs.forEach(function(ref){ batch.delete(ref); });
+        batch.commit().catch(function(){});
+      }
+    }catch(e){
+      console.error('レアガチャ通知読込エラー:', e);
+    }
+  }
+
+function renderRanking(){
     var list = document.getElementById('ranking-list');
     if(!list) return;
     list.innerHTML = '<div class="loading-note">読み込み中…</div>';
@@ -5111,6 +5184,7 @@ document.addEventListener('DOMContentLoaded',function(){
             setTimeout(function(){ resultEl.classList.remove('gacha-flash'); }, 700);
           }
           await refreshShopUI();
+          if(isRareGachaRarity(item.rarity)) await saveRareGachaNotice(item);
           renderRanking();
         }catch(err){
           if(err.message === 'NOT_ENOUGH_POINTS') alert('ポイントが足りません(ガチャ1回 ' + GACHA_COST + 'pt)。');
@@ -5356,6 +5430,15 @@ document.addEventListener('DOMContentLoaded',function(){
   /* ログイン後の localStorage 変更を確実に拾う */
   setInterval(admin2UpdateVisibility,1000);
 })();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(function(){
+    if(typeof renderRareGachaNotices === 'function') renderRareGachaNotices();
+  }, 1000);
+});
 </script>
 
 </body>
