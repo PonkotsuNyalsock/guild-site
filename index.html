@@ -1685,11 +1685,19 @@
     <input type="text" id="prank-word-input" maxlength="3" placeholder="例: 様">
     <div class="login-error hidden" id="prank-error"></div>
     <button type="button" id="prank-btn" class="mc-btn primary">いたずらする(20pt)</button>
+    <p class="shop-sub-note" style="margin-top:10px;">※いたずらは付けてから7日間で自動的に消えます。</p>
+  </div>
+
+  <div class="shop-block">
+    <div class="shop-block-label">😇 いたずら解除(100pt)</div>
+    <p class="shop-sub-note">自分の名前に付いたいたずらを、7日間の期限を待たずに今すぐ消せます。</p>
+    <div class="shop-sub-note" id="prank-cure-status">読み込み中…</div>
+    <button type="button" id="prank-cure-btn" class="mc-btn primary">いたずらを解除する(100pt)</button>
   </div>
 
   <div class="shop-block">
     <div class="shop-block-label">🎲 サイコロ対決(1日1回無料)</div>
-    <p class="shop-sub-note">団員を選んでサイコロ対決を挑めます。5つのサイコロを振り、①1つだけ選んで振り直す、②全部振り直す、③そのまま勝負、のどれかを選べます(振り直しは1日1回まで)。合計の目が大きい方の勝ちで、勝った方が相手から1ポイント奪えます。ただし、挑まれた側がポイントを奪われるのは1日1回までです(挑戦自体は何度でも受けられます)。</p>
+    <p class="shop-sub-note">団員を選んでサイコロ対決を挑めます。5つのサイコロを振り、①1つだけ選んで振り直す、②全部振り直す、③そのまま勝負、のどれかを選べます(振り直しは1回の対戦につき1回まで)。合計の目が大きい方の勝ちで、勝った方が相手から1ポイント奪えます。ただし、挑まれた側がポイントを奪われるのは1日1回までです(挑戦自体は何度でも受けられます)。</p>
     <div class="shop-sub-note" id="dice-status">読み込み中…</div>
     <label>挑む相手</label>
     <select id="dice-target-select"></select>
@@ -1935,6 +1943,8 @@ async function adminResetAccount(targetId){
       firstLoginAwarded: false,
       lastLoginDate: firebase.firestore.FieldValue.delete(),
       dailyMissionClaimedDate: firebase.firestore.FieldValue.delete(),
+      postPointDate: firebase.firestore.FieldValue.delete(),
+      postPointCount: 0,
       diceChallengeUsedDate: firebase.firestore.FieldValue.delete(),
       diceLossUsedDate: firebase.firestore.FieldValue.delete(),
       claimedTasks: [],
@@ -2084,25 +2094,75 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!ts) return false;
     return (Date.now() - parseInt(ts, 10)) < LOGIN_EXPIRY_MS;
   }
+  /* 投稿ポイントは1日3回まで（写真・みんなの声・名言集で共通） */
+  var DAILY_POST_POINT_LIMIT = 3;
+
+  function getLocalDateKey(){
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+
   async function awardPostPoints(amount){
     if(!isLoginValid() || !db) return false;
     var uid = localStorage.getItem('loggedInUserId');
     try{
       await authReadyPromise;
       var docRef = db.collection('users').doc(uid);
+      var today = getLocalDateKey();
+
       var result = await db.runTransaction(function(tx){
         return tx.get(docRef).then(function(doc){
           var data = doc.exists ? doc.data() : {};
-          var current = Number(data.points); if(!Number.isFinite(current)) current = 0;
-          var total = Number(data.totalPoints); if(!Number.isFinite(total)) total = current;
-          var next = current + Number(amount || 0);
-          var nextTotal = total + Number(amount || 0);
-          tx.set(docRef, { points: next, totalPoints: nextTotal }, { merge: true });
-          return { points: next, totalPoints: nextTotal };
+
+          var savedDate = data.postPointDate || '';
+          var usedCount = Number(data.postPointCount || 0);
+          if(savedDate !== today) usedCount = 0;
+
+          /* 4回目以降の投稿は投稿自体はできるが、ポイントは増えない */
+          if(usedCount >= DAILY_POST_POINT_LIMIT){
+            var currentNoAward = Number(data.points);
+            if(!Number.isFinite(currentNoAward)) currentNoAward = 0;
+            return {
+              awarded: false,
+              points: currentNoAward,
+              count: usedCount
+            };
+          }
+
+          var current = Number(data.points);
+          if(!Number.isFinite(current)) current = 0;
+          var total = Number(data.totalPoints);
+          if(!Number.isFinite(total)) total = current;
+
+          var add = Number(amount || 0);
+          var next = current + add;
+          var nextTotal = total + add;
+          var nextCount = usedCount + 1;
+
+          tx.set(docRef, {
+            points: next,
+            totalPoints: nextTotal,
+            postPointDate: today,
+            postPointCount: nextCount
+          }, { merge: true });
+
+          return {
+            awarded: true,
+            points: next,
+            count: nextCount
+          };
         });
       });
+
       updateUserBar(localStorage.getItem('loggedInUserName'), result.points);
-      return true;
+
+      if(!result.awarded){
+        console.log('本日の投稿ポイント上限（3回）に達しています。');
+      }
+      return result.awarded;
     }catch(e){
       console.error('ポイント付与エラー:', e);
       return false;
@@ -2345,6 +2405,7 @@ document.addEventListener('DOMContentLoaded',function(){
           if(typeof renderQuests === 'function') renderQuests();
           if(typeof renderDailyMission === 'function') renderDailyMission();
           if(typeof renderDiceSection === 'function') renderDiceSection();
+          if(typeof renderPrankCureStatus === 'function') renderPrankCureStatus();
         }catch(e){
           errorEl.textContent = '通信に失敗しました。もう一度お試しください。';
           errorEl.classList.remove('hidden');
@@ -2417,16 +2478,27 @@ document.addEventListener('DOMContentLoaded',function(){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
   }
+  var PRANK_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7日間
+  function effectivePrankAffix(raw, setAt){
+    if(!raw) return '';
+    if(!setAt || (Date.now() - setAt) >= PRANK_EXPIRY_MS) return '';
+    return raw;
+  }
   function mergedMember(m, overrides){
     var o = overrides[m.id] || {};
     var baseName = o.name !== undefined ? o.name : m.name;
-    var prankPrefix = o.prankPrefix !== undefined ? o.prankPrefix : (m.prankPrefix || '');
-    var prankSuffix = o.prankSuffix !== undefined ? o.prankSuffix : (m.prankSuffix || '');
+    var prankPrefixRaw = o.prankPrefix !== undefined ? o.prankPrefix : (m.prankPrefix || '');
+    var prankSuffixRaw = o.prankSuffix !== undefined ? o.prankSuffix : (m.prankSuffix || '');
+    var prankPrefixSetAt = o.prankPrefixSetAt !== undefined ? o.prankPrefixSetAt : (m.prankPrefixSetAt || 0);
+    var prankSuffixSetAt = o.prankSuffixSetAt !== undefined ? o.prankSuffixSetAt : (m.prankSuffixSetAt || 0);
+    var prankPrefix = effectivePrankAffix(prankPrefixRaw, prankPrefixSetAt);
+    var prankSuffix = effectivePrankAffix(prankSuffixRaw, prankSuffixSetAt);
     return {
       id:m.id, role:m.role, color:m.color,
       name: prankPrefix + baseName + prankSuffix,
       baseName: baseName,
       prankPrefix: prankPrefix, prankSuffix: prankSuffix,
+      prankPrefixSetAt: prankPrefixSetAt, prankSuffixSetAt: prankSuffixSetAt,
       icon:o.icon !== undefined ? o.icon : m.icon,
       birthday:o.birthday!==undefined ? o.birthday : m.birthday,
       food:o.food!==undefined ? o.food : m.food,
@@ -2648,14 +2720,15 @@ document.addEventListener('DOMContentLoaded',function(){
       snap.forEach(function(doc){
         var d = doc.data();
         var baseName = d.name || '';
-        var prankPrefix = d.prankPrefix || '';
-        var prankSuffix = d.prankSuffix || '';
+        var prankPrefix = effectivePrankAffix(d.prankPrefix || '', d.prankPrefixSetAt || 0);
+        var prankSuffix = effectivePrankAffix(d.prankSuffix || '', d.prankSuffixSetAt || 0);
         out.push({
           id: doc.id, isExtra: true,
           role: d.role || '団員', color: d.color || 0,
           name: prankPrefix + baseName + prankSuffix,
           baseName: baseName,
           prankPrefix: prankPrefix, prankSuffix: prankSuffix,
+          prankPrefixSetAt: d.prankPrefixSetAt || 0, prankSuffixSetAt: d.prankSuffixSetAt || 0,
           icon: d.icon || '',
           birthday: d.birthday || '', food: d.food || '',
           hobby: d.hobby || '', mbti: d.mbti || '', adv: d.adv || '', title: d.title || '', intro: d.intro || ''
@@ -3352,7 +3425,11 @@ document.addEventListener('DOMContentLoaded',function(){
     if(homeExtras) homeExtras.style.display = (id === 'about') ? '' : 'none';
     if(id === 'members' && typeof recordDailyProfileView === 'function') recordDailyProfileView();
     if(id === 'rules' && typeof recordRulesViewed === 'function') recordRulesViewed();
-    if(id === 'shop' && typeof refreshShopUI === 'function') refreshShopUI();
+    if(id === 'shop'){
+      if(typeof refreshShopUI === 'function') refreshShopUI();
+      if(typeof renderPrankCureStatus === 'function') renderPrankCureStatus();
+      if(typeof renderDiceSection === 'function') renderDiceSection();
+    }
     if(id === 'quests'){
       if(typeof renderQuests === 'function') renderQuests();
       if(typeof renderDailyMission === 'function') renderDailyMission();
@@ -3397,8 +3474,11 @@ document.addEventListener('DOMContentLoaded',function(){
     var questBack = document.getElementById('quest-back-btn');
     if(questBack){
       questBack.addEventListener('click', function(){
-        if(window.history.length > 1){ window.history.back(); }
-        else { history.replaceState({tab:'about'}, '', '#about'); showTab('about'); window.scrollTo({top:0,behavior:'smooth'}); }
+        if(window.location.hash !== '#about'){
+          history.pushState({tab:'about'}, '', '#about');
+        }
+        showTab('about');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
   });
@@ -4288,7 +4368,7 @@ document.addEventListener('DOMContentLoaded',function(){
     function rollDie(){ return 1 + Math.floor(Math.random() * 6); }
 
     // 5つのサイコロを振り、①1つだけ選んで振り直す ②全部振り直す ③そのまま決定、を選ばせるモーダル。
-    // 振り直し(①②のどちらか)は1日1回まで(canReroll=falseなら③しか選べない)。
+    // 振り直し(①②のどちらか)は1回の対戦につき1回まで。モーダル内で一度使うと再度は使えない。
     // resolve()には { dice:[5個の目], total:合計, rerollUsed:振り直しを使ったか } または キャンセル時 null が渡る。
     function openDiceRollModal(opts){
       return new Promise(function(resolve){
@@ -4344,7 +4424,7 @@ document.addEventListener('DOMContentLoaded',function(){
           var note;
           if(!canRerollToday) note = '(本日はすでに振り直しを使っているため、このままの目で決定します)';
           else if(rerollUsed) note = '(振り直しを使いました。この目で決定してください)';
-          else note = '(サイコロを1つ選ぶと「選んだ1つを振り直す」が使えます。振り直しは1日1回までです)';
+          else note = '(サイコロを1つ選ぶと「選んだ1つを振り直す」が使えます。振り直しは1回の対戦につき1回までです)';
           hintEl.textContent = '合計: ' + total + ' ' + note;
           oneBtn.disabled = animating || !canRerollToday || rerollUsed || selected === -1;
           allBtn.disabled = animating || !canRerollToday || rerollUsed;
@@ -4607,7 +4687,9 @@ document.addEventListener('DOMContentLoaded',function(){
       try{
         var col = isExtra ? 'extraMembers' : 'memberOverrides';
         var doc = await db.collection(col).doc(targetId).get();
-        return doc.exists ? (doc.data()[field] || '') : '';
+        if(!doc.exists) return '';
+        var data = doc.data();
+        return effectivePrankAffix(data[field] || '', data[field + 'SetAt'] || 0);
       }catch(e){ return ''; }
     }
     var prankBtn = document.getElementById('prank-btn');
@@ -4660,6 +4742,7 @@ document.addEventListener('DOMContentLoaded',function(){
           updateUserBar(localStorage.getItem('loggedInUserName'), points);
           var payload = {};
           payload[field] = newAffix;
+          payload[field + 'SetAt'] = Date.now();
           if(isExtra){
             await saveExtraMember(targetId, payload);
           } else {
@@ -4673,6 +4756,75 @@ document.addEventListener('DOMContentLoaded',function(){
           errorEl.classList.remove('hidden');
         }
         prankBtn.disabled = false;
+      });
+    }
+
+    async function renderPrankCureStatus(){
+      var statusEl = document.getElementById('prank-cure-status');
+      var cureBtn = document.getElementById('prank-cure-btn');
+      if(!statusEl) return;
+      if(!isLoginValid()){
+        statusEl.textContent = 'ログインすると確認できます';
+        cureBtn.disabled = true;
+        return;
+      }
+      var uid = localStorage.getItem('loggedInUserId');
+      if(uid.indexOf('m_') !== 0){
+        statusEl.textContent = 'ゲスト・団員以外のログインでは使えません';
+        cureBtn.disabled = true;
+        return;
+      }
+      var myId = uid.slice(2);
+      var members = [];
+      try{ members = await getAllMembers(); }catch(e){}
+      var me = members.find(function(m){ return m.id === myId; });
+      if(!me || (!me.prankPrefix && !me.prankSuffix)){
+        statusEl.textContent = '現在いたずらは付いていません';
+        cureBtn.disabled = true;
+      } else {
+        statusEl.textContent = '現在の表示名: ' + me.name + '(このいたずらを消せます)';
+        cureBtn.disabled = false;
+      }
+    }
+    var prankCureBtn = document.getElementById('prank-cure-btn');
+    if(prankCureBtn){
+      prankCureBtn.addEventListener('click', async function(){
+        if(!isLoginValid()) return;
+        var uid = localStorage.getItem('loggedInUserId');
+        if(uid.indexOf('m_') !== 0) return;
+        var myId = uid.slice(2);
+        prankCureBtn.disabled = true;
+        try{
+          await authReadyPromise;
+          var docRef = db.collection('users').doc(uid);
+          var doc = await docRef.get();
+          var data = doc.exists ? doc.data() : {};
+          var points = data.points || 0;
+          if(points < 100){
+            alert('ポイントが足りません(いたずら解除は100pt)');
+            prankCureBtn.disabled = false;
+            return;
+          }
+          points -= 100;
+          await docRef.set({ points: points }, { merge: true });
+          updateUserBar(localStorage.getItem('loggedInUserName'), points);
+
+          var members2 = await getAllMembers();
+          var me2 = members2.find(function(m){ return m.id === myId; });
+          var isExtra = me2 ? !!me2.isExtra : false;
+          var clearPayload = { prankPrefix: '', prankSuffix: '', prankPrefixSetAt: 0, prankSuffixSetAt: 0 };
+          if(isExtra){
+            await saveExtraMember(myId, clearPayload);
+          } else {
+            await saveOverride(myId, clearPayload);
+          }
+          if(typeof render === 'function') render();
+          await renderPrankCureStatus();
+          await refreshShopUI();
+        }catch(err){
+          alert('通信に失敗しました。もう一度お試しください。');
+        }
+        prankCureBtn.disabled = false;
       });
     }
 
@@ -4704,7 +4856,7 @@ document.addEventListener('DOMContentLoaded',function(){
             diceChallengeBtn.disabled = false;
             return;
           }
-          var canReroll = data.diceRerollUsedDate !== today;
+          var canReroll = true;
           var result = await openDiceRollModal({
             title: '🎲 ' + opt.dataset.name + 'さんへの挑戦',
             subLabel: '5つのサイコロが出ました。1つだけ選んで振り直す・全部振り直す・そのまま挑戦する、から選んでください。',
@@ -4715,7 +4867,6 @@ document.addEventListener('DOMContentLoaded',function(){
             return;
           }
           var payload = { diceChallengeUsedDate: today };
-          if(result.rerollUsed) payload.diceRerollUsedDate = today;
           await docRef.set(payload, { merge: true });
           await db.collection('diceBattles').add({
             challengerId: uid,
@@ -4761,16 +4912,13 @@ document.addEventListener('DOMContentLoaded',function(){
           var myRerollSnap = await myDocRef.get();
           var myRerollData = myRerollSnap.exists ? myRerollSnap.data() : {};
           var today = todayStr();
-          var canReroll = myRerollData.diceRerollUsedDate !== today;
+          var canReroll = true;
           var rollResult = await openDiceRollModal({
             title: '🎲 ' + battle.challengerName + 'さんとの対決',
             subLabel: '5つのサイコロが出ました。1つだけ選んで振り直す・全部振り直す・そのまま対決する、から選んでください。',
             canReroll: canReroll
           });
           if(!rollResult){ btn.disabled = false; return; }
-          if(rollResult.rerollUsed){
-            await myDocRef.set({ diceRerollUsedDate: today }, { merge: true });
-          }
 
           var targetRoll = rollResult.total;
           var challengerRoll = battle.challengerRoll;
@@ -4843,6 +4991,7 @@ document.addEventListener('DOMContentLoaded',function(){
     }
 
     renderDiceSection();
+    renderPrankCureStatus();
 
     var shopGrid = document.getElementById('shop-grid');
     if(shopGrid){
@@ -5140,6 +5289,8 @@ document.addEventListener('DOMContentLoaded',function(){
           firstLoginAwarded:false,
           lastLoginDate:firebase.firestore.FieldValue.delete(),
           dailyMissionClaimedDate:firebase.firestore.FieldValue.delete(),
+          postPointDate:firebase.firestore.FieldValue.delete(),
+          postPointCount:0,
           diceChallengeUsedDate:firebase.firestore.FieldValue.delete(),
           diceLossUsedDate:firebase.firestore.FieldValue.delete(),
           claimedTasks:[],
