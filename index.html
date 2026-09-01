@@ -4177,7 +4177,7 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   }
 
-function renderRanking(){
+async function renderRanking(){
     var list = document.getElementById('ranking-list');
     if(!list) return;
     list.innerHTML = '<div class="loading-note">読み込み中…</div>';
