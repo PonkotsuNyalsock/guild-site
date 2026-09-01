@@ -443,6 +443,20 @@
     font-size:11px;color:var(--ink-soft);background:none;border:none;cursor:pointer;text-decoration:underline;
   }
   .voice-empty{text-align:center;color:var(--ink-soft);font-size:13px;padding:24px;}
+  .voice-reactions{display:flex;gap:8px;margin-top:10px;}
+  .voice-react-btn{
+    font-family:'M PLUS Rounded 1c';font-weight:800;font-size:12.5px;
+    border:1px solid var(--line);border-radius:999px;background:var(--paper);
+    padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:4px;color:var(--ink-soft);
+  }
+  .voice-react-btn.active.kusa{background:#eafaf0;border-color:var(--mint-dark);color:var(--mint-dark);}
+  .voice-react-btn.active.oko{background:#fff0f0;border-color:var(--coral);color:var(--coral);}
+
+  /* ---------- HOME ANNOUNCEMENTS ---------- */
+  .home-announce-wrap{max-width:640px;margin:0 auto 20px;}
+  .home-announce-wrap.hidden{display:none;}
+  .home-announce-title{font-family:'M PLUS Rounded 1c';font-weight:800;font-size:13px;margin-bottom:8px;color:var(--ink-soft);}
+  .home-announce-list{display:flex;flex-direction:column;gap:8px;}
 
   /* ---------- SPOTLIGHT ---------- */
   .spotlight{max-width:1000px;margin:0 auto 8px;padding:0 24px;}
@@ -1128,6 +1142,10 @@
 </section>
 
 <section class="about tab-panel" id="about">
+  <div id="home-announce-wrap" class="home-announce-wrap hidden">
+    <div class="home-announce-title">📢 24時間のお知らせ</div>
+    <div class="home-announce-list" id="home-announce-list"></div>
+  </div>
   <div class="section-head">
     <div class="section-tag">About us</div>
     <h2>騎士団について</h2>
@@ -1708,7 +1726,7 @@
 
   <div class="shop-block">
     <div class="shop-block-label">🎰 ガチャ(1回 5pt・レアなアイテムはガチャ限定)</div>
-    <div id="gacha-rare-notice-list" style="max-width:640px;margin:0 auto 16px;display:flex;flex-direction:column;gap:8px;"></div>
+    <p class="shop-sub-note">レアアイテム(SR・UR)を引くと「紹介」ページ上部のお知らせ欄に24時間表示されます。</p>
 <div class="gacha-area">
       <button type="button" id="gacha-btn" class="mc-btn primary">ガチャを引く</button>
       <div class="gacha-result hidden" id="gacha-result"></div>
@@ -3555,12 +3573,23 @@ document.addEventListener('DOMContentLoaded',function(){
   document.addEventListener('DOMContentLoaded', renderSpotlight);
 
   /* ---------- VOICES (anonymous board) ---------- */
-  function voiceCardHTML(v){
+  function voiceCardHTML(v, myUid){
     var d = new Date(v.addedAt || Date.now());
     var dateStr = (d.getMonth() + 1) + '/' + d.getDate();
+    var reactions = v.reactions || {};
+    var kusaCount = 0, okoCount = 0;
+    Object.keys(reactions).forEach(function(uid){
+      if(reactions[uid] === 'kusa') kusaCount++;
+      else if(reactions[uid] === 'oko') okoCount++;
+    });
+    var myReaction = myUid ? (reactions[myUid] || '') : '';
     return ''
       + '<div class="voice-card" data-id="' + v.id + '">'
       + '  <div class="voice-text">' + esc(v.text) + '</div>'
+      + '  <div class="voice-reactions">'
+      + '    <button type="button" class="voice-react-btn kusa' + (myReaction === 'kusa' ? ' active' : '') + '" data-reaction="kusa">🌱 草 <span>' + kusaCount + '</span></button>'
+      + '    <button type="button" class="voice-react-btn oko' + (myReaction === 'oko' ? ' active' : '') + '" data-reaction="oko">💢 怒 <span>' + okoCount + '</span></button>'
+      + '  </div>'
       + '  <div class="voice-meta"><span class="voice-date">' + dateStr + '</span>'
       + '    <button type="button" class="voice-delete">削除</button></div>'
       + '</div>';
@@ -3579,13 +3608,29 @@ document.addEventListener('DOMContentLoaded',function(){
         list.innerHTML = '<div class="voice-empty">まだ投稿がありません。最初のひとことを送ってみましょう。</div>';
         return;
       }
+      var myUid = isLoginValid() ? localStorage.getItem('loggedInUserId') : null;
       var msgs = [];
       snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; msgs.push(d); });
       msgs.sort(function(a, b){ return (b.addedAt || 0) - (a.addedAt || 0); });
-      list.innerHTML = msgs.map(voiceCardHTML).join('');
+      list.innerHTML = msgs.map(function(m){ return voiceCardHTML(m, myUid); }).join('');
     }catch(e){
       list.innerHTML = '<div class="voice-empty">読み込みに失敗しました。</div>';
     }
+  }
+  async function recordDailyVoiceReact(){
+    if(!isLoginValid()) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    try{
+      await authReadyPromise;
+      var docRef = db.collection('users').doc(uid);
+      var doc = await docRef.get();
+      var data = doc.exists ? doc.data() : {};
+      var today = todayStr();
+      if(data.dailyVoiceReactDate !== today){
+        await docRef.set({ dailyVoiceReactDate: today }, { merge: true });
+      }
+    }catch(e){ /* ignore */ }
+    if(typeof renderDailyMission === 'function') renderDailyMission();
   }
   document.addEventListener('DOMContentLoaded', function(){
     loadVoices();
@@ -3617,17 +3662,57 @@ document.addEventListener('DOMContentLoaded',function(){
     var voiceList = document.getElementById('voice-list');
     if(voiceList){
       voiceList.addEventListener('click', async function(e){
-        var btn = e.target.closest('.voice-delete');
-        if(!btn) return;
-        var card = btn.closest('.voice-card');
-        var id = card.getAttribute('data-id');
-        if(!confirm('この投稿を削除しますか?この操作は取り消せません。')) return;
-        try{
-          await authReadyPromise;
-          await db.collection('anonMessages').doc(id).delete();
-          card.remove();
-        }catch(e){
-          alert('削除に失敗しました。');
+        var delBtn = e.target.closest('.voice-delete');
+        if(delBtn){
+          var card = delBtn.closest('.voice-card');
+          var id = card.getAttribute('data-id');
+          if(!confirm('この投稿を削除しますか?この操作は取り消せません。')) return;
+          try{
+            await authReadyPromise;
+            await db.collection('anonMessages').doc(id).delete();
+            card.remove();
+          }catch(e){
+            alert('削除に失敗しました。');
+          }
+          return;
+        }
+        var reactBtn = e.target.closest('.voice-react-btn');
+        if(reactBtn){
+          if(!isLoginValid()){
+            alert('リアクションするにはログインしてください。');
+            return;
+          }
+          var rCard = reactBtn.closest('.voice-card');
+          var rId = rCard.getAttribute('data-id');
+          var kind = reactBtn.dataset.reaction;
+          var uid = localStorage.getItem('loggedInUserId');
+          reactBtn.disabled = true;
+          try{
+            await authReadyPromise;
+            var docRef = db.collection('anonMessages').doc(rId);
+            var newData = await db.runTransaction(function(tx){
+              return tx.get(docRef).then(function(doc){
+                var data = doc.exists ? doc.data() : {};
+                var reactions = Object.assign({}, data.reactions || {});
+                if(reactions[uid] === kind){
+                  delete reactions[uid];
+                } else {
+                  reactions[uid] = kind;
+                }
+                tx.set(docRef, { reactions: reactions }, { merge: true });
+                return reactions;
+              });
+            });
+            var newCardHTML = voiceCardHTML(Object.assign({}, { id: rId, text: rCard.querySelector('.voice-text').textContent, addedAt: null, reactions: newData }), uid);
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = newCardHTML;
+            var newCard = wrapper.firstElementChild;
+            newCard.querySelector('.voice-date').textContent = rCard.querySelector('.voice-date').textContent;
+            rCard.replaceWith(newCard);
+            recordDailyVoiceReact();
+          }catch(err){
+            alert('リアクションに失敗しました。');
+          }
         }
       });
     }
@@ -4106,42 +4191,92 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   }
 
-  /* ---------- SR以上ガチャ通知（24時間） ---------- */
+  /* ---------- 紹介ページのお知らせ（ガチャ・サイコロ対決、24時間） ---------- */
   function isRareGachaRarity(rarity){
     return rarity === 'SR' || rarity === 'UR';
   }
 
-  async function saveRareGachaNotice(item){
-    if(!db || !isLoginValid() || !item || !isRareGachaRarity(item.rarity)) return;
+  async function saveHomeAnnouncement(kind, payload){
+    if(!db) return;
     try{
       await authReadyPromise;
-      var uid = localStorage.getItem('loggedInUserId');
-      var name = localStorage.getItem('loggedInUserName') || uid || '団員';
       var now = Date.now();
-      await db.collection('gachaRareNotices').add({
-        userId: uid,
-        userName: name,
-        itemId: item.id || '',
-        itemName: item.name || 'アイテム',
-        rarity: item.rarity || '',
-        createdAtMs: now,
-        expiresAtMs: now + 24 * 60 * 60 * 1000
-      });
-      renderRareGachaNotices();
+      var doc = Object.assign({ kind: kind, createdAtMs: now, expiresAtMs: now + 24 * 60 * 60 * 1000 }, payload);
+      await db.collection('homeAnnouncements').add(doc);
+      renderHomeAnnouncements();
     }catch(e){
-      console.error('レアガチャ通知保存エラー:', e);
+      console.error('お知らせ保存エラー:', e);
     }
   }
 
-  async function renderRareGachaNotices(){
-    var box = document.getElementById('gacha-rare-notice-list');
+  async function saveRareGachaNotice(item){
+    if(!isLoginValid() || !item || !isRareGachaRarity(item.rarity)) return;
+    var uid = localStorage.getItem('loggedInUserId');
+    var name = localStorage.getItem('loggedInUserName') || uid || '団員';
+    await saveHomeAnnouncement('gacha', {
+      userId: uid,
+      userName: name,
+      itemId: item.id || '',
+      itemName: item.name || 'アイテム',
+      rarity: item.rarity || ''
+    });
+  }
+
+  async function saveDiceAnnouncement(challengerName, targetName, challengerRoll, targetRoll, winnerId, battle){
+    var isDraw = (challengerRoll === targetRoll);
+    var winnerName, loserName, winnerRoll, loserRoll;
+    if(!isDraw){
+      if(winnerId === battle.challengerId){
+        winnerName = challengerName; loserName = targetName;
+        winnerRoll = challengerRoll; loserRoll = targetRoll;
+      } else {
+        winnerName = targetName; loserName = challengerName;
+        winnerRoll = targetRoll; loserRoll = challengerRoll;
+      }
+    }
+    await saveHomeAnnouncement('dice', {
+      isDraw: isDraw,
+      challengerName: challengerName,
+      targetName: targetName,
+      winnerName: winnerName || '',
+      loserName: loserName || '',
+      winnerRoll: isDraw ? challengerRoll : winnerRoll,
+      loserRoll: isDraw ? targetRoll : loserRoll
+    });
+  }
+
+  function homeAnnouncementRowHTML(d){
+    if(d.kind === 'gacha'){
+      var rarity = d.rarity || 'SR';
+      var icon = rarity === 'UR' ? '🌈' : '✨';
+      return '<div class="gacha-result rarity-' + esc(rarity) + '" style="margin-top:0;padding:12px 14px;text-align:left;">' +
+          '<div style="font-size:12px;font-weight:800;">' + icon + ' ' + esc(rarity) + '獲得！</div>' +
+          '<div style="font-size:13px;margin-top:2px;"><strong>' + esc(d.userName || '団員') +
+          '</strong>さんが「<strong>' + esc(d.itemName || 'アイテム') + '</strong>」を引きました！</div>' +
+        '</div>';
+    }
+    if(d.kind === 'dice'){
+      var text = d.isDraw
+        ? esc(d.challengerName) + 'と' + esc(d.targetName) + 'が' + d.winnerRoll + '対' + d.loserRoll + 'で引き分けました'
+        : esc(d.winnerName) + 'が' + esc(d.loserName) + 'に' + d.winnerRoll + '対' + d.loserRoll + 'で勝利しました';
+      return '<div class="gacha-result rarity-R" style="margin-top:0;padding:12px 14px;text-align:left;">' +
+          '<div style="font-size:12px;font-weight:800;">🎲 サイコロ対決</div>' +
+          '<div style="font-size:13px;margin-top:2px;">' + text + '</div>' +
+        '</div>';
+    }
+    return '';
+  }
+
+  async function renderHomeAnnouncements(){
+    var wrap = document.getElementById('home-announce-wrap');
+    var box = document.getElementById('home-announce-list');
     if(!box || !db) return;
     try{
       await authReadyPromise;
       var now = Date.now();
-      var snap = await db.collection('gachaRareNotices')
+      var snap = await db.collection('homeAnnouncements')
         .orderBy('createdAtMs','desc')
-        .limit(20)
+        .limit(30)
         .get();
 
       var rows = [];
@@ -4153,18 +4288,11 @@ document.addEventListener('DOMContentLoaded',function(){
           expiredRefs.push(doc.ref);
           return;
         }
-        var rarity = d.rarity || 'SR';
-        var icon = rarity === 'UR' ? '🌈' : '✨';
-        rows.push(
-          '<div class="gacha-result rarity-' + esc(rarity) + '" style="margin-top:0;padding:12px 14px;text-align:left;">' +
-            '<div style="font-size:12px;font-weight:800;">' + icon + ' ' + esc(rarity) + '獲得！</div>' +
-            '<div style="font-size:13px;margin-top:2px;"><strong>' + esc(d.userName || '団員') +
-            '</strong>さんが「<strong>' + esc(d.itemName || 'アイテム') + '</strong>」を引きました！</div>' +
-          '</div>'
-        );
+        rows.push(homeAnnouncementRowHTML(d));
       });
 
       box.innerHTML = rows.join('');
+      if(wrap) wrap.classList.toggle('hidden', rows.length === 0);
 
       /* 期限切れ通知はついでに削除 */
       if(expiredRefs.length){
@@ -4173,7 +4301,7 @@ document.addEventListener('DOMContentLoaded',function(){
         batch.commit().catch(function(){});
       }
     }catch(e){
-      console.error('レアガチャ通知読込エラー:', e);
+      console.error('お知らせ読込エラー:', e);
     }
   }
 
@@ -4310,7 +4438,8 @@ async function renderRanking(){
     { id:'view_profile', label:'誰かのプロフィールを見る' },
     { id:'post_photo',   label:'写真を投稿する' },
     { id:'post_voice',   label:'みんなの声に書き込む' },
-    { id:'post_quote',   label:'名言集に投稿する' }
+    { id:'post_quote',   label:'名言集に投稿する' },
+    { id:'react_voice',  label:'みんなの声に「草」か「怒」を押す' }
   ];
   function getTodayMission(){
     var d = new Date();
@@ -4330,6 +4459,7 @@ async function renderRanking(){
     if(mission.id === 'post_photo') return await hasCollectionActivity('photos', uid, startOfTodayMs());
     if(mission.id === 'post_voice') return await hasCollectionActivity('anonMessages', uid, startOfTodayMs());
     if(mission.id === 'post_quote') return await hasCollectionActivity('quotes', uid, startOfTodayMs());
+    if(mission.id === 'react_voice') return userData.dailyVoiceReactDate === todayStr();
     return false;
   }
   async function renderDailyMission(){
@@ -5048,6 +5178,8 @@ async function renderRanking(){
             resolvedAt: Date.now()
           }, { merge: true });
 
+          await saveDiceAnnouncement(battle.challengerName, battle.targetName, challengerRoll, targetRoll, winnerId, battle);
+
           alert('🎲 ' + resultText + (pointNote ? ' ' + pointNote : ''));
 
           var freshMe = await db.collection('users').doc(uid).get();
@@ -5435,7 +5567,7 @@ async function renderRanking(){
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   setTimeout(function(){
-    if(typeof renderRareGachaNotices === 'function') renderRareGachaNotices();
+    if(typeof renderHomeAnnouncements === 'function') renderHomeAnnouncements();
   }, 1000);
 });
 </script>
